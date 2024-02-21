@@ -1,70 +1,126 @@
-# Getting Started with Create React App
+# flower kiosk
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**팀 프로젝트의 프론트 엔드 Repository 입니다.**
 
-## Available Scripts
+[백엔드 Repositroy](https://github.com/acornkiosk/flower_back)
 
-In the project directory, you can run:
+## 프로젝트 특징
 
-### `npm start`
+## 프로젝트 특징
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* React, Spring Boot을 기반으로 꽃을 판매하는 키오스크 서비스
+    
+* 프론트엔드와 백엔드를 분리하여 프로젝트 개발
+    * 각 파트의 별도 Repository를 생성 후 작업
+    * 프론트 : React 프레임워크 이용
+    * 백엔드 : Spring Boot를 이용
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* 회원가입은 X
 
-### `npm test`
+* 로그인 처리는 Spring Boot Security와 Jwt Token방식으로 처리
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* 초기 더미데이터는 DBeaver를 통한 DB에 직접 삽입
+  
+* RestApi 방식으로 CRUD 구현
+    * 키오스크 정보 추가, 조회, 수정, 삭제, 키오스크 전원 변경   
+    * 메뉴 정보 추가, 조회, 수정, 삭제
+    * 사용자 정보 추가, 조회, 수정, 삭제
+    * 주문 정보 추가, 조회, 수정, 삭제
 
-### `npm run build`
+## 개요
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* 명칭 : flower_kiosk
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* 개발 인원 : 7명
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* 개발 기간 : 2024.02.18 ~ 2024.03.29
 
-### `npm run eject`
+* 주요 기능 
+	* 키오스크 관리 : 추가, 조회, 삭제, 위치 변경, 전원 변경
+	* 메뉴 관리 : 추가, 조회, 수정, 삭제
+	* 사용자 관리 : 추가, 조회, 수정, 삭제 
+	* 주문 관리 : 추가, 조회, 수정 , 삭제
+	* 로그인 관리 : 로그인 role 설정, Jwt를 이용한 로그인 상태 유지
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* 개발 언어 : JavaScript
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* 개발 라이브러리 : React.js
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* 형상 관리 툴 : git
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+* 협업 툴 : Notion 
+* 간단 소개 : 꽃 키오스크 서비스 프로젝트
+## 사용 패키지
 
-## Learn More
+* material-ui
+  * 각종 아이콘
+* bootstrap
+  * 부트스트랩과 react를 연동
+* axios
+  * 서버 통신을 위한 패키지
+* connected-react-router, history
+  * 라우팅을 위한 패키지
+* react-redux, redux
+  * 프론트엔드에서 데이터의 전역관리를 위한 패키지
+* redux-logger
+  * 리덕스의 state를 콘솔에서 조회할 수 있게하는 패키지
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+## API 설계
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 로그인 프로세스
+![image](https://github.com/acornkiosk/flower_back/assets/94777814/274685fe-30ef-4878-9007-9bfea86ccdac)
+![image](https://github.com/acornkiosk/flower_back/assets/94777814/56872714-d87b-4eb9-a54f-cf07016160d7)
 
-### Analyzing the Bundle Size
+## 개발 역할분담 (프론트)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| 이름       | 진행 목록                                                    |
+| ------------ | ------------------------------------------------------------- |
+| 김동주         | 주문관리 키오스크 관리 페이지, 초기 프로젝트 셋팅 |  |                          
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+| 이름       | 진행 목록                                                    |
+| ------------ | ------------------------------------------------------------- |
+| 김대원         | 메뉴 관리 페이지 |  |                         
+| 이승우         | 메뉴 관리 페이지 |     
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+| 이름       | 진행 목록                                                    |
+| ------------ | ------------------------------------------------------------- |
+| 이준호         | 사용자 관리 페이지 |  |                       
+| 오영찬         | 사용자 관리 페이지 |         
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+| 이름       | 진행 목록                                                    |
+| ------------ | ------------------------------------------------------------- |
+| 정도경         | 로그인 관리 페이지 |  |                         
+| 이안철         | 로그인 관리 페이지 |  
+## 개발 타임라인
 
-### `npm run build` fails to minify
+## 개발 타임라인(백엔드, 프론트 공통)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+| 일자       | 진행 목록                                                    |
+| ---------- | ------------------------------------------------------------ |
+| 2024.02.17 | [ 프로젝트 화면계획서 V0.1 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br />백엔드 Repository 생성 |
+| 2024.02.19 | [ 프로젝트 화면계획서 V0.3 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) |
+| 2024.02.20 | [ 프로젝트 화면계획서 V0.5 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> 키오스크 관리 DB, API 추가|
+| 2024.02.21 | [ 프로젝트 화면계획서 V0.6 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> 주문 관리 DB, API 추가<br/> 프론트 Repository 생성|
+
+
+## Contents
+
+### 메인 페이지
+
+
+### 로그인 관리 페이지
+
+
+
+### 키오스크 관리 페이지
+
+### 주문 관리 페이지
+
+### 사용자 관리 페이지
+
+### 메뉴 관리 페이지
