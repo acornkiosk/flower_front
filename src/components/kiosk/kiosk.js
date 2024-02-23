@@ -68,6 +68,37 @@ function Kiosk() {
       location: event.target.value
     })
   }
+  //전원변경 함수
+  const changePower = (data) => {
+    //전원이 on이면
+    if (data.power === "on") {
+      //전원을 꺼준다
+      axios.post("/api/kiosk/turnOff", data.id, { headers: { "Content-Type": "application/json" } })
+        .then(res => {
+          let newState = kiosk.map(item => {
+            if (item.id === data.id) {
+              item.power = "off"
+            }
+            return item
+          })
+          setKiosk(newState)
+        })
+        .catch((error) => { console.log(error) })
+    } else { //전원이 꺼져있다면
+      //전원을 켜준다
+      axios.post("/api/kiosk/turnOn", data.id, { headers: { "Content-Type": "application/json" } })
+        .then(res => {
+          let newState = kiosk.map(item => {
+            if (item.id === data.id) {
+              item.power = "on"
+            }
+            return item
+          })
+          setKiosk(newState)
+        })
+        .catch((error) => { console.log(error) })
+    }
+  }
   return (
     <Container>
 
@@ -144,10 +175,10 @@ function Kiosk() {
           {kiosk.map(item =>
             <tr key={item.id}>
               <td className="justify-content-md-center">{item.id}</td>
-              <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)}/></td>
-              <td>{item.power} 
-                {item.power === "on" && <Icon.Power style={{color : "green"}}/>}
-                {item.power === "off" && <Icon.Power style={{color : "red"}}/>}
+              <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)} /></td>
+              <td>{item.power}
+                {item.power === "on" && <Icon.Power style={{ color: "green" }} onClick={() => { changePower(item) }} />}
+                {item.power === "off" && <Icon.Power style={{ color: "red" }} onClick={() => { changePower(item) }} />}
               </td>
               <td>
                 <CloseButton onClick={() => {
