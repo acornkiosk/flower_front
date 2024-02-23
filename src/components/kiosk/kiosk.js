@@ -86,11 +86,14 @@ function Kiosk() {
               <td>
                 <CloseButton onClick={() => {
                   axios.post("/api/kiosk/delete", item.id,
-                    { "Content-Type": "application/json" })
-                  .then(res =>{
-                    let newKiosk = kiosk.filter(kiosk =>  kiosk.id !== item.id)
-                    console.log(newKiosk)
-                  })
+                    { headers: { "Content-Type": "application/json" } })
+                    .then(res => {
+                      let newKiosk = kiosk.filter(kiosk => kiosk.id !== item.id)
+                      setKiosk(newKiosk)
+                    })
+                    .catch(error => {
+                      console.log(error)
+                    })
                 }}></CloseButton>
               </td>
             </tr>
