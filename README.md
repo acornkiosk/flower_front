@@ -65,7 +65,8 @@
 * redux-logger
   * 리덕스의 state를 콘솔에서 조회할 수 있게하는 패키지
 
-
+## 테이블 설계
+![flowerDB](https://github.com/acornkiosk/flower_front/assets/94777814/b7e18eef-0821-4096-9b0a-5901e8ba38c2)
 
 ## API 설계
 
