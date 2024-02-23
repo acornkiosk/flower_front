@@ -2,7 +2,7 @@
 
 **팀 프로젝트의 프론트 엔드 Repository 입니다.**
 
-[백엔드 Repositroy](https://github.com/acornkiosk/flower_back)
+[백엔드 Repositroy](https://github.com/acornkiosk/Flower_back)
 
 ## 프로젝트 특징
 
@@ -69,10 +69,15 @@
 ![flowerDB](https://github.com/acornkiosk/flower_front/assets/94777814/b7e18eef-0821-4096-9b0a-5901e8ba38c2)
 
 ## API 설계
-
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/6824e7d2-e84c-4a5a-99f8-be109596d44d)
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/7d834a8d-638b-46da-a27e-f31ef82be611)
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/1bc0943a-ff3a-4432-a1fb-cfd4982b3fe7)
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/aabaf8a9-3c89-4055-a831-a19ddbef72dd)
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/32aa5b4c-6eb5-4137-aecd-375539b26f7c)
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/9e72a990-f936-4132-bc4f-ff6d0fead894)
 ## 로그인 프로세스
-![image](https://github.com/acornkiosk/flower_back/assets/94777814/274685fe-30ef-4878-9007-9bfea86ccdac)
-![image](https://github.com/acornkiosk/flower_back/assets/94777814/56872714-d87b-4eb9-a54f-cf07016160d7)
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/769b7e44-8d16-45f4-808d-7af70177fd63)
+![image](https://github.com/acornkiosk/Flower_back/assets/94777814/957b97ec-fc02-4e73-a76b-cb2fe456cd52)
 
 ## 개발 역할분담 (프론트)
 
@@ -107,6 +112,7 @@
 | 2024.02.19 | [ 프로젝트 화면계획서 V0.3 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) |
 | 2024.02.20 | [ 프로젝트 화면계획서 V0.5 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> 키오스크 관리 DB, API 추가|
 | 2024.02.21 | [ 프로젝트 화면계획서 V0.6 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> 주문 관리 DB, API 추가<br/> 프론트 Repository 생성|
+| 2024.02.23 | API 명세서 작성|
 
 
 ## Contents
