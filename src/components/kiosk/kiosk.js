@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Button, CloseButton, Col, Container, Form, Modal, Row, Table } from "react-bootstrap"
+import { Button, CloseButton, Col, Container, Form, InputGroup, Modal, Row, Table } from "react-bootstrap"
 
 function Kiosk() {
   //키오스크 정보를 저장하는 state
@@ -19,12 +19,10 @@ function Kiosk() {
   }, [])
   //추가 요청 함수
   const addKiosk = (event) => {
-    //폼 요청 막기
-    event.preventDefault();
     //키오스크 추가 옵션
     axios.post('/api/kiosk', { location: location })
       .then(res => {
-        setKiosk([...kiosk,res.data.dto])
+        setKiosk([...kiosk, res.data.dto])
         setAddModalShow(false)
       })
       .catch(error => {
@@ -52,23 +50,23 @@ function Kiosk() {
           <Modal.Title>키오스크 추가</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={addKiosk}>
-            <Form.Group className="mb-3">
-              <Form.Label>키오스크 위치</Form.Label>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>키오스크 위치</InputGroup.Text>
               <Form.Control type="text" placeholder="키오스크 위치 입력" onChange={handleChange} />
-            </Form.Group>
-            <Row className="justify-content-md-end">
-              <Col md="auto">
-                <Button variant="secondary" onClick={() => { setAddModalShow(false) }}>닫기</Button>
-              </Col>
-              <Col md="auto">
-                <Button variant="primary" type="submit">
-                  추가하기
-                </Button>
-              </Col>
-            </Row>
-          </Form>
+            </InputGroup>
         </Modal.Body>
+        <Modal.Footer>
+          <Row className="justify-content-md-end">
+            <Col md="auto">
+              <Button variant="secondary" onClick={() => { setAddModalShow(false) }}>닫기</Button>
+            </Col>
+            <Col md="auto">
+              <Button variant="primary" type="button" onClick={addKiosk}>
+                추가하기
+              </Button>
+            </Col>
+          </Row>
+        </Modal.Footer>
       </Modal>
       <Table striped bordered hover>
         <thead>
