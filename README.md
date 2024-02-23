@@ -52,7 +52,7 @@
 * 간단 소개 : 꽃 키오스크 서비스 프로젝트
 ## 사용 패키지
 
-* material-ui
+* React Bootstrap Icons
   * 각종 아이콘
 * bootstrap
   * 부트스트랩과 react를 연동
