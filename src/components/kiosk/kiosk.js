@@ -106,7 +106,7 @@ function Kiosk() {
       {/* 키오스크 수정 modal */}
       <Modal size="lg" centered show={updateModalShow} onHide={() => setUpdateModalShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{data.id}번 키오스크 정보 변경</Modal.Title>
+          <Modal.Title>{data.id}번 키오스크 위치 변경</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <InputGroup className="mb-3">
@@ -144,8 +144,11 @@ function Kiosk() {
           {kiosk.map(item =>
             <tr key={item.id}>
               <td className="justify-content-md-center">{item.id}</td>
-              <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)}></Icon.Pencil></td>
-              <td>{item.power}</td>
+              <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)}/></td>
+              <td>{item.power} 
+                {item.power === "on" && <Icon.Power style={{color : "green"}}/>}
+                {item.power === "off" && <Icon.Power style={{color : "red"}}/>}
+              </td>
               <td>
                 <CloseButton onClick={() => {
                   axios.post("/api/kiosk/delete", item.id,
