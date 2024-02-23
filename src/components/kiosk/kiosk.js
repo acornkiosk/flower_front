@@ -18,7 +18,7 @@ function Kiosk() {
       })
   }, [])
   //추가 요청 함수
-  const addKiosk = (event) => {
+  const addKiosk = () => {
     //키오스크 추가 옵션
     axios.post('/api/kiosk', { location: location })
       .then(res => {
@@ -50,10 +50,10 @@ function Kiosk() {
           <Modal.Title>키오스크 추가</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <InputGroup className="mb-3">
-              <InputGroup.Text>키오스크 위치</InputGroup.Text>
-              <Form.Control type="text" placeholder="키오스크 위치 입력" onChange={handleChange} />
-            </InputGroup>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>키오스크 위치</InputGroup.Text>
+            <Form.Control type="text" placeholder="키오스크 위치 입력" onChange={handleChange} />
+          </InputGroup>
         </Modal.Body>
         <Modal.Footer>
           <Row className="justify-content-md-end">
@@ -84,7 +84,14 @@ function Kiosk() {
               <td className="justify-content-md-center">{item.location}</td>
               <td>{item.power}</td>
               <td>
-                <CloseButton></CloseButton>
+                <CloseButton onClick={() => {
+                  axios.post("/api/kiosk/delete", item.id,
+                    { "Content-Type": "application/json" })
+                  .then(res =>{
+                    let newKiosk = kiosk.filter(kiosk =>  kiosk.id !== item.id)
+                    console.log(newKiosk)
+                  })
+                }}></CloseButton>
               </td>
             </tr>
           )}
