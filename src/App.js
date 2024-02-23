@@ -39,11 +39,13 @@ function App() {
       }}>응답받기</button>
       <table>
         <thead>
-          <th>code_id</th>
-          <th>p_code_id</th>
-          <th>code_name</th>
-          <th>code_value</th>
-          <th>code_img</th>
+          <tr>
+            <th>code_id</th>
+            <th>p_code_id</th>
+            <th>code_name</th>
+            <th>code_value</th>
+            <th>code_img</th>
+          </tr>
         </thead>
         <tbody>
           {common.map(item =>
