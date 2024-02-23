@@ -68,6 +68,37 @@ function Kiosk() {
       location: event.target.value
     })
   }
+  //전원변경 함수
+  const changePower = (data) => {
+    //전원이 on이면
+    if (data.power === "on") {
+      //전원을 꺼준다
+      axios.post("/api/kiosk/turnOff", data.id, { headers: { "Content-Type": "application/json" } })
+        .then(res => {
+          let newState = kiosk.map(item => {
+            if (item.id === data.id) {
+              item.power = "off"
+            }
+            return item
+          })
+          setKiosk(newState)
+        })
+        .catch((error) => { console.log(error) })
+    } else { //전원이 꺼져있다면
+      //전원을 켜준다
+      axios.post("/api/kiosk/turnOn", data.id, { headers: { "Content-Type": "application/json" } })
+        .then(res => {
+          let newState = kiosk.map(item => {
+            if (item.id === data.id) {
+              item.power = "on"
+            }
+            return item
+          })
+          setKiosk(newState)
+        })
+        .catch((error) => { console.log(error) })
+    }
+  }
   return (
     <Container>
 
@@ -106,7 +137,7 @@ function Kiosk() {
       {/* 키오스크 수정 modal */}
       <Modal size="lg" centered show={updateModalShow} onHide={() => setUpdateModalShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{data.id}번 키오스크 정보 변경</Modal.Title>
+          <Modal.Title>{data.id}번 키오스크 위치 변경</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <InputGroup className="mb-3">
@@ -144,8 +175,11 @@ function Kiosk() {
           {kiosk.map(item =>
             <tr key={item.id}>
               <td className="justify-content-md-center">{item.id}</td>
-              <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)}></Icon.Pencil></td>
-              <td>{item.power}</td>
+              <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)} /></td>
+              <td>{item.power}
+                {item.power === "on" && <Icon.Power style={{ color: "green" }} onClick={() => { changePower(item) }} />}
+                {item.power === "off" && <Icon.Power style={{ color: "red" }} onClick={() => { changePower(item) }} />}
+              </td>
               <td>
                 <CloseButton onClick={() => {
                   axios.post("/api/kiosk/delete", item.id,
