@@ -20,14 +20,34 @@ function Kiosk() {
   const [updateModalShow, setUpdateModalShow] = useState(false)
   // 수정시 data state
   const [data, setData] = useState({})
+  // 체크박스 state
+  const [checked, setChecked] = useState({})
   //추가 form
   const [location, setLocation] = useState("")
+  //체크박스(선택된) 키오스크
+  const [selectedKiosk, setSelectedKiosk] = useState([])
+  //체크박스 체크시 호출 함수
+  const handleCheckBoxChange = (e, item) => {
+    const isChecked = e.target.checked
+    setChecked({
+      ...checked,
+      [item.id]: isChecked
+    })
+    if (isChecked) {
+      //체크된 키오스크 저장
+      setSelectedKiosk([...selectedKiosk, item])
+    } else {
+      //체크된 키오스크에서 삭제
+      let newState = selectedKiosk.filter(tmp => tmp.id !== item.id)
+      setSelectedKiosk(newState)
+    }
+  }
   //추가 요청 함수
   const addKiosk = () => {
     //키오스크 추가 옵션
     axios.post('/api/kiosk', { location: location })
       .then(res => {
-        setKiosk([...kiosk, res.data.dto])
+        setKiosk(res.data.list)
         setAddModalShow(false)
       })
       .catch(error => {
@@ -99,6 +119,26 @@ function Kiosk() {
         .catch((error) => { console.log(error) })
     }
   }
+  //삭제 버튼 기능
+  const deleteKiosk = () => {
+    //삭제하기 위한 키오스크 배열
+    const kioskIdsToDelete = selectedKiosk.map((kiosk) => kiosk.id);
+    
+      selectedKiosk.forEach(tmp => {
+        console.log(tmp)
+        axios.post("/api/kiosk/delete", tmp,
+          { headers: { "Content-Type": "application/json" } })
+          .then(res => {
+            let newKiosk = kiosk.filter(kiosk => !kioskIdsToDelete.includes(kiosk.id))
+            setKiosk(newKiosk)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+    
+
+  }
   return (
     <Container>
 
@@ -107,7 +147,10 @@ function Kiosk() {
           <h1>키오스크 관리 페이지 입니다.</h1>
         </Col>
         <Col md="auto">
-          <Button onClick={() => { setAddModalShow(true) }}>추가하기</Button>
+          <Button variant="success" className="me-3">전원 켜기</Button>
+          <Button variant="danger" className="me-3">전원 끄기</Button>
+          <Button className="me-3" onClick={() => { setAddModalShow(true) }}>추가하기</Button>
+          <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
         </Col>
       </Row>
       {/* 키오스크 추가 modal */}
@@ -165,33 +208,25 @@ function Kiosk() {
       <Table striped bordered hover>
         <thead>
           <tr>
+            <th></th>
             <th>ID</th>
             <th>Location</th>
             <th>Power</th>
-            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
           {kiosk.map(item =>
             <tr key={item.id}>
+              <td>
+                <Form.Check type={`checkbox`} id={item.id} checked={checked[item.id] || false} onChange={(e) => {
+                  handleCheckBoxChange(e, item)
+                }} />
+              </td>
               <td className="justify-content-md-center">{item.id}</td>
               <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)} /></td>
               <td>{item.power}
                 {item.power === "on" && <Icon.Power style={{ color: "green" }} onClick={() => { changePower(item) }} />}
                 {item.power === "off" && <Icon.Power style={{ color: "red" }} onClick={() => { changePower(item) }} />}
-              </td>
-              <td>
-                <CloseButton onClick={() => {
-                  axios.post("/api/kiosk/delete", item.id,
-                    { headers: { "Content-Type": "application/json" } })
-                    .then(res => {
-                      let newKiosk = kiosk.filter(kiosk => kiosk.id !== item.id)
-                      setKiosk(newKiosk)
-                    })
-                    .catch(error => {
-                      console.log(error)
-                    })
-                }}></CloseButton>
               </td>
             </tr>
           )}
