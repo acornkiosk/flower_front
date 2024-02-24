@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Button, CloseButton, Col, Container, Form, InputGroup, Modal, Row, Table } from "react-bootstrap"
+import { Button, Col, Container, Form, InputGroup, Modal, Row, Table } from "react-bootstrap"
 import * as Icon from 'react-bootstrap-icons';
 
 function Kiosk() {
@@ -54,7 +54,7 @@ function Kiosk() {
       newSelectedKiosk = [...kiosk]
     }
     // checked 상태 업데이트
-    const newChecked = {};
+    const newChecked = {}
     kiosk.forEach(tmp => {
       newChecked[tmp.id] = isChecked
     })
@@ -74,29 +74,66 @@ function Kiosk() {
       })
   }
   //수정 요청 함수
-  const updateKiosk = () => {
-    //키오스크 추가 옵션
-    axios.post('/api/kiosk/update/location', data)
-      .then(res => {
-        let newState = kiosk.map(item => {
-          if (item.id === data.id) {
-            item.location = data.location
-          }
-          return item
+  const updateKiosk = (action) => {
+    //키오스크 위치 수정
+    if (action === 'location') {
+      axios.post('/api/kiosk/update', data)
+        .then(res => {
+          let newState = kiosk.map(item => {
+            if (item.id === data.id) {
+              item.location = data.location
+            }
+            return item
+          })
+          setKiosk(newState)
+          setUpdateModalShow(false)
         })
-        setKiosk(newState)
-        setUpdateModalShow(false)
+        .catch(error => {
+          console.log(error)
+        })
+    } else if (action === 'on') {
+      const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'on' } })
+      updatedKiosk.forEach(item => {
+        axios.post("/api/kiosk/update", item)
+          .then(res => {
+            let newState = kiosk.map(tmp => {
+              if (tmp.id === item.id) {
+                tmp.power = 'on'
+              }
+              return tmp
+            })
+            setKiosk(newState)
+          })
       })
-      .catch(error => {
-        console.log(error)
+      setChecked({})
+      setSelectedKiosk([])
+      setAllCheck(false)
+    } else {
+      const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'off' } })
+      updatedKiosk.forEach(item => {
+        axios.post("/api/kiosk/update", item)
+          .then(res => {
+            let newState = kiosk.map(tmp => {
+              if (tmp.id === item.id) {
+                tmp.power = 'off'
+              }
+              return tmp
+            })
+            setKiosk(newState)
+          })
       })
+      setChecked({})
+      setSelectedKiosk([])
+      setAllCheck(false)
+    }
   }
   //수정 버튼 클릭 함수
   const showUpdateModal = (item) => {
     setUpdateModalShow(true)
     setData({
       id: item.id,
-      location: item.location
+      location: item.location,
+      power: item.power
     })
   }
   //input 값 변경시 location 업데이트
@@ -107,44 +144,12 @@ function Kiosk() {
       location: event.target.value
     })
   }
-  //전원변경 함수
-  const changePower = (data) => {
-    //전원이 on이면
-    if (data.power === "on") {
-      //전원을 꺼준다
-      axios.post("/api/kiosk/turnOff", data.id, { headers: { "Content-Type": "application/json" } })
-        .then(res => {
-          let newState = kiosk.map(item => {
-            if (item.id === data.id) {
-              item.power = "off"
-            }
-            return item
-          })
-          setKiosk(newState)
-        })
-        .catch((error) => { console.log(error) })
-    } else { //전원이 꺼져있다면
-      //전원을 켜준다
-      axios.post("/api/kiosk/turnOn", data.id, { headers: { "Content-Type": "application/json" } })
-        .then(res => {
-          let newState = kiosk.map(item => {
-            if (item.id === data.id) {
-              item.power = "on"
-            }
-            return item
-          })
-          setKiosk(newState)
-        })
-        .catch((error) => { console.log(error) })
-    }
-  }
   //삭제 버튼 기능
   const deleteKiosk = () => {
     //삭제하기 위한 키오스크 배열
     const kioskIdsToDelete = selectedKiosk.map((kiosk) => kiosk.id);
 
     selectedKiosk.forEach(tmp => {
-      console.log(tmp)
       axios.post("/api/kiosk/delete", tmp,
         { headers: { "Content-Type": "application/json" } })
         .then(res => {
@@ -158,6 +163,7 @@ function Kiosk() {
     //선택된 키오스크 초기화
     setSelectedKiosk([])
   }
+
   return (
     <Container>
 
@@ -166,8 +172,8 @@ function Kiosk() {
           <h1>키오스크 관리 페이지</h1>
         </Col>
         <Col md="auto">
-          <Button variant="success" className="me-3">전원 켜기</Button>
-          <Button variant="danger" className="me-3">전원 끄기</Button>
+          <Button variant="success" className="me-3" onClick={() => { updateKiosk('on') }}>전원 켜기</Button>
+          <Button variant="danger" className="me-3" onClick={() => { updateKiosk('off') }}>전원 끄기</Button>
           <Button className="me-3" onClick={() => { setAddModalShow(true) }}>추가하기</Button>
           <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
         </Col>
@@ -217,7 +223,7 @@ function Kiosk() {
               <Button variant="secondary" onClick={() => { setUpdateModalShow(false) }}>닫기</Button>
             </Col>
             <Col md="auto">
-              <Button variant="primary" type="button" onClick={updateKiosk}>
+              <Button variant="primary" type="button" onClick={() => { updateKiosk('location') }}>
                 변경하기
               </Button>
             </Col>
@@ -245,10 +251,7 @@ function Kiosk() {
               </td>
               <td className="justify-content-md-center">{item.id}</td>
               <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)} /></td>
-              <td>{item.power}
-                {item.power === "on" && <Icon.Power style={{ color: "green" }} onClick={() => { changePower(item) }} />}
-                {item.power === "off" && <Icon.Power style={{ color: "red" }} onClick={() => { changePower(item) }} />}
-              </td>
+              <td>{item.power}</td>
             </tr>
           )}
         </tbody>
