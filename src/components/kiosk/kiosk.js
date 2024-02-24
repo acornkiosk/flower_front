@@ -26,6 +26,8 @@ function Kiosk() {
   const [location, setLocation] = useState("")
   //체크박스(선택된) 키오스크
   const [selectedKiosk, setSelectedKiosk] = useState([])
+  //전체  체크박스 state
+  const [allCheck, setAllCheck] = useState(false)
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
     const isChecked = e.target.checked
@@ -41,6 +43,23 @@ function Kiosk() {
       let newState = selectedKiosk.filter(tmp => tmp.id !== item.id)
       setSelectedKiosk(newState)
     }
+  }
+  //전체 체크박스 체크시 호출 함수
+  const handleAllCheckBox = (e) => {
+    const isChecked = e.target.checked
+    setAllCheck(isChecked)
+    // 체크 상태에 따라 선택된 키오스크 배열 업데이트
+    let newSelectedKiosk = []
+    if (isChecked) {
+      newSelectedKiosk = [...kiosk]
+    }
+    // checked 상태 업데이트
+    const newChecked = {};
+    kiosk.forEach(tmp => {
+      newChecked[tmp.id] = isChecked
+    })
+    setChecked(newChecked)
+    setSelectedKiosk(newSelectedKiosk)
   }
   //추가 요청 함수
   const addKiosk = () => {
@@ -123,28 +142,28 @@ function Kiosk() {
   const deleteKiosk = () => {
     //삭제하기 위한 키오스크 배열
     const kioskIdsToDelete = selectedKiosk.map((kiosk) => kiosk.id);
-    
-      selectedKiosk.forEach(tmp => {
-        console.log(tmp)
-        axios.post("/api/kiosk/delete", tmp,
-          { headers: { "Content-Type": "application/json" } })
-          .then(res => {
-            let newKiosk = kiosk.filter(kiosk => !kioskIdsToDelete.includes(kiosk.id))
-            setKiosk(newKiosk)
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      })
-    
 
+    selectedKiosk.forEach(tmp => {
+      console.log(tmp)
+      axios.post("/api/kiosk/delete", tmp,
+        { headers: { "Content-Type": "application/json" } })
+        .then(res => {
+          let newKiosk = kiosk.filter(kiosk => !kioskIdsToDelete.includes(kiosk.id))
+          setKiosk(newKiosk)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    })
+    //선택된 키오스크 초기화
+    setSelectedKiosk([])
   }
   return (
     <Container>
 
       <Row className="justify-content-md-center">
         <Col>
-          <h1>키오스크 관리 페이지 입니다.</h1>
+          <h1>키오스크 관리 페이지</h1>
         </Col>
         <Col md="auto">
           <Button variant="success" className="me-3">전원 켜기</Button>
@@ -208,7 +227,9 @@ function Kiosk() {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th></th>
+            <th>
+              <Form.Check type={`checkbox`} checked={allCheck} onChange={(e) => { handleAllCheckBox(e) }} />
+            </th>
             <th>ID</th>
             <th>Location</th>
             <th>Power</th>
