@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link, Route, Routes } from 'react-router-dom';
 import Kiosk from './components/kiosk/kiosk';
 import Login from './components/login/login';
-import Menu from './components/menu/menu';
+import Menu from './components/menu/main';
 import Order from './components/order/Order';
 import User from './components/user/User';
 

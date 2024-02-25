@@ -12,7 +12,7 @@ export default function CategoryBtn(props) {
   return (
     <>
       <categoryBtn>
-          <DropdownButton id="dropdown-basic-button" title="항목별 조회">
+          <DropdownButton id="dropdown-basic-button">
 
             {/*메뉴 전체를 불러오기*/}
             <Dropdown.Item value={0} onClick={() => handleDropdownItemClick(0)}>전체</Dropdown.Item>
@@ -23,7 +23,6 @@ export default function CategoryBtn(props) {
               onClick={() => handleDropdownItemClick(item.code_id)}
               >{item.code_name}</Dropdown.Item>
             ))}
-
           </DropdownButton>
       </categoryBtn>
     </>
