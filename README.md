@@ -89,7 +89,7 @@
 | 이름       | 진행 목록                                                    |
 | ------------ | ------------------------------------------------------------- |
 | 김대원         | 메뉴 관리 페이지 |  |                         
-| 이승우         | 메뉴정보 전체조회 |     
+| 이승우         | 메뉴정보 조회기능 |     
 
 
 | 이름       | 진행 목록                                                    |
@@ -113,6 +113,7 @@
 | 2024.02.20 | [ 프로젝트 화면계획서 V0.5 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> 키오스크 관리 DB, API 추가|
 | 2024.02.21 | [ 프로젝트 화면계획서 V0.6 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> 주문 관리 DB, API 추가<br/> 프론트 Repository 생성|
 | 2024.02.23 | [ 프로젝트 화면계획서 V0.7 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> API 명세서 작성|
+| 2024.02.24 | 키오스크 관리 기능 완료|
 
 
 ## Contents
