@@ -38,7 +38,7 @@ function App() {
         <Route path='/kiosk' Component={Kiosk}/>
         <Route path='/order' Component={Order}/>
         <Route path='/user' Component={User}/>
-        <Route path='/menu' Component={Menu}/>
+        <Route path='/menu/*' Component={Menu}/>
         <Route path='/login' Component={Login}/>
       </Routes>
       <p>spring boot 와 연동이 되었는지 테스트 입니다.</p>
