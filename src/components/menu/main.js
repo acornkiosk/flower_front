@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import Loading from '../loading';
 import CategoryBtn from './categoryBtn';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
 
 /** HTML 본문 : 메뉴관리 전체 */ 
 function Main() {
@@ -11,8 +14,12 @@ function Main() {
   const [menuList, setMenuList] = useState([]);
   /** 로딩실행 값을 true 로 만들고 끝나면 false 로 변환하기 */
   const [loading, setLoading] = useState(true);
+
   /** 처음 접속시 카테고리 정보를 담는 배분 배열 변수 */
   const [categoryList,setCategoryList] = useState([]);
+
+  const navigate= useNavigate()
+
 
   /** 화면에 접속하자마자 서버로부터 메뉴정보를 모두 가져오는 코드를 작성 */
   useEffect(() => {
@@ -38,7 +45,16 @@ function Main() {
     // fetchData 함수 호출
     fetchData();
   }, []);
-
+  
+  //메뉴 수정 폼으로 가기
+  const goToUpdateMenu = (MenuId)=>{
+    navigate(`/menu/updateMenu/${MenuId}`)
+  }
+    
+  // 메뉴등록 폼으로가기
+    const goToAddMenu = () =>{
+      navigate("/menu/addMenu")
+  };
   // 로딩 중일 때 Spinner를 보여줌
   if (loading) {
     return <Loading/>;
@@ -76,6 +92,9 @@ function Main() {
       {/* <AddMenuBtn></AddMenuBtn> */}
       <CategoryBtn list={categoryList} onSelectCategory={handleCategoryChange} />
 
+      <Button onClick={goToAddMenu}>등록하기</Button>
+
+
       <Table striped>
         <thead>
           <tr>
@@ -92,7 +111,7 @@ function Main() {
               <td>{item.category}</td>
               <td>{item.name}</td>
               <td>{item.price}</td>
-              <td><button>수정</button></td>
+              <td><button onClick={()=>goToUpdateMenu(item.id)}>수정</button></td>
               <td><button>삭제</button></td>
             </tr>
           ))}
@@ -102,7 +121,9 @@ function Main() {
   );
 }
 
-/** 등록 버튼 */
+
+// /** 등록 버튼 */
+
 // function AddMenuBtn() {
 //   return (
 //     <div>
