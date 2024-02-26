@@ -24,7 +24,7 @@ function AddMenu(){
     },[])
     
     const getCategory= ()=>{
-        axios.post("/api/common/child", 1000,
+        axios.post("/api/common/child", {"code_id": 1000},
         { headers: { "Content-Type": "application/json" } })
         .then(res => {
           console.log(res.data.list)
