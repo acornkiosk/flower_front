@@ -24,9 +24,10 @@ function App() {
     .catch(error => console.log(error))
     
   },[])
+
   return (
     <div className="container">
-      <h1>인덱스 테스트 페이지 입니다</h1>
+      <p>관리자 페이지</p>
       <ul>
         <li><Link to="/kiosk">키오스크 관리</Link></li>
         <li><Link to="/order">주문 관리</Link></li>
@@ -41,6 +42,7 @@ function App() {
         <Route path='/menu/*' Component={Menu}/>
         <Route path='/login' Component={Login}/>
       </Routes>
+
       <p>spring boot 와 연동이 되었는지 테스트 입니다.</p>
       <button onClick={() => {
         axios.post("/api/common/child", {"code_id": 1000},
@@ -72,6 +74,7 @@ function App() {
             )}
         </tbody>
       </table>
+
     </div>
   );
 }
