@@ -1,9 +1,10 @@
+import axios from "axios";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 export default function OrderItem(props) {
   //공통 코드 가져오기
-  const common = useSelector((state)=>{
+  const common = useSelector((state) => {
     return state.commonTable
   })
   const orderId = props.orders[0].order_id
@@ -13,21 +14,22 @@ export default function OrderItem(props) {
   function calRegDate(regDate) {
     const today = new Date()
     const orderTime = new Date(regDate)
-    
+
     const tTime = today.getTime()
     const oTime = orderTime.getTime()
 
-    const timeDiff = Math.floor(Math.abs(tTime - oTime) / (1000*60))
+    const timeDiff = Math.floor(Math.abs(tTime - oTime) / (1000 * 60))
 
     return timeDiff
   }
   //옵션을 글자로 변경
   function convertOptions(options) {
+    if (options === null) return "옵션 없음"
     const newOptions = options.split(',').map(tmp => parseInt(tmp))
     let result = ""
-    for(let item of common) {
-      for(let codeId of newOptions) {
-        if(codeId === item.code_id) {
+    for (let item of common) {
+      for (let codeId of newOptions) {
+        if (codeId === item.code_id) {
           result += item.code_name + " "
         }
       }
@@ -35,6 +37,26 @@ export default function OrderItem(props) {
 
     return result
   }
+
+  //완료 버튼 누를 시 
+  function onComplted() {
+    let orderList = props.orders
+    for (let item of orderList) {
+      item.is_completed = 'true'
+      axios.post("/api/order/update", item)
+        .then(res => {
+          if (res.data.status === 'OK') {
+            const newList = { ...props.list }
+            delete newList[props.id]
+            props.setOrders(newList)
+          } else {
+            console.log("완료작업 실패")
+          }
+        })
+        .catch(error => console.log(error))
+    }
+  }
+
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Body>
@@ -53,7 +75,7 @@ export default function OrderItem(props) {
           {props.orders.map(item =>
             <div className="mb-1">
               <Row>
-                <Col xs = "auto"><Form.Check type={`checkbox`} /></Col>
+                <Col xs="auto"><Form.Check type={`checkbox`} /></Col>
                 <Col><Card.Text>{item.menu_name}</Card.Text></Col>
                 <Col><Card.Text className="text-end">{item.menu_count}개</Card.Text></Col>
               </Row>
@@ -64,7 +86,7 @@ export default function OrderItem(props) {
           )}
         </Row>
         <Row className="mt-3">
-          <Button>완료</Button>
+          <Button onClick={onComplted}>완료</Button>
         </Row>
       </Card.Footer>
     </Card>
