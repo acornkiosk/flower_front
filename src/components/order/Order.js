@@ -1,7 +1,7 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
 import { Col, Container, Row } from "react-bootstrap"
 import OrderItem from "./orderItem"
-import { useEffect, useState } from "react"
-import axios from "axios"
 
 function Order() {
   //들어온 주문을 저장
@@ -10,7 +10,7 @@ function Order() {
   //화면 로딩시 
   useEffect(() => {
     //주문 db에 있는 정보 가져오기 
-    axios.get("/api/order/list")
+    axios.post("/api/order/list", {})
       .then(res => {
         const orderData = res.data.list
         //order_id를 기준으로 주문들을 묶어서 저장할 객체
@@ -37,7 +37,7 @@ function Order() {
           <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {Object.keys(orders).map(key =>
               <Col key={key}>
-                <OrderItem orders={orders[key]} />
+                <OrderItem orders={orders[key]} setOrders={setOrders} list={orders} id={key} />
               </Col>
             )}
           </Row>
