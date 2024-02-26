@@ -233,7 +233,7 @@ function Kiosk() {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>
+            <th style={{ width: '1%' }}>
               <Form.Check type={`checkbox`} checked={allCheck} onChange={(e) => { handleAllCheckBox(e) }} />
             </th>
             <th>ID</th>

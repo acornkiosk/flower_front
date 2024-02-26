@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, Route, Routes } from 'react-router-dom';
 import Kiosk from './components/kiosk/kiosk';
@@ -7,9 +7,23 @@ import Login from './components/login/login';
 import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
+import { useDispatch } from 'react-redux';
 
 function App() {
   const [common,setCommon] = useState([])
+  const dispatch = useDispatch()
+  useEffect(() =>{
+    axios.post("/api/common/child",{code_id : 0})
+    .then(res => {
+      const action = {
+        type: "UPDATE_COMMON",
+        payload: res.data.list
+      }
+      dispatch(action)
+    })
+    .catch(error => console.log(error))
+    
+  },[])
   return (
     <div className="container">
       <h1>인덱스 테스트 페이지 입니다</h1>
