@@ -29,7 +29,7 @@ function App() {
       </Routes>
       <p>spring boot 와 연동이 되었는지 테스트 입니다.</p>
       <button onClick={() => {
-        axios.post("/api/common/child", 1000,
+        axios.post("/api/common/child", {"code_id": 1000},
           { headers: { "Content-Type": "application/json" } })
           .then(res => {
             console.log(res.data.list)
