@@ -24,6 +24,7 @@ function UpdateMenu(){
 
     const [getViewImage,setGetViewImage]=useState(null)
     const [previewImage, setPreviewImage]=useState(null)
+    
     const { menuId } = useParams();
 
     const goToMenuMain = () =>{
@@ -36,6 +37,15 @@ function UpdateMenu(){
        
        
     },[])
+
+    const deleteMenu= ()=>{
+        axios.post("/api/menu/delete", {"id": menuData.id},
+        { headers: { "Content-Type": "application/json" }   })
+        .then(res => {
+          console.log(res.data)
+          goToMenuMain()
+        })
+    }
     
     //카테고리 가져오기
     const getCategory = ()=>{
@@ -222,7 +232,8 @@ function UpdateMenu(){
                 </Form.Group>
 
              
-                <Button type="submit" >Submit</Button>
+                <Button type="submit" >수정</Button>
+                <Button onClick={deleteMenu}>삭제</Button>
             </fieldset>
             </Form>
        
