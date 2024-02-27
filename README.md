@@ -52,18 +52,16 @@
 * 간단 소개 : 꽃 키오스크 서비스 프로젝트
 ## 사용 패키지
 
-* React Bootstrap Icons
+* React Bootstrap, Icons
   * 각종 아이콘
 * bootstrap
   * 부트스트랩과 react를 연동
 * axios
   * 서버 통신을 위한 패키지
-* connected-react-router, history
+* react-router-dom
   * 라우팅을 위한 패키지
 * react-redux, redux
   * 프론트엔드에서 데이터의 전역관리를 위한 패키지
-* redux-logger
-  * 리덕스의 state를 콘솔에서 조회할 수 있게하는 패키지
 
 ## 테이블 설계
 ![flowerDB](https://github.com/acornkiosk/flower_front/assets/94777814/b7e18eef-0821-4096-9b0a-5901e8ba38c2)
