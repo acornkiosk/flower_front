@@ -74,11 +74,11 @@ function Main() {
 
   /** 화면 구현 */
   return (
-    <div>
-
-      <CategoryBtn onSelectCategory={handleCategoryChange}></CategoryBtn>
-      <Button variant="warning" onClick={goToAddMenu}>등록하기</Button>
-
+      <div>
+        <div className="d-flex justify-content-between">
+        <Button variant="warning" onClick={goToAddMenu}>등록하기</Button>
+        <CategoryBtn className="m" onSelectCategory={handleCategoryChange}></CategoryBtn>
+        </div>
       <Table striped>
         <thead>
           <tr>
