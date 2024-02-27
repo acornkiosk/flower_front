@@ -8,6 +8,7 @@ import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
 import { useDispatch } from 'react-redux';
+import main from './components/main';
 
 function App() {
   const [common,setCommon] = useState([])
@@ -33,6 +34,7 @@ function App() {
         <li><Link to="/order">주문 관리</Link></li>
         <li><Link to="/user">사용자 관리</Link></li>
         <li><Link to="/menu">메뉴 관리</Link></li>
+        <li><Link to="/main">키오스크</Link></li>
         <li><Link to="/login">로그인</Link></li>
       </ul>
       <Routes>
@@ -41,6 +43,7 @@ function App() {
         <Route path='/user' Component={User}/>
         <Route path='/menu/*' Component={Menu}/>
         <Route path='/login' Component={Login}/>
+        <Route path='/main' Component={main}/>
       </Routes>
 
       <p>spring boot 와 연동이 되었는지 테스트 입니다.</p>
