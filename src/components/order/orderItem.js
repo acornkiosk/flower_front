@@ -1,12 +1,9 @@
 import axios from "axios";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { Justify } from "react-bootstrap-icons";
+import ConvertOptions from "./util";
 
 export default function OrderItem(props) {
-  //공통 코드 가져오기
-  const common = useSelector((state) => {
-    return state.commonTable
-  })
   const orderId = props.orders[0].order_id
   const kioskId = props.orders[0].kiosk_id
   const regDate = calRegDate(props.orders[0].regdate)
@@ -22,21 +19,7 @@ export default function OrderItem(props) {
 
     return timeDiff
   }
-  //옵션을 글자로 변경
-  function convertOptions(options) {
-    if (options === null) return "옵션 없음"
-    const newOptions = options.split(',').map(tmp => parseInt(tmp))
-    let result = ""
-    for (let item of common) {
-      for (let codeId of newOptions) {
-        if (codeId === item.code_id) {
-          result += item.code_name + " "
-        }
-      }
-    }
 
-    return result
-  }
 
   //완료 버튼 누를 시 
   function onComplted() {
@@ -61,7 +44,11 @@ export default function OrderItem(props) {
     <Card style={{ width: '18rem' }}>
       <Card.Body>
         <Row>
-          <Col><Card.Title>주문 번호 : {orderId}번</Card.Title></Col>
+          <Col md={8}><Card.Title>주문 번호 : {orderId}번</Card.Title></Col>
+          <Col md={4} className="text-end"><Justify onClick={() => {
+                props.setShowModal(true)
+                props.setData(props.orders)
+              }}></Justify></Col>
         </Row>
         <Row>
           <Col><Card.Title>키오스크 번호 : {kioskId}번</Card.Title></Col>
@@ -80,7 +67,7 @@ export default function OrderItem(props) {
                 <Col><Card.Text className="text-end">{item.menu_count}개</Card.Text></Col>
               </Row>
               <Row>
-                <Col><Card.Text>옵션 : {convertOptions(item.options)}</Card.Text>  </Col>
+                <Col><Card.Text>옵션 : {ConvertOptions(item.options)}</Card.Text>  </Col>
               </Row>
             </div>
           )}
