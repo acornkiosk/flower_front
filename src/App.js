@@ -13,17 +13,22 @@ import main from './components/main';
 function App() {
   const [common,setCommon] = useState([])
   const dispatch = useDispatch()
+
   useEffect(() =>{
+    console.log("App.js : 공통코드 서버요청중")
+    
     axios.post("/api/common/child",{code_id : 0})
     .then(res => {
       const action = {
         type: "UPDATE_COMMON",
         payload: res.data.list
       }
+      console.log("App.js : 공통코드 현황")
+      console.log(res.data.list)
       dispatch(action)
     })
     .catch(error => console.log(error))
-    
+   
   },[])
 
   return (
