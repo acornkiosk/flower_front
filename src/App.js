@@ -7,7 +7,9 @@ import Login from './components/login/login';
 import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
-import SuperAdd from './components/login/SuperAdd';
+import OwnerManage from './components/login/OwnerManage';
+
+
 
 function App() {
   const [common,setCommon] = useState([])
@@ -20,7 +22,7 @@ function App() {
     },1000)
     if(count===5){
       count=0;
-      navigate("/qweqwewqe")
+      navigate("/asd")
     }
   }
   return (
@@ -40,7 +42,8 @@ function App() {
         <Route path='/user' Component={User}/>
         <Route path='/menu' Component={Menu}/>
         <Route path='/login' Component={Login}/>  
-        <Route path='/qweqwewqe' Component={SuperAdd}/>
+        <Route path='/asd' Component={OwnerManage}/>
+          
       </Routes>
       <p>spring boot 와 연동이 되었는지 테스트 입니다.</p>
       <button onClick={() => {

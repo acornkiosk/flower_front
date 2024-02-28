@@ -5,14 +5,40 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
+import { legacy_createStore as createStore } from 'redux';
+import { Provider} from 'react-redux';
+
+
+const initialstate={
+  userName:null,
+  showmodal:false
+}
+
+const reducer=(state=initialstate,action)=>{
+  let newState
+
+  if(action.type==="UPDATE_MODAL"){
+    newState={
+      ...state,
+      showmodal:action.payload
+    }
+  }else{
+    newState=state
+  }
+  return newState
+}
+const store = createStore(reducer)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <BrowserRouter>
+    <React.StrictMode>
       <App />
+    </React.StrictMode>
     </BrowserRouter>
-  </React.StrictMode>
+  </Provider>
+ 
 );
 
 // If you want to start measuring performance in your app, pass a function
