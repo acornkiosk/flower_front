@@ -8,9 +8,9 @@ import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
 import { useDispatch } from 'react-redux';
-import main from './components/main';
 import Sidebar from './SideBar';
 import Navbar from './NavBar';
+import Main from './components/main';
 
 function App() {
   const [common,setCommon] = useState([])
@@ -48,6 +48,7 @@ function App() {
             <Route path='/user' Component={User}/>
             <Route path='/menu/*' Component={Menu}/>
             <Route path='/login' Component={Login}/>
+            <Route path='/main' Component={Main}/>
           </Routes>
           </div>    
         </div> 

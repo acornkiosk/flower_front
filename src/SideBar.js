@@ -40,8 +40,11 @@ const Sidebar = () => {
             <NavLink onClick={() => toggleAccordion('login')} exact to="/login" className={activeStyle}>
               <CDBSidebarMenuItem icon="user">로그인</CDBSidebarMenuItem>
             </NavLink>
+            <NavLink onClick={() => toggleAccordion('main')} exact to="/main" className={activeStyle}>
+              <CDBSidebarMenuItem icon="tablet">키오스크 화면</CDBSidebarMenuItem>
+            </NavLink>
             <NavLink onClick={() => toggleAccordion('kiosk')} exact to="/kiosk" className={activeStyle}>
-              <CDBSidebarMenuItem icon="tablet">키오스크 관리</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="warehouse">키오스크 관리</CDBSidebarMenuItem>
             </NavLink>
             <NavLink onClick={() => toggleAccordion('user')} exact to="/user" className={activeStyle}>
               <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
