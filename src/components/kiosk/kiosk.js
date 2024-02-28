@@ -15,6 +15,7 @@ function Kiosk() {
   useEffect(() => {
     refresh()
   }, [])
+
   //키오스크 정보를 저장하는 state
   const [kiosk, setKiosk] = useState([])
   //추가모달 state
