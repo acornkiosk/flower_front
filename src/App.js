@@ -13,7 +13,7 @@ import Navbar from './NavBar';
 import Main from './components/main';
 
 function App() {
-  const [common,setCommon] = useState([])
+
   const dispatch = useDispatch()
 
   useEffect(() =>{
