@@ -2,10 +2,12 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button, Card, Col, Form, Image, Modal, Row } from "react-bootstrap"
 import { DashCircle, PlusCircle } from "react-bootstrap-icons"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 export default function Menu(props) {
   const commonTable = useSelector(state => state.commonTable)
+  const orders = useSelector(state => state.orders)
+  const dispatch = useDispatch();
   const { category } = props
   const [menu, setMenu] = useState([])
   const [selectedMenu, setSelectedMenu] = useState({})
@@ -21,12 +23,37 @@ export default function Menu(props) {
     bag: [],
     self: []
   })
+  //메뉴 개수 state
+  const [count, setCount] = useState(1)
   //장바구니
   const [cart, setCart] = useState([])
   //장바구니 추가
   const addCart = (item, options) => {
-    console.log(item)
-    console.log(options)
+    //order_id는 장바구니에서 최종적으로 주문할때 추가
+    //kiosk_id는 처음 키오스크에 로그인할때 부여하기로 결정 
+    let list = orders
+    const order = {
+      kiosk_id: 2,
+      menu_name: item.name,
+      menu_price: item.price,
+      menu_count: count,
+      options: options
+    }
+    list.push(order)
+    const action = {
+      type: "UPDATE_ORDERS",
+      payload: list
+    }
+    dispatch(action)
+    closeModal()
+  }
+  //모달 닫는 함수
+  const closeModal = () => {
+    setShowModal(false)
+    setCount(1)
+    setChecked({})
+    setBag(0)
+    setWrap(0)
   }
   //상세 모달 열릴시 
   const openModal = (item) => {
@@ -53,14 +80,14 @@ export default function Menu(props) {
   //옵션을 DB에 넣기 위해 리스트 형태로 변형
   const convertOption = () => {
     let result = ""
-    if(wrap !== 0) {
+    if (wrap !== 0) {
       result += wrap + ", "
     }
-    
-    if(bag !== 0) {
+
+    if (bag !== 0) {
       result += bag + ", "
     }
-    
+
     let etcKeys = Object.keys(checked).filter(key => checked[key] === true)
     etcKeys.forEach(tmp => result += tmp + ", ")
     return result
@@ -80,8 +107,7 @@ export default function Menu(props) {
     }
     setOptions({ ...options, etc: etcList, bag: bagList })
   }, [])
-  //메뉴 개수 state
-  const [count, setCount] = useState(1)
+  
   //카테고리에 맞는 menu를 출력해쥐야함
   useEffect(() => {
     axios.post("/api/menu/list", { category_id: category })
@@ -198,13 +224,7 @@ export default function Menu(props) {
         <Modal.Footer>
           <Row className="justify-content-md-end">
             <Col md="auto">
-              <Button variant="secondary" onClick={() => {
-                setShowModal(false)
-                setCount(0)
-                setChecked({})
-                setBag(0)
-                setWrap(0)
-              }}>닫기</Button>
+              <Button variant="secondary" onClick={closeModal}>닫기</Button>
             </Col>
             <Col md="auto">
               <Button variant="primary" type="button" onClick={() => {

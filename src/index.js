@@ -10,7 +10,8 @@ import { Provider } from 'react-redux';
 
 
 const initialState = {
-  commonTable : []
+  commonTable : [],
+  orders : []
 }
 //reducer 함수
 const reducer = (state = initialState, action) => {
@@ -21,7 +22,13 @@ const reducer = (state = initialState, action) => {
       commonTable : action.payload
     }
     return newState
+  }else if(action.type === "UPDATE_ORDERS") {
+    newState = {
+      ...state,
+      orders : action.payload
+    }
   }
+  
   return state
 }
 //storage
