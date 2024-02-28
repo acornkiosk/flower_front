@@ -1,23 +1,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import Loading from '../loading';
 import CategoryBtn from './categoryBtn';
 import { Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-/**
- * 실패한 코드
- * 참고용으로 쓰기 위해 살려둠
- * 1. 서버에서 삭제한 사실을 확인하지 않고 요청 후 성공이라 함
- * 2. 안내 모달 이후 화면 초기화 실패
- */
-
 /** HTML 본문 : 메뉴조회 전체 */ 
 function Main() {
 
-  /** 로딩실행 값을 true 로 만들고 끝나면 false 로 변환하기 */
-  const [loading, setLoading] = useState(true);
   /** 서버에서 가져온 데이터 배분 배열 변수 */ 
   const [menuList, setMenuList] = useState([]);
   /** 필터링된 메뉴 데이터 배열 변수 */
@@ -25,39 +15,48 @@ function Main() {
   /** 삭제버튼 눌렀을 때 경고알림으로 사용할 변수 */
   const [warning, setWarning] = useState({
     menu_id:0,
-    category_id:"",
+    category_id:0,
     show:false
   });
   /** 삭제처리 이후 안내설명으로 사용할 변수 */
-  const [info, setInfo] = useState(false)
+  const [info, setInfo] = useState({
+    title:"",
+    header:"",
+    body:"",
+    show:false
+  })
+  /** 삭제 프로세스 함수 실행여부 */
+  const [deleteProcess, SetDeleteProcess] = useState(false)
+
 
   /** 등록과 수정폼 이동처리 변수 */
   const navigate= useNavigate()
 
   console.log("메뉴관리 : 메뉴정보 현황(menuList)")
   console.log(menuList)
-  
+  const refresh = ()=>{
+    console.log("메뉴관리 : 화면에서 렌더링 요청중")
+
+    /** 메뉴정보 전체 요청하기 */
+    axios.post("/api/menu/list", {})
+    .then(res=>{
+      const menuDB = res.data.list; // menuListResponse.data.list = [{},{},{}...]
+      setMenuList(menuDB)
+      setFilteredMenuList(menuDB)
+
+      console.log("메뉴관리 : 서버에서 가져온 메뉴리스트")
+      console.log(menuDB)
+    })
+    .catch(error=>{
+      console.error('메뉴관리 : 메뉴리스트 요청 오류:', error);
+    })
+  }
   /** 화면에 접속하자마자 서버로부터 메뉴정보를 모두 가져오는 코드를 작성 */
   useEffect(() => {
-    const fetchData = () =>{
-      console.log("메뉴관리 : 화면에서 렌더링 요청중")
-
-      /** 메뉴정보 전체 요청하기 */
-      axios.post("/api/menu/list", {})
-      .then(res=>{
-        const menuData = res.data.list; // menuListResponse.data.list = [{},{},{}...]
-        setMenuList(menuData)
-        setFilteredMenuList(menuData)
-      })
-      .catch(error=>{console.error('메뉴관리 : 메뉴리스트 요청 오류:', error);})
-      .finally(setLoading(false)) // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
-    }
-    // fetchData 함수 호출
-    fetchData();
-    console.log("메뉴관리 : 화면에서 렌더링 완료")
+    refresh()
   }, []); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
 
-    /** 카테고리 드롭다운 박스에 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
+    /** 카테고리 드롭다운 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
     const handleCategoryChange = (item) => {
       try{
         if(item === 1000 || item === 0){
@@ -72,65 +71,67 @@ function Main() {
           setFilteredMenuList(filtered);
         }
       }catch (e) {
-        console.error('Error handling category change:', e);
+        console.error('메뉴관리 : 카테고리 드롭다운 버튼에서 가져온 값이 이상함', e);
       }
       
     };
-    
-    /** 로딩 중일 때 Spinner를 보여줌 */ 
-    if (loading) {
-      return <Loading/>;
-    }
 
-  //메뉴 수정 폼으로 가기
+  /** 메뉴 수정 폼으로 가기 */
   const goToUpdateMenu = (MenuId)=>{
     navigate(`/menu/updateMenu/${MenuId}`)
   }
     
-  // 메뉴등록 폼으로가기
+  /** 메뉴등록 폼으로가기 */ 
     const goToAddMenu = () =>{
       navigate("/menu/addMenu")
   };
 
-  /** 삭제완료 안내 모달 */
-  const callInfoModal = (call) => {
-    if(call){
-      setWarning({show:false})
-      setInfo(true)
-    }else{
-      setInfo(false)
-    }
+  /** 삭제처리 로직 */
+  if(deleteProcess){ // call : props.deleteMenu(true)
+
+      axios.post("/api/menu/delete", {"id": warning.menu_id},
+      { headers: { "Content-Type": "application/json" }})
+      .then(res=>{
+        console.log(res.data) // res.data = { {"dto":{...}}, {"list":null}, {"status": HttpStatus 결과값} }
+        let isSuccess = res.data.status
+
+        if(isSuccess === "OK"){
+          // 안내 메시지에 성공되었다 알리기
+          setInfo({
+            title:"알림",
+            header:"삭제되었습니다.",
+            body:"메뉴관리 페이지로 돌아가겠습니다.",
+            show:true
+          })
+          setWarning({
+            menu_id:0,
+            category_id:0,
+            show:false
+          })
+          SetDeleteProcess(false)
+        }else{
+          // 안내 메시지에 실패했다고 알리기 
+          setInfo({
+            title:"알림",
+            header:"삭제가 실패되었습니다.",
+            body:"정보를 확인해주세요",
+            show:true
+          })
+          setWarning({
+            menu_id:0,
+            category_id:0,
+            show:false
+          })
+          SetDeleteProcess(false)
+        }
+
+      })
+      .catch(error=>{
+        console.error('삭제과정 : 서버요청 오류', error);
+      })
   }
 
-  /** 삭제 완전처리 후 웹브라우저 정보 최신화 */
-  const reloading = (id) => {
 
-    /** 메뉴정보 전체 다시 요청하기 */
-    axios.post("/api/menu/list", {})
-    .then(res=>{
-      /** menuData = [{},{},{}...] */ 
-      const DB = res.data.list; 
-
-      /** 최신화된 데이터 보존용 */
-      setMenuList(DB)
-
-    })
-    .catch(error=>{console.error('에헤이~ 삭제 다 했는데 막판에 뭐여 조졌네 이거', error);})
-
-    const filtered = menuList.filter(menu => menu.category_id === id)
-    
-    // 새로운 배열을 상태로 설정
-    setFilteredMenuList(filtered)
-
-    // setWarning 정보 초기화
-    setWarning({
-      id:0,
-      category:"",
-      show:false
-    })
-    // 알림창 닫기 
-    setInfo(false)
-  }
 
   /** 화면 구현 */
   return (
@@ -161,8 +162,11 @@ function Main() {
           ))}
         </tbody>
       </Table>
-      <WarningModal show={warning.show} value_id={warning.menu_id} onHide={()=>setWarning({show:false})} success={callInfoModal}></WarningModal>
-      <InfoModal show={info} value_id={warning.menu_id}  onHide={()=>setInfo(false)} reload={reloading}></InfoModal>
+      <WarningModal show={warning.show} value_id={warning.menu_id} onHide={()=>setWarning({show:false})} deleteMenu={()=>SetDeleteProcess(true)}></WarningModal>
+      <InfoModal show={info.show} title={info.title} header={info.header} body={info.body} onHide={()=>{
+        setInfo({show:false})
+        refresh()
+      }} ></InfoModal>
     </div>
   );
 }
@@ -172,29 +176,14 @@ export default Main;
 /** 경고 메시지 */
 function WarningModal(props) {
 
-const deleteMenu= (id)=>{
-  axios.post("/api/menu/delete", {"id": id},
-  { headers: { "Content-Type": "application/json" }})
-  .then(res => {
-    console.log(res.data)
-    props.success(true)
-  })
-  .catch(error=>{console.error('제발 삭제하게 해주세요.', error);})
-}
-
   return (
     <Modal
       {...props} 
-      /** 
-       * 경고문 Warning: Unknown event handler property `onSave`. It will be ignored. 
-       * ㄴ> 임의로 만든 'onSave' 라는 함수명은 없어서 나온 경고문이다. 무시해도 된다. 
-      */
       size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Title >
           경고
         </Modal.Title>
       </Modal.Header>
@@ -202,7 +191,7 @@ const deleteMenu= (id)=>{
         <h4>보고 계신 정보를 정말 삭제하시겠습니까?</h4>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={()=>{deleteMenu(props.value_id)}}>삭제</Button>
+        <Button variant="danger" onClick={props.deleteMenu}>삭제</Button>
         <Button variant="warning" onClick={props.onHide}>취소</Button>
       </Modal.Footer>
     </Modal>
@@ -212,15 +201,6 @@ const deleteMenu= (id)=>{
 /** 안내 메시지 */
 function InfoModal(props){
 
-const deleteFinish = (id) => {
-  try{
-    props.reload(id)
-
-  }catch(e){
-    console.error('아니 이제 정보 다 지웠는데 무슨 일이야 : ', e);
-  }
-}
-
   return (
     <Modal
       {...props}
@@ -229,18 +209,14 @@ const deleteFinish = (id) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          알림
-        </Modal.Title>
+        <Modal.Title >{props.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>삭제되었습니다.</h4>
-        <p>
-          메뉴관리 페이지로 돌아가겠습니다.
-        </p>
+        <h4>{props.header}</h4>
+        <p>{props.body}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="warning" onClick={()=>{deleteFinish(props.value_id)}}>확인</Button>
+        <Button variant="warning" onClick={props.onHide}>확인</Button>
       </Modal.Footer>
     </Modal>
   );
