@@ -55,7 +55,7 @@ function Main() {
     // fetchData 함수 호출
     fetchData();
     console.log("메뉴관리 : 화면에서 렌더링 완료")
-  }, []); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
+  }, [menuList]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
 
     /** 카테고리 드롭다운 박스에 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
     const handleCategoryChange = (item) => {
