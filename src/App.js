@@ -33,7 +33,6 @@ function App() {
 
   return (
     <div className="container">
-      <p>관리자 페이지</p>
       <ul>
         <li><Link to="/kiosk">키오스크 관리</Link></li>
         <li><Link to="/order">주문 관리</Link></li>
@@ -50,39 +49,6 @@ function App() {
         <Route path='/login' Component={Login}/>
         <Route path='/main' Component={main}/>
       </Routes>
-
-      <p>spring boot 와 연동이 되었는지 테스트 입니다.</p>
-      <button onClick={() => {
-        axios.post("/api/common/child", {"code_id": 1000},
-          { headers: { "Content-Type": "application/json" } })
-          .then(res => {
-            console.log(res.data.list)
-            setCommon(res.data.list)
-          })
-      }}>응답받기</button>
-      <table>
-        <thead>
-          <tr>
-            <th>code_id</th>
-            <th>p_code_id</th>
-            <th>code_name</th>
-            <th>code_value</th>
-            <th>code_img</th>
-          </tr>
-        </thead>
-        <tbody>
-          {common.map(item =>
-              <tr>
-                <td>{item.code_id}</td>
-                <td>{item.p_code_id}</td>
-                <td>{item.code_name}</td>
-                <td>{item.code_value}</td>
-                <td>{item.code_img}</td>
-              </tr>
-            )}
-        </tbody>
-      </table>
-
     </div>
   );
 }
