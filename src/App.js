@@ -8,6 +8,9 @@ import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
 import OwnerManage from './components/login/OwnerManage';
+import { useSelector } from 'react-redux';
+
+
 
 
 
@@ -25,8 +28,12 @@ function App() {
       navigate("/asd")
     }
   }
+  const userName=useSelector(state=>state.userName)
   return (
     <div className="container">
+      {
+        userName && <p>{userName}</p>
+      }
       <h1 onClick={test}>인덱스 테스트 페이지 입니다</h1>
       <ul>
         <li><Link to="/kiosk">키오스크 관리</Link></li>
@@ -43,7 +50,7 @@ function App() {
         <Route path='/menu' Component={Menu}/>
         <Route path='/login' Component={Login}/>  
         <Route path='/asd' Component={OwnerManage}/>
-          
+
       </Routes>
       <p>spring boot 와 연동이 되었는지 테스트 입니다.</p>
       <button onClick={() => {

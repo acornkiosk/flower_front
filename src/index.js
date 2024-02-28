@@ -11,16 +11,22 @@ import { Provider} from 'react-redux';
 
 const initialstate={
   userName:null,
-  showmodal:false
+  addmodal:false,
+  upmodal:false
 }
 
 const reducer=(state=initialstate,action)=>{
   let newState
 
-  if(action.type==="UPDATE_MODAL"){
+  if(action.type==="UPDATE_AddMODAL"){
     newState={
       ...state,
-      showmodal:action.payload
+      addmodal:action.payload
+    }
+  }else if(action.type==="UPDATE_UpMODAL"){
+    newState={
+      ...state,
+      upmodal:action.payload
     }
   }else{
     newState=state
