@@ -29,7 +29,7 @@ const reducer = (state = initialState, action) => {
     }
   }
   
-  return state
+  return newState
 }
 //storage
 const store = createStore(reducer)

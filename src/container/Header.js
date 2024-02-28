@@ -1,4 +1,5 @@
-import Cart from "../components/cart/Cart";
+
+import Cart from "../components/header/Cart";
 import HeaderImg from "../components/header/HeaderImg";
 import HeaderMenu from "../components/header/HeaderMenu";
 

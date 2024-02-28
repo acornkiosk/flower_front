@@ -25,13 +25,10 @@ export default function Menu(props) {
   })
   //메뉴 개수 state
   const [count, setCount] = useState(1)
-  //장바구니
-  const [cart, setCart] = useState([])
   //장바구니 추가
   const addCart = (item, options) => {
     //order_id는 장바구니에서 최종적으로 주문할때 추가
     //kiosk_id는 처음 키오스크에 로그인할때 부여하기로 결정 
-    let list = orders
     const order = {
       kiosk_id: 2,
       menu_name: item.name,
@@ -39,7 +36,7 @@ export default function Menu(props) {
       menu_count: count,
       options: options
     }
-    list.push(order)
+    let list = [...orders, order]
     const action = {
       type: "UPDATE_ORDERS",
       payload: list
