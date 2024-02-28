@@ -2,7 +2,6 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button, CloseButton, Col, Container, Modal, Row } from "react-bootstrap"
 import OrderItem from "./orderItem"
-import { useSelector } from "react-redux"
 import ConvertOptions from "./util"
 
 export default function Order() {
