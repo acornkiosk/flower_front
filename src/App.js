@@ -8,7 +8,9 @@ import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
 import { useDispatch } from 'react-redux';
-import main from './components/main';
+import Sidebar from './SideBar';
+import Navbar from './NavBar';
+import Main from './components/main';
 
 function App() {
   const [common,setCommon] = useState([])
@@ -32,23 +34,25 @@ function App() {
   },[])
 
   return (
-    <div className="container">
-      <ul>
-        <li><Link to="/kiosk">키오스크 관리</Link></li>
-        <li><Link to="/order">주문 관리</Link></li>
-        <li><Link to="/user">사용자 관리</Link></li>
-        <li><Link to="/menu">메뉴 관리</Link></li>
-        <li><Link to="/main">키오스크</Link></li>
-        <li><Link to="/login">로그인</Link></li>
-      </ul>
-      <Routes>
-        <Route path='/kiosk' Component={Kiosk}/>
-        <Route path='/order' Component={Order}/>
-        <Route path='/user' Component={User}/>
-        <Route path='/menu/*' Component={Menu}/>
-        <Route path='/login' Component={Login}/>
-        <Route path='/main' Component={main}/>
-      </Routes>
+    <div className="d-flex">
+       <div>
+        <Sidebar/>
+      </div>
+      <div style={{flex:"1 1 auto", display:"flex", flexFlow:"column", height:"100vh", overflowY:"hidden"}}>
+        <Navbar/>
+        <div style={{height:"100%"}}>
+          <div style={{height:"calc(100% - 64px)", padding:"20px 5%", overflowY:"scroll"}}> 
+          <Routes>
+            <Route path='/kiosk' Component={Kiosk}/>
+            <Route path='/order' Component={Order}/>
+            <Route path='/user' Component={User}/>
+            <Route path='/menu/*' Component={Menu}/>
+            <Route path='/login' Component={Login}/>
+            <Route path='/main' Component={Main}/>
+          </Routes>
+          </div>    
+        </div> 
+      </div>
     </div>
   );
 }
