@@ -6,6 +6,8 @@ import Menu from "../../container/Menu";
 export default function HeaderMenu() {
   const commonTable = useSelector((state) => state.commonTable)
   const [category, setCategory] = useState([])
+  //주문 구별을 위한 id 
+  const [id, setId] = useState(1)
   //처음 컴포넌트 실행시 category 가져오기
   useEffect(() => {
     let list = []
@@ -24,7 +26,7 @@ export default function HeaderMenu() {
           <div className="album py-5 ">
             <Container>
               <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                <Menu category={0} />
+                <Menu category={0} id={id} setId={setId} />
               </Row>
             </Container>
           </div>
@@ -34,7 +36,7 @@ export default function HeaderMenu() {
             <div className="album py-5">
               <Container>
                 <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                  <Menu category={item.code_id} />
+                  <Menu category={item.code_id} id={id} setId={setId} />
                 </Row>
               </Container>
             </div>

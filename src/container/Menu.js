@@ -8,7 +8,7 @@ export default function Menu(props) {
   const commonTable = useSelector(state => state.commonTable)
   const orders = useSelector(state => state.orders)
   const dispatch = useDispatch();
-  const { category } = props
+  const { category, id, setId } = props
   const [menu, setMenu] = useState([])
   const [selectedMenu, setSelectedMenu] = useState({})
   const [showModal, setShowModal] = useState(false)
@@ -30,12 +30,14 @@ export default function Menu(props) {
     //order_id는 장바구니에서 최종적으로 주문할때 추가
     //kiosk_id는 처음 키오스크에 로그인할때 부여하기로 결정 
     const order = {
+      id:id,
       kiosk_id: 2,
       menu_name: item.name,
       menu_price: item.price,
       menu_count: count,
       options: options
     }
+    setId(id+1)
     let list = [...orders, order]
     const action = {
       type: "UPDATE_ORDERS",
