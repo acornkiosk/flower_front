@@ -1,19 +1,24 @@
-import './App.css';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import Navbar from './NavBar';
+import Sidebar from './SideBar';
 import Kiosk from './components/kiosk/kiosk';
 import Login from './components/login/login';
+import Main from './components/main';
 import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import Sidebar from './SideBar';
-import Navbar from './NavBar';
-import Main from './components/main';
+
 
 function App() {
+  const [isLogin, setIsLogin] = useState(false);
+  const handleLogin = () => {
+    setIsLogin(true);
+  };  
   const dispatch = useDispatch()
  
   const userName=useSelector(state=>state.userName)
@@ -48,7 +53,7 @@ function App() {
             <Route path='/order' Component={Order}/>
             <Route path='/user' Component={User}/>
             <Route path='/menu/*' Component={Menu}/>
-            <Route path='/login' Component={Login}/>
+            <Route path='/login' element={<Login isLogin={isLogin} handleLogin={handleLogin} />} />
             <Route path='/main' Component={Main}/>
           </Routes>
           </div>    
