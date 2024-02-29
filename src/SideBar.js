@@ -8,7 +8,7 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem
 } from 'cdbreact';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState('');
@@ -26,11 +26,30 @@ const Sidebar = () => {
     }
   };
 
+  const navigate=useNavigate();
+  
+  const home=()=>{
+    navigate("/")
+  }
+
+  //여기서 부터 super(관리자모드) 필요한 코드
+  let count=0;
+  const superin=()=>{
+    count+=1;
+    setTimeout(()=>{
+      count=0;
+    },1000)
+    if(count===5){
+      count=0;
+      navigate("/owner")
+    }
+  }
+
   return (
     <div style={{ display: 'flex' ,  height: '100vh', overflow: 'scroll initial' }}>
       <CDBSidebar textColor="#fff" backgroundColor="#333">
         <CDBSidebarHeader prefix={<i onClick={()=>{setActiveMenu("close")}} className="fa fa-bars fa-large"></i>}>
-          <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+          <a onClick={home} className="text-decoration-none" style={{ color: 'inherit' }}>
             Flower
           </a>
         </CDBSidebarHeader>
@@ -83,7 +102,7 @@ const Sidebar = () => {
               padding: '20px 5px',
             }}
           >
-            Kiosk
+            <p onClick={superin}>Kiosk</p>
           </div>
         </CDBSidebarFooter>
       </CDBSidebar>

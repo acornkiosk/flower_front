@@ -17,7 +17,6 @@ const initialstate={
   upmodal:false,
   commonTable : [],
   orders : [],
-  userName:null,
   isLogin:false
 }
 

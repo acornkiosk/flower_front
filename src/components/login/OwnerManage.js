@@ -193,7 +193,6 @@ function AddModal(props) {
             }
         })
         .then(res => {
-            console.log(res.data)
             setOwner(res.data); // 단일 객체가 아닌 여러 개의 속성을 가진 객체를 업데이트 해야 함
         })
         .catch(error => {
