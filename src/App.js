@@ -1,6 +1,7 @@
 import axios from 'axios';
+
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './NavBar';
@@ -12,12 +13,15 @@ import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
 
+
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const handleLogin = () => {
     setIsLogin(true);
   };  
   const dispatch = useDispatch()
+ 
+  const userName=useSelector(state=>state.userName)
 
   useEffect(() =>{
     console.log("App.js : 공통코드 서버요청중")
@@ -35,7 +39,6 @@ function App() {
     .catch(error => console.log(error))
    
   },[])
-
   return (
     <div className="d-flex">
        <div>

@@ -8,19 +8,33 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
 import { legacy_createStore as createStore } from 'redux';
-import { Provider } from 'react-redux';
+import { Provider} from 'react-redux';
 
 
-const initialState = {
+const initialstate={
+  userName:null,
+  addmodal:false,
+  upmodal:false,
   commonTable : [],
   orders : [],
   userName:null,
   isLogin:false
 }
-//reducer 함수
-const reducer = (state = initialState, action) => {
+
+const reducer=(state=initialstate,action)=>{
   let newState
-  if(action.type === "UPDATE_COMMON") {
+
+  if(action.type==="UPDATE_AddMODAL"){
+    newState={
+      ...state,
+      addmodal:action.payload
+    }
+  }else if(action.type==="UPDATE_UpMODAL"){
+    newState={
+      ...state,
+      upmodal:action.payload
+    }
+  }else if(action.type === "UPDATE_COMMON") {
     newState = {
       ...state,
       commonTable : action.payload
@@ -44,12 +58,9 @@ const reducer = (state = initialState, action) => {
   }else{
     newState=state
   }
-  
   return newState
 }
-//storage
 const store = createStore(reducer)
-//storag에서 관리될 초기값
 
 //id 가 root 인 곳에 UI 출력하기 
 const root = ReactDOM.createRoot(document.getElementById('root'));
