@@ -1,11 +1,5 @@
 /** 달력기능 */
 import * as React from 'react';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-// import { TextField } from '@mui/material';
-// import dayjs from 'dayjs';
-
 import { Button, Form, Modal, Row, Col, Table } from 'react-bootstrap';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -17,13 +11,13 @@ function User() {
 
   useEffect(() => {
     axios.get("/api/user/list", {})
-    .then(res=>{
-      const userList = res.data.list;
-      console.log(userList)
-    })
-    .catch(error=>{
-      console.error('사용자 관리 : 정보 리스트 요청 오류:', error);
-    })
+      .then(res => {
+        const userList = res.data.list;
+        console.log(userList)
+      })
+      .catch(error => {
+        console.error('사용자 관리 : 정보 리스트 요청 오류:', error);
+      })
   }, [])
 
   return (
@@ -92,10 +86,9 @@ function InsertModal(props) {
           </Form.Group>
 
           <Form.Group as={Row}>
-            <Form.Label column md="1"  type="date"> 입사일 : </Form.Label>
-           
+            <Form.Label column md="1" type="date"> 입사일 : </Form.Label>
             <Col md="5">
-            <input type="date" />
+              <input type="date" />
             </Col>
             <Form.Label column md="1"></Form.Label>
             <Col md="5"></Col>

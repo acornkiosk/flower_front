@@ -60,7 +60,7 @@ export default function OrderItem(props) {
       <Card.Footer>
         <Row className="shadow-sm p-3 rounded" style={{ backgroundColor: '#C7C8CC' }}>
           {props.orders.map(item =>
-            <div className="mb-1">
+            <div className="mb-1" key={item.id}>
               <Row>
                 <Col xs="auto"><Form.Check type={`checkbox`} /></Col>
                 <Col><Card.Text>{item.menu_name}</Card.Text></Col>
