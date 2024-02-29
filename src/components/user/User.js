@@ -4,6 +4,7 @@ import { Button, Form, Modal, Row, Col, Table } from 'react-bootstrap';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 /** 주석처리가 많은 이유 : 달력기능 npm install 오류 확인되어 임시조치 */
 function User() {
@@ -11,13 +12,14 @@ function User() {
 
   useEffect(() => {
     axios.get("/api/user/list", {})
-      .then(res => {
-        const userList = res.data.list;
-        console.log(userList)
-      })
-      .catch(error => {
-        console.error('사용자 관리 : 정보 리스트 요청 오류:', error);
-      })
+    .then(res=>{
+      const userList = res.data.list;
+      console.log(userList)
+    })
+    .catch(error=>{
+      //console.error('사용자 관리 : 정보 리스트 요청 오류:', error);
+    })
+
   }, [])
 
   return (
@@ -49,21 +51,66 @@ export default User
 /** 사용자 정보 등록 모달 */
 function InsertModal(props) {
 
+  const navigate= useNavigate()
+   
+    const goToMenuMain = () =>{
+       navigate("/user")
+    };
+  const [Rank,setRank]=useState([])
+  const [regDate,setRegDate]=useState([])
+
+  const getRank= ()=>{
+    
+    axios.post("/api/common/child", {"code_id": 3000},
+    { headers: { "Content-Type": "application/json" } })
+    .then(res => {
+      console.log("직급 리스트:"+res.data.list)
+      setRank(res.data.list)
+    }) 
+    .catch(error=>{
+      console.log("직급리스트: "+ error)
+    }) 
+  }
+ 
+  const userInput =(e)=>{
+    e.preventDefault();
+   
+    const url = "/api/user/add";
+    const formData = new FormData(e.target);
+
+    axios.post(url, formData,
+      { headers: { "Content-Type": "application/json" } })
+        .then(res=>{
+            console.log(res.data);
+            props.onHide(); 
+        })  
+  }
+
+  
+
+  useEffect(() => {
+    getRank()
+    
+
+  }, [])
+
+
   return (
+    
     <Modal
       {...props}
       size="xl"
       dialogClassName="modal-90w"
       aria-labelledby="example-custom-modal-styling-title"
     >
-      <Form>
+      <Form onSubmit={(e)=>userInput(e)}>
 
         <Modal.Header closeButton>
           <Modal.Title id="example-custom-modal-styling-title">
           </Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body >
           <Form.Group as={Row} className="mb-3">
             <Form.Label column md="1"> 아이디 : </Form.Label>
             <Col md="5"><Form.Control type='text' name='id' /></Col>
@@ -73,22 +120,26 @@ function InsertModal(props) {
 
           <Form.Group as={Row} className="mb-3">
             <Form.Label column md="1" > 이름 : </Form.Label>
-            <Col md="5"><Form.Control type='text' name='id' /></Col>
+            <Col md="5"><Form.Control type='text' name='userName' /></Col>
+         
             <Form.Label column md="1" > 직급 : </Form.Label>
             <Col md="5">
-              <Form.Select aria-label="여기는 누르기 전에 UI 상에 보여질 정보를 입력하는 곳" name='rank'>
-                <option value="0">반복문 사용해서 하나씩 배치되도록 코딩하면 될거야</option>
-                <option value="1">3000번대 데이터 나열하기</option>
-                <option value="2">우리팀 엑셀 공통코드 참고하기</option>
-                <option value="3">직급종류</option>
+              <Form.Select aria-label="직급" name='rank'>
+                {Rank.map(item=>
+                  <option value={item.code_id}>{item.code_name}</option>
+                )}
+
               </Form.Select>
             </Col>
           </Form.Group>
 
           <Form.Group as={Row}>
-            <Form.Label column md="1" type="date"> 입사일 : </Form.Label>
+
+            <Form.Label column md="1"  type="date"  > 입사일 : </Form.Label>
+           
             <Col md="5">
-              <input type="date" />
+            <input type="date" name="regdate" />
+
             </Col>
             <Form.Label column md="1"></Form.Label>
             <Col md="5"></Col>
