@@ -32,7 +32,7 @@ export default function CartRow(props) {
   }
   //아이템 개수 감소 기능
   const minus = () =>{
-    if (item.menu_count == 1) return
+    if (item.menu_count === 1) return
     const newOrders = orders.map(tmp => {
       if (tmp.id === item.id) {
         tmp.menu_count--
