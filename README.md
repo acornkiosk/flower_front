@@ -6,8 +6,6 @@
 
 ## 프로젝트 특징
 
-## 프로젝트 특징
-
 * React, Spring Boot을 기반으로 꽃을 판매하는 키오스크 서비스
     
 * 프론트엔드와 백엔드를 분리하여 프로젝트 개발
@@ -52,18 +50,16 @@
 * 간단 소개 : 꽃 키오스크 서비스 프로젝트
 ## 사용 패키지
 
-* React Bootstrap Icons
+* React Bootstrap, Icons
   * 각종 아이콘
 * bootstrap
   * 부트스트랩과 react를 연동
 * axios
   * 서버 통신을 위한 패키지
-* connected-react-router, history
+* react-router-dom
   * 라우팅을 위한 패키지
 * react-redux, redux
   * 프론트엔드에서 데이터의 전역관리를 위한 패키지
-* redux-logger
-  * 리덕스의 state를 콘솔에서 조회할 수 있게하는 패키지
 
 ## 테이블 설계
 ![flowerDB](https://github.com/acornkiosk/flower_front/assets/94777814/b7e18eef-0821-4096-9b0a-5901e8ba38c2)
@@ -88,13 +84,13 @@
 
 | 이름       | 진행 목록                                                    |
 | ------------ | ------------------------------------------------------------- |
-| 김대원         | 메뉴 관리 페이지 |  |                         
+| 김대원         | 메뉴 관리 페이지, sideBar, navBar|  |                         
 | 이승우         | 메뉴정보 조회기능 |     
 
 
 | 이름       | 진행 목록                                                    |
 | ------------ | ------------------------------------------------------------- |
-| 이준호         | 사용자 관리 페이지 |  |                       
+| 이준호         | 사용자 관리 페이지, sideBar, navBar |  |                       
 | 오영찬         | 사용자 관리 페이지 |         
 
 
@@ -114,6 +110,8 @@
 | 2024.02.21 | [ 프로젝트 화면계획서 V0.6 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> 주문 관리 DB, API 추가<br/> 프론트 Repository 생성|
 | 2024.02.23 | [ 프로젝트 화면계획서 V0.7 작성](https://drive.google.com/drive/folders/19cVOkx5jpWMl9KqFia3Dd_BrflqpRaVl) <br/> API 명세서 작성|
 | 2024.02.24 | 키오스크 관리 기능 완료|
+| 2024.02.27 | 주문 관리 기능 완료|
+| 2024.02.28 | 사이드바 기능 완료|
 
 
 ## Contents

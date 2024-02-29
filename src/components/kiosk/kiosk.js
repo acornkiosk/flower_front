@@ -4,14 +4,18 @@ import { Button, Col, Container, Form, InputGroup, Modal, Row, Table } from "rea
 import * as Icon from 'react-bootstrap-icons';
 
 function Kiosk() {
-  //화면 로딩시
-  useEffect(() => {
+  const refresh = () => {
     //table에 출력할 키오스크 정보를 받아옴
     axios.get("/api/kiosk/list")
       .then(res => {
         setKiosk(res.data.list)
       })
+  }
+  //화면 로딩시
+  useEffect(() => {
+    refresh()
   }, [])
+
   //키오스크 정보를 저장하는 state
   const [kiosk, setKiosk] = useState([])
   //추가모달 state
@@ -79,13 +83,7 @@ function Kiosk() {
     if (action === 'location') {
       axios.post('/api/kiosk/update', data)
         .then(res => {
-          let newState = kiosk.map(item => {
-            if (item.id === data.id) {
-              item.location = data.location
-            }
-            return item
-          })
-          setKiosk(newState)
+          refresh()
           setUpdateModalShow(false)
         })
         .catch(error => {
@@ -96,13 +94,7 @@ function Kiosk() {
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
-            let newState = kiosk.map(tmp => {
-              if (tmp.id === item.id) {
-                tmp.power = 'on'
-              }
-              return tmp
-            })
-            setKiosk(newState)
+            refresh()
           })
       })
       setChecked({})
@@ -113,13 +105,7 @@ function Kiosk() {
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
-            let newState = kiosk.map(tmp => {
-              if (tmp.id === item.id) {
-                tmp.power = 'off'
-              }
-              return tmp
-            })
-            setKiosk(newState)
+            refresh()
           })
       })
       setChecked({})
@@ -146,15 +132,11 @@ function Kiosk() {
   }
   //삭제 버튼 기능
   const deleteKiosk = () => {
-    //삭제하기 위한 키오스크 배열
-    const kioskIdsToDelete = selectedKiosk.map((kiosk) => kiosk.id);
-
     selectedKiosk.forEach(tmp => {
       axios.post("/api/kiosk/delete", tmp,
         { headers: { "Content-Type": "application/json" } })
         .then(res => {
-          let newKiosk = kiosk.filter(kiosk => !kioskIdsToDelete.includes(kiosk.id))
-          setKiosk(newKiosk)
+          refresh()
         })
         .catch(error => {
           console.log(error)
@@ -233,7 +215,7 @@ function Kiosk() {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>
+            <th style={{ width: '1%' }}>
               <Form.Check type={`checkbox`} checked={allCheck} onChange={(e) => { handleAllCheckBox(e) }} />
             </th>
             <th>ID</th>

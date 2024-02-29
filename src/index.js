@@ -12,7 +12,9 @@ import { Provider} from 'react-redux';
 const initialstate={
   userName:null,
   addmodal:false,
-  upmodal:false
+  upmodal:false,
+  commonTable : [],
+  orders : []
 }
 
 const reducer=(state=initialstate,action)=>{
@@ -28,12 +30,24 @@ const reducer=(state=initialstate,action)=>{
       ...state,
       upmodal:action.payload
     }
+  }else if(action.type === "UPDATE_COMMON") {
+    newState = {
+      ...state,
+      commonTable : action.payload
+    }
+    return newState
+  }else if(action.type === "UPDATE_ORDERS") {
+    newState = {
+      ...state,
+      orders : action.payload
+    }
   }else{
     newState=state
   }
   return newState
 }
 const store = createStore(reducer)
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
