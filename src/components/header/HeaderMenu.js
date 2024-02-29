@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Tab, Tabs } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Menu from "../../container/Menu";
 
 export default function HeaderMenu() {
   const commonTable = useSelector((state) => state.commonTable)
   const [category, setCategory] = useState([])
+  const dispatch = useDispatch()
   //주문 구별을 위한 id 
   const [id, setId] = useState(1)
   //처음 컴포넌트 실행시 category 가져오기
@@ -17,6 +18,10 @@ export default function HeaderMenu() {
       }
     })
     setCategory(list)
+    return () =>{
+      //dispatch를 통해 장바구니 초기화 
+      dispatch({type:"UPDATE_ORDERS", payload: []})
+    }
   }, [])
 
   return (
