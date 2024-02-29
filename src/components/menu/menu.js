@@ -1,8 +1,17 @@
+import { Route, Routes } from "react-router"
+import Main from "./main"
+import AddMenu from "./addMenu"
+import UpdateMenu from "./updateMenu"
+
 function Menu() {
   return (
-    <div>
-      <h1>메뉴 관리 페이지 입니다.</h1>
-    </div>
+   
+    <Routes path="/menu">
+      <Route path="/" element={<Main />} />
+      <Route path="/addMenu" element={<AddMenu />} />
+      <Route path="/updateMenu/:menuId" element={<UpdateMenu />} />
+    </Routes>
+   
   )
 }
 
