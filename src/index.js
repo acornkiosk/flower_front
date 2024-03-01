@@ -15,7 +15,8 @@ const initialstate={
   userName:null,
   commonTable : [],
   orders : [],
-  isLogin:false
+  isLogin:false,
+  rank:null
 }
 
 const reducer=(state=initialstate,action)=>{
@@ -40,6 +41,11 @@ const reducer=(state=initialstate,action)=>{
     newState ={
       ...state,
       isLogin:action.payload //boolean 값으로 전달될 예정 
+    }
+  }else if(action.type === "SET_RANK"){
+    newState ={
+      ...state,
+      rank:action.payload 
     }
   }else{
     newState=state

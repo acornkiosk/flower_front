@@ -9,6 +9,7 @@ import {
   CDBSidebarMenuItem
 } from 'cdbreact';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState('');
@@ -31,7 +32,7 @@ const Sidebar = () => {
   const home=()=>{
     navigate("/home")
   }
-
+  const rank=useSelector(state=>state.rank)
   //여기서 부터 super(관리자모드) 필요한 코드
   let count=0;
   const superin=()=>{
@@ -39,8 +40,9 @@ const Sidebar = () => {
     setTimeout(()=>{
       count=0;
     },1000)
-    if(count===5){
+    if(count===5 ){
       count=0;
+      console.log(rank)
       navigate("/owner")
     }
   }

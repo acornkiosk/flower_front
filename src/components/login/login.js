@@ -35,6 +35,7 @@ function Login() {
       } else {//유효기간이 만료 되지 않았다면 로그인된 상태라고 간주!
         dispatch({ type: "SET_LOGIN", payload: true })
         dispatch({ type: "UPDATE_USER", payload: result.payload.sub })
+        dispatch({ type: "SET_RANK", payload: result.payload.rank})
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
       }
@@ -55,6 +56,8 @@ function Login() {
         //redux 에 로그인 상태 , 사용자 이름 저장하기
         dispatch({ type: "UPDATE_USER", payload: result.payload.sub })
         dispatch({ type: "SET_LOGIN", payload: true })
+        dispatch({ type: "SET_RANK", payload: result.payload.rank})
+        console.log(result.payload.rank)
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
        alert(userName+"님 로그인 했습니다.")
