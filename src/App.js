@@ -12,6 +12,7 @@ import Main from './components/main';
 import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
+import OwnerMange from './components/login/OwnerManage';
 
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
   };  
   const dispatch = useDispatch()
  
-  const userName=useSelector(state=>state.userName)
+ 
 
   useEffect(() =>{
     console.log("App.js : 공통코드 서버요청중")
@@ -55,6 +56,7 @@ function App() {
             <Route path='/menu/*' Component={Menu}/>
             <Route path='/login' element={<Login isLogin={isLogin} handleLogin={handleLogin} />} />
             <Route path='/main' Component={Main}/>
+            <Route path='/owner' Component={OwnerMange}/>
           </Routes>
           </div>    
         </div> 
