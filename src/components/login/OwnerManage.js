@@ -32,7 +32,7 @@ export default function OwnerMange() {
     
     const [showAddModal, setShowAddModal] = useState(false)
     const [showUpModal, setShowUpModal] = useState(false)
-    const [currentItem, setCurrentItem] = useState(null)
+    const [currentItem, setCurrentItem] = useState({})
 
     //사장님 삭제
     const ownerDelete=(id)=>{
@@ -56,10 +56,9 @@ export default function OwnerMange() {
             <h1>super 전용 (관리자 모드)</h1>
 
             <h4>사장님(OWENR) 목록</h4>
-            <button onClick={()=>{
+            <Button variant="success" onClick={()=>{
                 setShowAddModal(true)
-            }}> 사장님 추가</button>
-            <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal}/>
+            }}> 추가</Button>
             <Table>
                 <thead>
                     
@@ -102,6 +101,7 @@ export default function OwnerMange() {
                     }
                 </tbody>
             </Table>
+            <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal}/>
             <UpModal show={showUpModal} setshow={setShowUpModal} item={currentItem} refresh={refresh} />
         </div>
     );
@@ -168,70 +168,65 @@ function AddModal(props) {
   }
 
   function UpModal(props) {
-     //state로 값을 관리
-     const [owner, setOwner] = useState( {
-         id: ""
-         , newId: ""
-         , userName: "" 
-        });
+    //state로 값을 관리
+    const [owner, setOwner] = useState(props.item);
 
-    console.log(props.item)
-    //모달창에 입력값 바뀌면 state 값 바꾸기
-    const handleChange = (e)=>{
-        setOwner({
-            ...owner,
-            [e.target.name]:e.target.value
-            
-        })
-        console.log("변경")
-    }
+   console.log(props.item)
+   //모달창에 입력값 바뀌면 state 값 바꾸기
+   const handleChange = (e)=>{
+       setOwner({
+           ...owner,
+           [e.target.name]:e.target.value
+           
+       })
+       console.log("변경")
+   }
 
-   
-    const handleSave = ()=>{
-        axios.put("/super/ownerUpdate/"+owner.id,owner,{
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.token
-            }
-        })
-        .then(res=>{
-            //회원 목록 보기로 이동
-            console.log(res.data)
-            props.refresh()
-            props.setshow(false)
-        })
-        .catch(error=>{
-            console.log(error)
-        })
-    } 
-
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered 
-      >
-        <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
-          {props.item.id} 사장님
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        <label htmlFor="newId">새로운 아이디</label>
-        <input type="text" name="newId"  onChange={handleChange} />
-        <label htmlFor="userName">이름</label>
-        <input type="text" name="userName" value={props.item.userName} onChange={handleChange} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => {
-            handleSave()
-          }}>수정</Button>
-          <Button onClick={() => {
-          props.setshow(false)
-          }}>취소</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
   
+   const handleSave = ()=>{
+       axios.put("/super/ownerUpdate/"+props.item.id,owner,{
+           headers: {
+               "Content-Type": "application/json",
+               Authorization: localStorage.token
+           }
+       })
+       .then(res=>{
+           //회원 목록 보기로 이동
+           console.log(res.data)
+           props.refresh()
+           props.setshow(false)
+       })
+       .catch(error=>{
+           console.log(error)
+       })
+   } 
+
+   return (
+     <Modal
+       {...props}
+       size="lg"
+       aria-labelledby="contained-modal-title-vcenter"
+       centered 
+     >
+       <Modal.Header>
+         <Modal.Title id="contained-modal-title-vcenter">
+         {props.item.userName} 사장님 정보
+         </Modal.Title>
+       </Modal.Header>
+       <Modal.Body>
+       <label htmlFor="newId">새로운 아이디</label>
+       <input type="text" name="newId"  onChange={handleChange} />
+       <label htmlFor="userName">이름</label>
+       <input type="text" name="userName" value={props.item.userName} onChange={handleChange} />
+       </Modal.Body>
+       <Modal.Footer>
+         <Button onClick={() => {
+           handleSave()
+         }}>수정</Button>
+         <Button onClick={() => {
+         props.setshow(false)
+         }}>취소</Button>
+       </Modal.Footer>
+     </Modal>
+   );
+ }
