@@ -11,8 +11,6 @@ function Login() {
 
   const dispatch = useDispatch()
   
-  const userName=useSelector(state=>state.userName)
-  
   // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
   const [login, setLogin] = useState({})
 
@@ -60,7 +58,7 @@ function Login() {
         console.log(result.payload.rank)
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
-       alert(userName+"님 로그인 했습니다.")
+       alert(result.payload.sub +"님 로그인 했습니다.")
         //home으로 보내기
         navigate("/home")
       })

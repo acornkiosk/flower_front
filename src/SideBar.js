@@ -32,6 +32,7 @@ const Sidebar = () => {
   const home=()=>{
     navigate("/home")
   }
+  const isLogin=useSelector(state=>state.isLogin)
   const rank=useSelector(state=>state.rank)
   //여기서 부터 super(관리자모드) 필요한 코드
   let count=0;
@@ -40,9 +41,9 @@ const Sidebar = () => {
     setTimeout(()=>{
       count=0;
     },1000)
-    if(count===5 ){
+    if(count===5 && isLogin ===true && rank==3001){
       count=0;
-      console.log(rank)
+      console.log("허허허"+rank)
       navigate("/owner")
     }
   }
