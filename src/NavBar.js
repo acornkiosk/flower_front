@@ -4,6 +4,7 @@ import { CDBNavbar } from "cdbreact";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import { useNavigate } from "react-router";
+import { Button } from "react-bootstrap";
 
 const Navbar = () => {
   const userName=useSelector(state=>state.userName)
@@ -26,13 +27,13 @@ const Navbar = () => {
             <div className="ml-auto">
               
               {
-                isLogin && <i className="mx-4"><strong>{userName} </strong>님 로그인중 <button onClick={handleLogout}>로그아웃</button></i>
+                isLogin && <i className="mx-4"><strong>{userName} </strong>님 로그인중 <Button variant="secondary" onClick={handleLogout}>로그아웃</Button></i>
               }
               
               {
-                !isLogin && <button className="mx-4" onClick={()=>{
+                !isLogin && <Button variant="secondary" className="mx-4" onClick={()=>{
                   navigate("/login")
-                }}> 로그인 </button>
+                }}> 로그인 </Button>
                 
               }
               

@@ -13,8 +13,7 @@ export default function OwnerMange() {
     const refresh=()=>{
         axios.get("/super/ownerList",{
             headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.token
+                "Content-Type": "application/json"
             }
         }
         )
@@ -114,8 +113,7 @@ function AddModal(props) {
     const ownerInsert = () => {
         axios.post("/super/ownerInsert", ownerdata, { // 수정된 부분: onwerdata -> ownerdata
             headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.token
+                "Content-Type": "application/json"
             }
         })
             .then(res => {
@@ -186,8 +184,7 @@ function AddModal(props) {
    const handleSave = ()=>{
        axios.put("/super/ownerUpdate/"+props.item.id,owner,{
            headers: {
-               "Content-Type": "application/json",
-               Authorization: localStorage.token
+               "Content-Type": "application/json"
            }
        })
        .then(res=>{

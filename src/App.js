@@ -22,7 +22,7 @@ function App() {
   };  
   const dispatch = useDispatch()
  
-  const userName=useSelector(state=>state.userName)
+ 
 
   useEffect(() =>{
     console.log("App.js : 공통코드 서버요청중")

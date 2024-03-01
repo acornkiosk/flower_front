@@ -29,7 +29,7 @@ const Sidebar = () => {
   const navigate=useNavigate();
   
   const home=()=>{
-    navigate("/")
+    navigate("/home")
   }
 
   //여기서 부터 super(관리자모드) 필요한 코드
@@ -58,9 +58,6 @@ const Sidebar = () => {
 
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-            <NavLink onClick={() => toggleAccordion('login')} exact to="/login" className={activeStyle}>
-              <CDBSidebarMenuItem icon="user">로그인</CDBSidebarMenuItem>
-            </NavLink>
             <NavLink onClick={() => toggleAccordion('main')} exact to="/main" className={activeStyle}>
               <CDBSidebarMenuItem icon="tablet">키오스크 화면</CDBSidebarMenuItem>
             </NavLink>
