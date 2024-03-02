@@ -13,8 +13,6 @@ import { Provider} from 'react-redux';
 
 const initialstate={
   userName:null,
-  addmodal:false,
-  upmodal:false,
   commonTable : [],
   orders : [],
   isLogin:false,
@@ -24,22 +22,11 @@ const initialstate={
 const reducer=(state=initialstate,action)=>{
   let newState
 
-  if(action.type==="UPDATE_AddMODAL"){
-    newState={
-      ...state,
-      addmodal:action.payload
-    }
-  }else if(action.type==="UPDATE_UpMODAL"){
-    newState={
-      ...state,
-      upmodal:action.payload
-    }
-  }else if(action.type === "UPDATE_COMMON") {
+  if(action.type === "UPDATE_COMMON") {
     newState = {
       ...state,
       commonTable : action.payload
     }
-    return newState
   }else if(action.type === "UPDATE_ORDERS") {
     newState = {
       ...state,
