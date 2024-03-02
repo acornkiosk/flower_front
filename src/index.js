@@ -14,9 +14,7 @@ import { Provider} from 'react-redux';
 const initialstate={
   userName:null,
   commonTable : [],
-  orders : [],
   isLogin:false,
-  kiosk : 0
 }
 
 const reducer=(state=initialstate,action)=>{
@@ -27,11 +25,6 @@ const reducer=(state=initialstate,action)=>{
       ...state,
       commonTable : action.payload
     }
-  }else if(action.type === "UPDATE_ORDERS") {
-    newState = {
-      ...state,
-      orders : action.payload
-    }
   }else if(action.type === "UPDATE_USER"){
     newState = {
       ...state,
@@ -41,11 +34,6 @@ const reducer=(state=initialstate,action)=>{
     newState ={
       ...state,
       isLogin:action.payload //boolean 값으로 전달될 예정 
-    }
-  }else if(action.type === "SET_KIOSK"){
-    newState ={
-      ...state,
-      kiosk: action.payload
     }
   }else{
     newState=state
