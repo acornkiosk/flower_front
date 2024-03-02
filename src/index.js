@@ -17,7 +17,8 @@ const initialstate={
   upmodal:false,
   commonTable : [],
   orders : [],
-  isLogin:false
+  isLogin:false,
+  kiosk : 0
 }
 
 const reducer=(state=initialstate,action)=>{
@@ -53,6 +54,11 @@ const reducer=(state=initialstate,action)=>{
     newState ={
       ...state,
       isLogin:action.payload //boolean 값으로 전달될 예정 
+    }
+  }else if(action.type === "SET_KIOSK"){
+    newState ={
+      ...state,
+      kiosk: action.payload
     }
   }else{
     newState=state
