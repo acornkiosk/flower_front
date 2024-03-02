@@ -14,8 +14,7 @@ import { Provider} from 'react-redux';
 const initialstate={
   userName:null,
   commonTable : [],
-  orders : [],
-  isLogin:false
+  isLogin:false,
 }
 
 const reducer=(state=initialstate,action)=>{
@@ -25,11 +24,6 @@ const reducer=(state=initialstate,action)=>{
     newState = {
       ...state,
       commonTable : action.payload
-    }
-  }else if(action.type === "UPDATE_ORDERS") {
-    newState = {
-      ...state,
-      orders : action.payload
     }
   }else if(action.type === "UPDATE_USER"){
     newState = {
