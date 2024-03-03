@@ -51,7 +51,7 @@ function User() {
         </thead>
         <tbody>
           {userList.map(item=>(
-            <tr>
+            <tr key={item.id}>
               <td>{item.userName}</td>
               <td>{item.rank}</td>
               <td><button  onClick={() => { setUpdateShow(true); setSelectedUserId(item.id);}} >수정</button></td>

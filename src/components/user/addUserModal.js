@@ -79,7 +79,7 @@ export default function InsertModal(props) {
                 <Form.Select aria-label="직급" name='rank'>
                     {Rank.map((item,index)=>{
                     if(index<2) return null;
-                    return <option value={item.code_id}>{item.code_name}</option>
+                    return <option key={item.code_id} value={item.code_id}>{item.code_name}</option>
                     })}
 
                 </Form.Select>

@@ -59,7 +59,7 @@ const Sidebar = () => {
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
             <NavLink onClick={() => toggleAccordion('kiosk')} exact to="/kiosk" className={activeStyle}>
-              <CDBSidebarMenuItem icon="warehouse">키오스크 관리</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="tablet">키오스크 관리</CDBSidebarMenuItem>
             </NavLink>
             <NavLink onClick={() => toggleAccordion('user')} exact to="/user" className={activeStyle}>
               <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
