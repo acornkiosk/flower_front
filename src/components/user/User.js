@@ -6,12 +6,14 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import InsertModal from './addUserModal';
 import UpdateModal from './updateUserModal';
+import DeleteModal from './deleteModal';
 
 
 /** 주석처리가 많은 이유 : 달력기능 npm install 오류 확인되어 임시조치 */
 function User() {
   const [insertShow, setInsertShow] = useState(false);
   const [updateShow, setUpdateShow] = useState(false);
+  const [deleteShow, setDeleteShow] = useState(false);
   const[userList,setUserList] =useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null); // 선택된 사용자의 id를 저장
 
@@ -64,8 +66,9 @@ function User() {
           </tr>
         </tbody>
       </Table>
-      <UpdateModal  show={updateShow} onHide={() => { setUpdateShow(false) }}  userId={selectedUserId} onUserUpdate={refresh}></UpdateModal>
+      <UpdateModal  show={updateShow} onHide={() => { setUpdateShow(false) }}  userId={selectedUserId} deleteShow={()=>{setDeleteShow(true)}} onUserUpdate={refresh}></UpdateModal>
       <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={refresh}></InsertModal> 
+      <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }}  userId={selectedUserId} updateHide={()=>{setUpdateShow(false)}} onUserDelete={refresh}  ></DeleteModal> 
     </>
   )
 }

@@ -1,13 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import DeleteModal from "./deleteModal";
 
 export default function UpdateModal(props) {
-    const { userId } = props;
+    const { userId ,deleteShow } = props;
     const [Rank, setRank] = useState([]);
     const [userData, setUserData] = useState({ role: ""});
+    const labelStyle = {
+      textAlign: 'right'
+    };
 
-  
+    const colGap={
+      marginTop:'8px',
+      fontWeight:'bold'
+    }
+
+    
 
    
 
@@ -36,15 +45,7 @@ export default function UpdateModal(props) {
   
     
   
-    const deleteUser=()=>{
-      axios.post("/api/user/delete",{id:userId},
-      { headers: { "Content-Type": "application/json" } })
-      .then(res=>{
-        console.log(res.data);
-        props.onHide();
-        props.onUserUpdate();
-      })
-    }
+   
     const getRank = () => {
         axios.post("/api/common/child", { "code_id": 3000 }, { headers: { "Content-Type": "application/json" } })
             .then(res => {
@@ -115,20 +116,20 @@ export default function UpdateModal(props) {
                 <Modal.Body className="d-flex justify-content-center">
                     <div className="col-md-6">
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column md="2"> 이름 : </Form.Label>
-                            <Col><p>{userData.userName}</p></Col>
+                            <Form.Label style={labelStyle} column md="3"> 이름 : </Form.Label>
+                            <Col style={colGap}>{userData.userName} </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column md="3"> 아이디 : </Form.Label>
+                            <Form.Label style={labelStyle} column md="3"> 아이디 : </Form.Label>
                             <input type="hidden" name="id" value={userData.id} />
-                            <Col><p>{userData.id}</p></Col>
+                            <Col style={colGap}>{userData.id}</Col>
                         </Form.Group>
                         <Form.Group as={Row}>
-                            <Form.Label column md="3" type="text"> 입사일 : </Form.Label>
-                            <Col><p>{userData.regdate}</p></Col>
+                            <Form.Label style={labelStyle} column md="3" type="text"> 입사일 : </Form.Label>
+                            <Col style={colGap}>{userData.regdate}</Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column md="2"> 직급 : </Form.Label>
+                            <Form.Label style={labelStyle}  column md="3"> 직급 : </Form.Label>
                             <Col md="4">
                                 <Form.Select aria-label="직급" onChange={handleChange} value={userData.rank} name='rank'>
                                     {Rank.map((item, index) => {
@@ -173,11 +174,14 @@ export default function UpdateModal(props) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={deleteUser}>직원 삭제</Button>
+                    <Button variant="danger" onClick={deleteShow}>직원 삭제</Button>
                     <Button variant="success" type="submit">저장</Button>
                     <Button variant="danger" onClick={props.onHide}>취소</Button>
                 </Modal.Footer>
             </Form>
+           
         </Modal>
+
     );
 }
+
