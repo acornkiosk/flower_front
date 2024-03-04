@@ -11,7 +11,6 @@ export default function DeleteModal(props) {
           props.onHide();
           props.onUserDelete();
           props.updateHide();
-          
         })
       }
 
@@ -21,8 +20,6 @@ export default function DeleteModal(props) {
         size="sm"
         centered
         style={{ marginTop: '20px' }}
-        
-
       >
         <Modal.Header closeButton>
           <Modal.Title >
