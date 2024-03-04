@@ -16,18 +16,10 @@ export default function UpdateModal(props) {
       fontWeight:'bold'
     }
 
-    
-
-   
-
-
-
     const handleChange = (e, roleId) => {
       const { checked } = e.target;
-  
       let updatedRoles = userData.role.split(',');
-      
-  
+
       if (checked) {
           // 새롭게 체크된 체크박스의 value 값을 추가
           updatedRoles.push(roleId);
@@ -42,10 +34,6 @@ export default function UpdateModal(props) {
       setUserData({ ...userData, role: updatedRoles.join(',') });
   };
   
-  
-    
-  
-   
     const getRank = () => {
         axios.post("/api/common/child", { "code_id": 3000 }, { headers: { "Content-Type": "application/json" } })
             .then(res => {
@@ -99,7 +87,6 @@ export default function UpdateModal(props) {
     if (!userData.id) {
         return null;
     }
-
     return (
         <Modal
             {...props}
@@ -169,7 +156,6 @@ export default function UpdateModal(props) {
                             value="4003"
                         />
                         <Form.Label>키오스크 관리 권한</Form.Label>
-
                         </Form.Group>
                     </div>
                 </Modal.Body>
@@ -179,9 +165,7 @@ export default function UpdateModal(props) {
                     <Button variant="danger" onClick={props.onHide}>취소</Button>
                 </Modal.Footer>
             </Form>
-           
         </Modal>
-
     );
 }
 

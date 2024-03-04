@@ -4,9 +4,6 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap"
 
 /** 사용자 정보 등록 모달 */
 export default function InsertModal(props) {
-
- 
-   
     const [Rank,setRank]=useState([])
     const labelStyle = {
         textAlign: 'right'
@@ -17,11 +14,11 @@ export default function InsertModal(props) {
         axios.post("/api/common/child", {"code_id": 3000},
         { headers: { "Content-Type": "application/json" } })
         .then(res => {
-        console.log("직급 리스트:"+res.data.list)
+        console.log("직급 리스트: "+res.data.list)
         setRank(res.data.list)
         }) 
         .catch(error=>{
-        console.log("직급리스트: "+ error)
+        console.log("직급 리스트: "+error)
         }) 
     }
 
@@ -40,14 +37,9 @@ export default function InsertModal(props) {
             })  
     }
 
-
-
     useEffect(() => {
         getRank()
-        
-
     }, [])
-
 
     return (
         
@@ -58,10 +50,8 @@ export default function InsertModal(props) {
         aria-labelledby="example-custom-modal-styling-title"
         >
         <Form onSubmit={(e)=>userInput(e)}>
-
             <Modal.Header closeButton>
-            <Modal.Title id="example-custom-modal-styling-title">
-            </Modal.Title>
+            <Modal.Title id="example-custom-modal-styling-title"></Modal.Title>
             </Modal.Header>
 
             <Modal.Body >
@@ -79,7 +69,7 @@ export default function InsertModal(props) {
                 <Form.Label style={labelStyle} column md="2" > 직급 : </Form.Label>
                 <Col md="3">
                 <Form.Select aria-label="직급" name='rank'>
-                    {Rank.map((item,index)=>{
+                    {Rank.map((item, index)=>{
                     if(index<2) return null;
                     return <option key={item.code_id} value={item.code_id}>{item.code_name}</option>
                     })}
@@ -90,7 +80,7 @@ export default function InsertModal(props) {
 
             <Form.Group as={Row}>
 
-                <Form.Label style={labelStyle} column md="2"  type="date"  > 입사일 : </Form.Label>
+                <Form.Label style={labelStyle} column md="2" type="date" > 입사일 : </Form.Label>
                 
                 <Col md="3">
                 <input type="date" name="regdate" />
