@@ -9,12 +9,38 @@ import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
 import { legacy_createStore as createStore } from 'redux';
 import { Provider} from 'react-redux';
+import { decodeToken } from 'jsontokens';
+import axios from 'axios';
 
+//userName,isLogin 초기값을 설정해준다.
+let userName=null
+let isLogin=false
 
+if (localStorage.token) {
+  //토큰을 디코딩
+  const result = decodeToken(localStorage.token);
+  console.log(result)
+  //초단위
+  const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
+  //현재시간
+  const now = new Date().getTime();
+  //만일 유효기간이 만료 되었다면 
+  if(expTime > now){
+    userName=result.payload.sub
+    isLogin=true
+    //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
+    axios.defaults.headers.common["Authorization"]="Bearer+"+localStorage.token
+  }else{
+    //만료된 토큰은 삭제한다 
+    delete localStorage.token
+  }
+}
 const initialstate={
-  userName:null,
+  userName,
   commonTable : [],
-  isLogin:false,
+  orders : [],
+  isLogin,
+  rank:null
 }
 
 const reducer=(state=initialstate,action)=>{
@@ -34,6 +60,11 @@ const reducer=(state=initialstate,action)=>{
     newState ={
       ...state,
       isLogin:action.payload //boolean 값으로 전달될 예정 
+    }
+  }else if(action.type === "SET_RANK"){
+    newState ={
+      ...state,
+      rank:action.payload 
     }
   }else{
     newState=state
