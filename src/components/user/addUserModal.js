@@ -46,6 +46,7 @@ export default function InsertModal(props) {
         <Modal
         {...props}
         size="lg"
+        centered
         dialogClassName="modal-90w"
         aria-labelledby="example-custom-modal-styling-title"
         >
@@ -59,7 +60,7 @@ export default function InsertModal(props) {
                 <Form.Label   style={labelStyle} column md="2"> 아이디 : </Form.Label>
                 <Col md="3"><Form.Control type='text' name='id' /></Col>
                 <Form.Label style={labelStyle} column md="2"> 비밀번호 : </Form.Label>
-                <Col md="3"><Form.Control type='text' name='password' /></Col>
+                <Col md="3"><Form.Control type='password' name='password' /></Col>
             </Form.Group>
 
             <Form.Group as={Row} className="mb-3">
