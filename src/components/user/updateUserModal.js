@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import DeleteModal from "./deleteModal";
 
 export default function UpdateModal(props) {
     const { userId ,deleteShow } = props;
