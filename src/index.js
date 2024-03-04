@@ -15,7 +15,7 @@ import axios from 'axios';
 //userName,isLogin 초기값을 설정해준다.
 let userName=null
 let isLogin=false
-
+let rank=null
 if (localStorage.token) {
   //토큰을 디코딩
   const result = decodeToken(localStorage.token);
@@ -28,6 +28,7 @@ if (localStorage.token) {
   if(expTime > now){
     userName=result.payload.sub
     isLogin=true
+    rank=result.payload.rank
     //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
     axios.defaults.headers.common["Authorization"]="Bearer+"+localStorage.token
   }else{
@@ -40,7 +41,7 @@ const initialstate={
   commonTable : [],
   orders : [],
   isLogin,
-  rank:null
+  rank
 }
 
 const reducer=(state=initialstate,action)=>{
