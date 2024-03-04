@@ -41,7 +41,7 @@ const Sidebar = () => {
     setTimeout(()=>{
       count=0;
     },1000)
-    if(count===5 && isLogin ===true && rank==3001){
+    if(count===5 && isLogin ===true && rank==3002){
       count=0;
       console.log("허허허"+rank)
       navigate("/owner")

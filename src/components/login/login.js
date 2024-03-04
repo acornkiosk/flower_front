@@ -17,29 +17,6 @@ function Login() {
 
   const navigate=useNavigate();
 
-  useEffect(() => {
-    if (localStorage.token) {
-      //토큰을 디코딩
-      const result = decodeToken(localStorage.token);
-      console.log(result)
-      //초단위
-      const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
-      //현재시간
-      const now = new Date().getTime();
-      //만일 유효기간이 만료 되었다면 
-      if (expTime < now) {
-        dispatch({ type: "SET_LOGIN", payload: false })
-        dispatch({ type: "UPDATE_USER", payload: ""})
-        delete localStorage.token;
-      } else {//유효기간이 만료 되지 않았다면 로그인된 상태라고 간주!
-        dispatch({ type: "SET_LOGIN", payload: true })
-        dispatch({ type: "UPDATE_USER", payload: result.payload.sub })
-        dispatch({ type: "SET_RANK", payload: result.payload.rank})
-        //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
-        axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
-      }
-    }
-  }, [])
 
   // 로그인 버튼을 클릭할 때 실행되는 함수입니다.
   const handleLogin = () => {
@@ -81,7 +58,7 @@ function Login() {
       <div className="border border-secondary border-5 rounded-3 p-5">
         <Row>
           <Col md={6}>
-            <Image fluid src="/images/testimg.jpg" style={{ width: '100%' }} />
+            <Image fluid src="/images/flower.png" style={{ width: '100%' }} />
           </Col>
           <Col>
             <div className="border border-light border-4 rounded-3 p-5">
