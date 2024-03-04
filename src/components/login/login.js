@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
 import React, { useEffect, useState } from 'react';
+import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -58,7 +59,7 @@ function Login() {
         console.log(result.payload.rank)
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
-       alert(result.payload.sub +"님 로그인 했습니다.")
+       alert(result.payload.sub+"님 로그인 했습니다.");
         //home으로 보내기
         navigate("/home")
       })
@@ -75,26 +76,37 @@ function Login() {
     })
   }
 
+  return (
+    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '80vh' }} >
+      <div className="border border-secondary border-5 rounded-3 p-5">
+        <Row>
+          <Col md={6}>
+            <Image fluid src="/images/testimg.jpg" style={{ width: '100%' }} />
+          </Col>
+          <Col>
+            <div className="border border-light border-4 rounded-3 p-5">
+              <p className="text-center fs-4 fw-bold mb-5"> 키오스크 로그인 </p>
+              <Form>
+                <Form.Group className="mb-3" controlId="formbasicEmail" >
+                  <Form.Control type="text" name="id" placeholder="USER ID" onChange={(e) => handleChange(e)} />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Control type="password" name="password" placeholder="PASSWORD" onChange={(e) => handleChange(e)} />
+                </Form.Group>
 
-
-    return (
-      <div>
-        <input
-          type="text"
-          placeholder="아이디"
-          name="id"
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          name="password"
-          onChange={handleChange}
-        />
-        <button onClick={handleLogin}>로그인</button>
+                <div className="d-grid gap-2">
+                  <Button type="button" variant="primary" onClick={handleLogin}>
+                    로그인
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </Col>
+        </Row>
       </div>
+    </Container>
 
-    )
-  }
+  )
+}
 
-  export default Login;
+export default Login;
