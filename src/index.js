@@ -27,11 +27,6 @@ const reducer=(state=initialstate,action)=>{
       ...state,
       commonTable : action.payload
     }
-  }else if(action.type === "UPDATE_ORDERS") {
-    newState = {
-      ...state,
-      orders : action.payload
-    }
   }else if(action.type === "UPDATE_USER"){
     newState = {
       ...state,
