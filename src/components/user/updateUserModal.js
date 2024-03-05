@@ -76,7 +76,8 @@ export default function UpdateModal(props) {
     // }, [userId]);
 
     useEffect(() => {
-        getUser();
+      if(userId !=null)getUser();
+        
         return () => {
             setUserData({});
         };
