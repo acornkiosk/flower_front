@@ -5,6 +5,22 @@ import OrderItem from "./orderItem"
 import ConvertOptions from "./util"
 
 export default function Order() {
+  const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+  const connect = () =>{
+    ws.onopen = () => {
+      console.log("웹소켓 오픈")
+    }
+    ws.onmessage = (e) => {
+      console.log(e.data)
+      refresh()
+    }
+    ws.onerror = (e) => {
+      console.log(e)
+    }
+    ws.onclose = () => {
+      console.log("웹소켓 닫힘")
+    }
+  }
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
@@ -35,7 +51,11 @@ export default function Order() {
   }
   //화면 로딩시 
   useEffect(() => {
+    connect()
     refresh()
+    return () =>{
+      ws.close()
+    }
   }, [])
 
   //모달에 있는 완료버튼을 누를 시 

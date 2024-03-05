@@ -1,23 +1,13 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Button, Col, Container, Form, InputGroup, Modal, Row, Table } from "react-bootstrap"
+import { Button, Col, Container, Form, InputGroup, Modal, Pagination, Row, Table } from "react-bootstrap"
 import * as Icon from 'react-bootstrap-icons';
 
 function Kiosk() {
-  const refresh = () => {
-    //table에 출력할 키오스크 정보를 받아옴
-    axios.get("/api/kiosk/list")
-      .then(res => {
-        setKiosk(res.data.list)
-      })
-  }
-  //화면 로딩시
-  useEffect(() => {
-    refresh()
-  }, [])
-
-  //키오스크 정보를 저장하는 state
-  const [kiosk, setKiosk] = useState([])
+  //페이지 정보를 저장하는 state
+  const [pageInfo, setpageInfo] = useState({
+    list : [] //키오스크 리스트
+  })
   //추가모달 state
   const [addModalShow, setAddModalShow] = useState(false)
   //수정 모달 state
@@ -32,6 +22,32 @@ function Kiosk() {
   const [selectedKiosk, setSelectedKiosk] = useState([])
   //전체  체크박스 state
   const [allCheck, setAllCheck] = useState(false)
+  //페이징 UI를 만들때 사용할 배열
+  const [pageArray, setPageArray] = useState([])
+  //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
+  function createArray(start, end) {
+    const result = []
+    for (let i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+  const refresh = (num) => {
+    //table에 출력할 키오스크 정보를 받아옴
+    axios.post("/api/kiosk/list", num, { "headers": { "Content-Type": "application/json" } })
+      .then(res => {
+        setpageInfo(res.data)
+        const result = createArray(res.data.startPageNum, res.data.endPageNum)
+        setPageArray(result)
+      })
+      .catch(error => console.log(error))
+  }
+  //화면 로딩시
+  useEffect(() => {
+    refresh(1)
+  }, [])
+
+
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
     const isChecked = e.target.checked
@@ -55,11 +71,11 @@ function Kiosk() {
     // 체크 상태에 따라 선택된 키오스크 배열 업데이트
     let newSelectedKiosk = []
     if (isChecked) {
-      newSelectedKiosk = [...kiosk]
+      newSelectedKiosk = [...pageInfo.list]
     }
     // checked 상태 업데이트
     const newChecked = {}
-    kiosk.forEach(tmp => {
+    pageInfo.list.forEach(tmp => {
       newChecked[tmp.id] = isChecked
     })
     setChecked(newChecked)
@@ -70,7 +86,7 @@ function Kiosk() {
     //키오스크 추가 옵션
     axios.post('/api/kiosk', { location: location })
       .then(res => {
-        setKiosk(res.data.list)
+        refresh(1)
         setAddModalShow(false)
       })
       .catch(error => {
@@ -83,7 +99,7 @@ function Kiosk() {
     if (action === 'location') {
       axios.post('/api/kiosk/update', data)
         .then(res => {
-          refresh()
+          refresh(1)
           setUpdateModalShow(false)
         })
         .catch(error => {
@@ -94,7 +110,7 @@ function Kiosk() {
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
-            refresh()
+            refresh(1)
           })
       })
       setChecked({})
@@ -105,7 +121,7 @@ function Kiosk() {
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
-            refresh()
+            refresh(1)
           })
       })
       setChecked({})
@@ -133,10 +149,9 @@ function Kiosk() {
   //삭제 버튼 기능
   const deleteKiosk = () => {
     selectedKiosk.forEach(tmp => {
-      axios.post("/api/kiosk/delete", tmp,
-        { headers: { "Content-Type": "application/json" } })
+      axios.post("/api/kiosk/delete", tmp)
         .then(res => {
-          refresh()
+          refresh(1)
         })
         .catch(error => {
           console.log(error)
@@ -151,7 +166,7 @@ function Kiosk() {
 
       <Row className="justify-content-md-center">
         <Col>
-          <h1>키오스크 관리 페이지</h1>
+          <h1>키오스크 관리</h1>
         </Col>
         <Col md="auto">
           <Button variant="success" className="me-3" onClick={() => { updateKiosk('on') }}>전원 켜기</Button>
@@ -224,7 +239,7 @@ function Kiosk() {
           </tr>
         </thead>
         <tbody>
-          {kiosk.map(item =>
+          {pageInfo.list.map(item =>
             <tr key={item.id}>
               <td>
                 <Form.Check type={`checkbox`} id={item.id} checked={checked[item.id] || false} onChange={(e) => {
@@ -238,6 +253,20 @@ function Kiosk() {
           )}
         </tbody>
       </Table>
+      <Pagination>
+        <Pagination.Item onClick={() => {
+          refresh(pageInfo.startPageNum - 1)
+        }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
+        {pageArray.map(num =>
+          <Pagination.Item onClick={() => {
+            refresh(num)
+            // setParams({ pageNum: num })
+          }} key={num} active={pageInfo.pageNum === num}>{num}</Pagination.Item>
+        )}
+        <Pagination.Item onClick={() => {
+          refresh(pageInfo.endPageNum + 1)
+        }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
+      </Pagination>
     </Container>
   )
 }

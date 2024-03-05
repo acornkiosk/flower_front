@@ -32,8 +32,6 @@ export default function OrderItem(props) {
             const newList = { ...props.list }
             delete newList[props.id]
             props.setOrders(newList)
-          } else {
-            console.log("완료작업 실패")
           }
         })
         .catch(error => console.log(error))

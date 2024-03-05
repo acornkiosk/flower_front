@@ -19,7 +19,6 @@ let rank=null
 if (localStorage.token) {
   //토큰을 디코딩
   const result = decodeToken(localStorage.token);
-  console.log(result)
   //초단위
   const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
   //현재시간
