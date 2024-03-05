@@ -14,7 +14,7 @@ export default function ConvertOptions(options) {
   for (let item of common) {
     for (let codeId of newOptions) {
       if (codeId === item.code_id) {
-        result += item.code_name + " "
+        result += (item.code_name + " ").replace(/없음/g, "")
       }
     }
   }
