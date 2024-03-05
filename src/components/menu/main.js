@@ -31,21 +31,13 @@ function Main() {
 
   /** 등록과 수정폼 이동처리 변수 */
   const navigate= useNavigate()
-
-  console.log("메뉴관리 : 메뉴정보 현황(menuList)")
-  console.log(menuList)
   const refresh = ()=>{
-    console.log("메뉴관리 : 화면에서 렌더링 요청중")
-
     /** 메뉴정보 전체 요청하기 */
     axios.post("/api/menu/list", {})
     .then(res=>{
       const menuDB = res.data.list; // menuListResponse.data.list = [{},{},{}...]
       setMenuList(menuDB)
       setFilteredMenuList(menuDB)
-
-      console.log("메뉴관리 : 서버에서 가져온 메뉴리스트")
-      console.log(menuDB)
     })
     .catch(error=>{
       console.error('메뉴관리 : 메뉴리스트 요청 오류:', error);
@@ -92,7 +84,6 @@ function Main() {
       axios.post("/api/menu/delete", {"id": warning.menu_id},
       { headers: { "Content-Type": "application/json" }})
       .then(res=>{
-        console.log(res.data) // res.data = { {"dto":{...}}, {"list":null}, {"status": HttpStatus 결과값} }
         let isSuccess = res.data.status
 
         if(isSuccess === "OK"){
@@ -156,8 +147,8 @@ function Main() {
               <td>{item.category}</td>
               <td>{item.name}</td>
               <td>{item.price}</td>
-              <td><button onClick={()=>goToUpdateMenu(item.id)}>수정</button></td>
-              <td><button onClick={()=>{setWarning({menu_id:item.id, category_id:item.category_id, show:true})}}>삭제</button></td>
+              <td><Button onClick={()=>goToUpdateMenu(item.id)}>수정</Button></td>
+              <td><Button onClick={()=>{setWarning({menu_id:item.id, category_id:item.category_id, show:true})}}>삭제</Button></td>
             </tr>
           ))}
         </tbody>
