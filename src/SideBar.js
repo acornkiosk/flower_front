@@ -30,7 +30,7 @@ const Sidebar = () => {
   const navigate=useNavigate();
   
   const home=()=>{
-    navigate("/home")
+    navigate("/")
   }
   const isLogin=useSelector(state=>state.isLogin)
   const rank=useSelector(state=>state.rank)
