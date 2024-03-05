@@ -23,8 +23,6 @@ function Login() {
     // Axios를 사용하여 Spring Boot와 통신합니다.
     axios.post("/api/auth", login)
       .then(res => {
-        // 로그인이 성공했을 때 처리하는 로직을 작성합니다.
-        console.log('로그인 성공:', res.data);
         //로컬 스토리지에 토큰 저장하기
         localStorage.token = res.data
         //저장된 토큰 디코딩 후 result에 저장하기
@@ -33,7 +31,6 @@ function Login() {
         dispatch({ type: "UPDATE_USER", payload: result.payload.sub })
         dispatch({ type: "SET_LOGIN", payload: true })
         dispatch({ type: "SET_RANK", payload: result.payload.rank})
-        console.log(result.payload.rank)
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
        alert(result.payload.sub+"님 로그인 했습니다.");

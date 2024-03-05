@@ -36,7 +36,6 @@ function Kiosk() {
     //table에 출력할 키오스크 정보를 받아옴
     axios.post("/api/kiosk/list", num, { "headers": { "Content-Type": "application/json" } })
       .then(res => {
-        console.log(res.data)
         setpageInfo(res.data)
         const result = createArray(res.data.startPageNum, res.data.endPageNum)
         setPageArray(result)
@@ -167,7 +166,7 @@ function Kiosk() {
 
       <Row className="justify-content-md-center">
         <Col>
-          <h1>키오스크 관리 페이지</h1>
+          <h1>키오스크 관리</h1>
         </Col>
         <Col md="auto">
           <Button variant="success" className="me-3" onClick={() => { updateKiosk('on') }}>전원 켜기</Button>

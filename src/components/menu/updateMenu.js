@@ -36,11 +36,8 @@ function UpdateMenu() {
         const requestData = {
             id: menuId,
         };
-        axios.post("/api/menu/get", requestData,
-            { headers: { "Content-Type": "application/json" } })
+        axios.post("/api/menu/get", requestData)
             .then(res => {
-                console.log(res.data)
-                console.log(res.data.dto.name)
                 let checkedValue = res.data.dto.is_sold
                 if (checkedValue === "true") {
                     res.data.dto.is_sold = true;
@@ -66,37 +63,28 @@ function UpdateMenu() {
     }, [])
 
     const deleteMenu = () => {
-        axios.post("/api/menu/delete", { "id": menuData.id },
-            { headers: { "Content-Type": "application/json" } })
+        axios.post("/api/menu/delete", { "id": menuData.id })
             .then(res => {
-                console.log(res.data)
                 goToMenuMain()
             })
     }
 
     //카테고리 가져오기
     const getCategory = () => {
-        axios.post("/api/common/child", { "code_id": 1000 },
-            { headers: { "Content-Type": "application/json" } })
+        axios.post("/api/common/child", { "code_id": 1000 })
             .then(res => {
-                console.log(res.data.list)
                 setCategory(res.data.list)
             })
     }
     
     // 서버에서 이미지 가져오기
     const getMenuImage = (img_name) => {
-        console.log(menuData.img_name)
-
         axios.post("/upload/images", { name: img_name },
             { responseType: 'blob' })
             .then(res => {
-                console.log(res.data)
-
                 const reader = new FileReader()
                 reader.readAsDataURL(res.data)
                 reader.onload = (e) => {
-                    console.log("이미지 테이타" + e.target.result)
                     setGetViewImage(e.target.result)
                 }
             })
@@ -115,7 +103,6 @@ function UpdateMenu() {
         axios.post(url, formData,
             { headers: { "Content-Type": "multipart/form-data" } })
             .then(res => {
-                console.log(res.data);
                 goToMenuMain()
 
             })
@@ -142,7 +129,6 @@ function UpdateMenu() {
         reader.onload = (event) => {
             //읽은 이미지 데이터
             const data = event.target.result
-            console.log(data)
             setPreviewImage(data)
         }
     }
@@ -161,7 +147,6 @@ function UpdateMenu() {
     const handleCheckboxChange = (e) => {
         const newValue = e.target.checked;
         setIsSold(newValue);
-        console.log("품절여부" + newValue)
     };
     const previewStyle = {
         "width": "200px",
