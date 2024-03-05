@@ -10,6 +10,8 @@ import {
 } from 'cdbreact';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
 
 const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState('');
@@ -68,7 +70,7 @@ const Sidebar = () => {
               <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
             </NavLink>
             <NavLink onClick={() => toggleAccordion('order')} exact to="/order" className={activeStyle}>
-              <CDBSidebarMenuItem icon="money-check">주문 관리</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="money-check">주문 관리<Badge bg="warning">9(바꿀거임)</Badge></CDBSidebarMenuItem>
             </NavLink>
 
             <div>
