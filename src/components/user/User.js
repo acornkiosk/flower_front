@@ -46,7 +46,6 @@ function User() {
   const refresh = () => {
     axios.post("/api/user/list",{rank : 0})
       .then(res => {
-        console.log(res.data)
         let filterList = res.data.list.filter(item => item.rank !== 3001)
           .filter(item => item.rank !== 3002)
         setUserList(filterList)

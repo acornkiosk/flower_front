@@ -53,9 +53,6 @@ export default function Order() {
   useEffect(() => {
     connect()
     refresh()
-    return () =>{
-      ws.close()
-    }
   }, [])
 
   //모달에 있는 완료버튼을 누를 시 
