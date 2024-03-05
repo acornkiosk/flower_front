@@ -15,14 +15,9 @@ export default function OwnerMange() {
     const rank=useSelector(state=>state.rank)
     //화면 refresh 하기
     const refresh = () => {
-        axios.get("/super/ownerList", {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }
-        )
+        axios.post("/api/user/list",{rank : 3002})
             .then(res => {
-                setOwnerlist(res.data);
+                setOwnerlist(res.data.list);
             })
             .catch(error => {
                 console.log(error)
@@ -38,15 +33,10 @@ export default function OwnerMange() {
     const [currentItem, setCurrentItem] = useState({})
 
     //사장님 삭제
-    const ownerDelete = (id) => {
-        axios.delete("/super/ownerDelete/" + id, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.token
-            }
-        })
+    const ownerDelete = (item) => {
+        axios.post("/api/user/delete",item)
             .then(res => {
-                alert(res.data + "님을 삭제 했습니다.")
+                alert(res.data.dto.userName + "님을 삭제 했습니다.")
                 refresh()
             })
             .catch(error => {
@@ -95,7 +85,7 @@ if(rank==3001){
                             </td>
                             <td><Button variant="danger" onClick={() => {
                                 if (window.confirm("삭제할거냐?")) {
-                                    ownerDelete(item.id)
+                                    ownerDelete(item)
                                 }
                             }}>삭제</Button></td>
                         </tr>)
@@ -127,13 +117,9 @@ function AddModal(props) {
 
     // 사장(owner) 추가
     const ownerInsert = () => {
-        axios.post("/super/ownerInsert", ownerdata, { // 수정된 부분: onwerdata -> ownerdata
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+        axios.post("/api/user/add", ownerdata)
             .then(res => {
-                alert(res.data + "님(owenr) 등록 되었습니다.")
+                alert(res.data.dto.id + "님(owenr) 등록 되었습니다.")
                 props.setshow(false)
                 props.refresh()
             })
@@ -194,11 +180,7 @@ function UpModal(props) {
 
 
     const handleSave = () => {
-        axios.put("/super/ownerUpdate/" + props.item.id, owner, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+        axios.post("/api/user/update", owner)
             .then(res => {
                 //회원 목록 보기로 이동
                 props.refresh()

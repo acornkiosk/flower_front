@@ -34,7 +34,7 @@ function Kiosk() {
   }
   const refresh = (num) => {
     //table에 출력할 키오스크 정보를 받아옴
-    axios.post("/api/kiosk/list", num, { "headers": { "Content-Type": "application/json" } })
+    axios.post("/api/kiosk/page", num, { "headers": { "Content-Type": "application/json" } })
       .then(res => {
         setpageInfo(res.data)
         const result = createArray(res.data.startPageNum, res.data.endPageNum)
