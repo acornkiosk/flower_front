@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button, Col, Container, Form, InputGroup, Modal, Pagination, Row, Table } from "react-bootstrap"
 import * as Icon from 'react-bootstrap-icons';
+import AddModal from "../components/kiosk/AddModal";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -175,30 +176,7 @@ function Kiosk() {
           <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
         </Col>
       </Row>
-      {/* 키오스크 추가 modal */}
-      <Modal size="lg" centered show={addModalShow} onHide={() => setAddModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>키오스크 추가</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>키오스크 위치</InputGroup.Text>
-            <Form.Control type="text" placeholder="키오스크 위치 입력" onChange={handleChange} />
-          </InputGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Row className="justify-content-md-end">
-            <Col md="auto">
-              <Button variant="secondary" onClick={() => { setAddModalShow(false) }}>닫기</Button>
-            </Col>
-            <Col md="auto">
-              <Button variant="primary" type="button" onClick={addKiosk}>
-                추가하기
-              </Button>
-            </Col>
-          </Row>
-        </Modal.Footer>
-      </Modal>
+      <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk}/>
       {/* 키오스크 수정 modal */}
       <Modal size="lg" centered show={updateModalShow} onHide={() => setUpdateModalShow(false)}>
         <Modal.Header closeButton>

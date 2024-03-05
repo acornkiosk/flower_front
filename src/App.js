@@ -7,13 +7,13 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './NavBar';
 import Sidebar from './SideBar';
-import Kiosk from './components/kiosk/kiosk';
 import OwnerMange from './components/login/OwnerManage';
 import Login from './components/login/login';
 import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
 import Home from './components/Home';
+import Kiosk from './pages/kiosk';
 
 
 function App() {
