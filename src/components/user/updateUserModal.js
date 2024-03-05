@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import DeleteModal from "./deleteModal";
 
 export default function UpdateModal(props) {
     const { userId ,deleteShow } = props;
@@ -45,7 +44,7 @@ export default function UpdateModal(props) {
     };
 
     const getUser = () => {
-        axios.post("/api/user/get", { id: userId }, { headers: { "Content-Type": "application/json" } })
+        axios.post("/api/user/get", { id: userId })
             .then(res => {
                 setUserData(res.data.dto);
             })
