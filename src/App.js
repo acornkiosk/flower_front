@@ -13,6 +13,7 @@ import Login from './components/login/login';
 import Menu from './components/menu/menu';
 import Order from './components/order/Order';
 import User from './components/user/User';
+import Home from './components/Home';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <div style={{ height: "100%" }}>
           <div style={{ height: "calc(100% - 64px)", padding: "20px 5%", overflowY: "scroll" }}>
             <Routes>
+            <Route path='/' Component={Home}/>
               <Route path='/kiosk' Component={Kiosk} />
               <Route path='/order' Component={Order} />
               <Route path='/user' Component={User} />
