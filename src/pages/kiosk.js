@@ -1,13 +1,14 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { Button, Col, Container, Form, InputGroup, Modal, Pagination, Row, Table } from "react-bootstrap"
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Button, Col, Container, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
 import AddModal from "../components/kiosk/AddModal";
+import UpdateModal from "../components/kiosk/UpdateModal";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
   const [pageInfo, setpageInfo] = useState({
-    list : [] //키오스크 리스트
+    list: [] //키오스크 리스트
   })
   //추가모달 state
   const [addModalShow, setAddModalShow] = useState(false)
@@ -176,35 +177,8 @@ function Kiosk() {
           <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
         </Col>
       </Row>
-      <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk}/>
-      {/* 키오스크 수정 modal */}
-      <Modal size="lg" centered show={updateModalShow} onHide={() => setUpdateModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{data.id}번 키오스크 위치 변경</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>키오스크 번호</InputGroup.Text>
-            <Form.Control type="text" value={data.id} readOnly />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>키오스크 위치</InputGroup.Text>
-            <Form.Control type="text" value={data.location} onChange={handleChange} />
-          </InputGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Row className="justify-content-md-end">
-            <Col md="auto">
-              <Button variant="secondary" onClick={() => { setUpdateModalShow(false) }}>닫기</Button>
-            </Col>
-            <Col md="auto">
-              <Button variant="primary" type="button" onClick={() => { updateKiosk('location') }}>
-                변경하기
-              </Button>
-            </Col>
-          </Row>
-        </Modal.Footer>
-      </Modal>
+      <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} />
+      <UpdateModal updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} />
       <Table striped bordered hover>
         <thead>
           <tr>
