@@ -124,7 +124,7 @@ function DetailModal(props) {
             <Col>{order_id}번 주문 내역</Col>
             <Col>키오스크 : {kiosk_id}번</Col>
             <Col className="text-end"><CloseButton onClick={() => {
-              props.setShowMoadl(false)
+              props.setShowModal(false)
             }}></CloseButton></Col>
           </Row>
         </Modal.Title>
