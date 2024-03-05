@@ -10,11 +10,9 @@ export default function InsertModal(props) {
       };
 
     const getRank= ()=>{
-        
         axios.post("/api/common/child", {"code_id": 3000},
         { headers: { "Content-Type": "application/json" } })
         .then(res => {
-        console.log("직급 리스트: "+res.data.list)
         setRank(res.data.list)
         }) 
         .catch(error=>{
