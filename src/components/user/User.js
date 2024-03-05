@@ -5,7 +5,6 @@ import DeleteModal from './deleteModal';
 import { useEffect, useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { CDBSidebarMenuItem } from 'cdbreact';
 import { PencilSquare } from 'react-bootstrap-icons';
 
 function User() {
