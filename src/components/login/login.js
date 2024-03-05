@@ -35,7 +35,7 @@ function Login() {
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
        alert(result.payload.sub+"님 로그인 했습니다.");
         //home으로 보내기
-        navigate("/home")
+        navigate("/")
       })
       .catch(error => {
         console.error(error);

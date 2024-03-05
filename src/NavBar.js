@@ -20,7 +20,7 @@ const Navbar = () => {
     delete axios.defaults.headers.common["Authorization"]
     dispatch({type:"SET_LOGIN",payload:false})
     dispatch({type:"SET_RANK",payload:false})
-    navigate("/home")
+    navigate("/")
   }
 
    return (
