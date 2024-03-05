@@ -22,7 +22,9 @@ export default function CategoryBtn(props) {
     } catch (e) {
       console.error("카테고리 : 공통코드에서 가져온 값 확인 어려움 " + e)
     }
-  }, [commonList]);
+    
+    console.log("카테고리 : 버튼에서 렌더링 완료")
+  }, [commonList]); // 파라미터가 변경될 때마다 서버로부터 정보를 다시 받아온다. 
 
   /** Dropdown.Item 버튼을 눌렀을 때 onClick 함수를 통해 코드값을 이 변수에 전달 */
   const handleDropdownItemClick = (category) => {
