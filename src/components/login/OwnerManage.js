@@ -1,14 +1,18 @@
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function OwnerMange() {
 
+    const navigate=useNavigate();
     //사장님(owner) 리스트 관리
     const [ownerlist, setOwnerlist] = useState([]);
-
+    const rank=useSelector(state=>state.rank)
     //화면 refresh 하기
     const refresh = () => {
         axios.post("/api/user/list",{rank : 3002})
@@ -39,7 +43,7 @@ export default function OwnerMange() {
                 console.log(error)
             })
     }
-
+if(rank==3001){
     return (
         <div>
             <h1>super 전용 (관리자 모드)</h1>
@@ -89,10 +93,24 @@ export default function OwnerMange() {
                 </tbody>
             </Table>
             <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
-            <UpModal show={showUpModal} setshow={setShowUpModal} item={currentItem} refresh={refresh} />
+            <UpModal show={showUpModal} setshow={setShowUpModal} item={currentItem} refresh={refresh} />ontent
         </div>
     );
 }
+else{
+    setTimeout(()=>{
+        navigate("/")
+      },5000)
+      return(
+        <div>
+            <h1>잘못된 접근입니다. 로그인 후 이용해주세요</h1>
+              
+        </div>
+    )
+        
+}
+}
+
 
 function AddModal(props) {
     //여기서 모달을 숨기고 싶으면 props.setshow(false) 가 실행되면 된다
