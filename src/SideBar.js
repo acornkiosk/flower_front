@@ -11,7 +11,6 @@ import {
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
 
 const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState('');
