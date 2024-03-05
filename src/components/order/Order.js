@@ -78,6 +78,7 @@ export default function Order() {
   //화면 로딩시 
   useEffect(() => {
     connect()
+    refresh()
   }, [])
 
   return (
