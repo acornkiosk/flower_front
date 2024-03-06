@@ -1,11 +1,11 @@
 import axios from 'axios';
-import InsertModal from './addUserModal';
-import UpdateModal from './updateUserModal';
-import DeleteModal from './deleteModal';
+import { CDBSidebarMenuItem } from 'cdbreact';
 import { useEffect, useState } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Pagination, Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { PencilSquare } from 'react-bootstrap-icons';
+import InsertModal from './addUserModal';
+import DeleteModal from './deleteModal';
+import UpdateModal from './updateUserModal';
 
 function User() {
   const [insertShow, setInsertShow] = useState(false);
@@ -15,6 +15,37 @@ function User() {
   // 직원 정보를 저장하는 State
   const [userList, setUserList] = useState([])
   const commonTable = useSelector(state => state.commonTable)
+
+  // const [userList, setUserList] = useState([])
+  const [pageInfo, setPageInfo] = useState({
+    list: []
+  })
+
+  // 페이징 UI 를 만들 때 사용할 배열
+  const [pageArray, setPageArray] = useState([])
+
+  // 페이징 UI 를 만들 떄 사용할 배열을 리턴해주는 함수
+  function createArray(start, end) {
+    const result = [];
+    for (let i = start; i <= end; i++) {
+      result.push(i)
+    }
+    return result;
+  }
+
+  // 직원 목록 데이터를 읽어오는 함수
+  const pageRefresh = (pageNum) => {
+    axios.post("/api/user/list", pageNum, { "headers": { "Content-Type": "application/json" } })
+      .then(res => {
+        console.log(res.data)
+        setPageInfo(res.data)
+        const result = createArray(res.data.startPageNum, res.data.endPageNum)
+        setPageArray(result)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   // rank 를 실제 text 로 변환해주는 함수
   const convertRank = (rank) => {
@@ -43,8 +74,8 @@ function User() {
     return str
   }
 
-  const refresh = () => {
-    axios.post("/api/user/list",{rank : 0})
+  const refresh = (pageNum) => {
+    axios.post("/api/user/list", pageNum)
       .then(res => {
         let filterList = res.data.list.filter(item => item.rank !== 3001)
           .filter(item => item.rank !== 3002)
@@ -53,9 +84,8 @@ function User() {
       .catch(error => console.log(error))
   }
 
-  // 직원 관리 페이지에 들어오면 refresh 함수를 실행시킨다.
   useEffect(() => {
-    refresh()
+    pageRefresh(1)
   }, [])
 
   return (
@@ -76,25 +106,33 @@ function User() {
           </tr>
         </thead>
         <tbody>
-          {userList.map(item =>
+          {pageInfo.list.map(item =>
             <tr key={item.userName}>
-              <td className='align-middle'>{item.userName}</td>
-              <td className='align-middle'>{convertRank(item.rank)}</td>
-              <td className='align-middle'>{converRegDate(item.regdate)}</td>
-              <td>
-                <Button variant="" onClick={() => {
-                  setUpdateShow(true)
-                  setSelectedUserId(item.id)
-                }} >
-                  <PencilSquare />
-                </Button>
-
-              </td>
+              <td>{item.userName}</td>
+              <td>{convertRank(item.rank)}</td>
+              <td>{converRegDate(item.regdate)}</td>
+              <Button className='d-flex justify-content-center' onClick={() => { setUpdateShow(true); setSelectedUserId(item.id); }}>
+                <div style={{ width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CDBSidebarMenuItem icon="pen" style={{ width: '245%', height: '245%', marginLeft: '11px', marginBottom: '8px' }} />
+                </div>
+              </Button>
             </tr>
           )}
         </tbody>
       </Table>
-
+      <Pagination className="mt-3">
+        <Pagination.Item onClick={() => {
+          pageRefresh(pageInfo.startPageNum - 1)
+        }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
+        {
+          pageArray.map(item => (<Pagination.Item onClick={() => {
+            pageRefresh(item)
+          }} key={item} active={pageInfo.pageNum === item}>{item}</Pagination.Item>))
+        }
+        <Pagination.Item onClick={() => {
+          pageRefresh(pageInfo.endPageNum + 1)
+        }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
+      </Pagination>
       <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={refresh}></UpdateModal>
       <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={refresh}></InsertModal>
       <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={refresh}></DeleteModal>
