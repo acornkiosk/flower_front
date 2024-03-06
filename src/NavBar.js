@@ -31,13 +31,13 @@ const Navbar = () => {
 
   let rankText = "";
   if (rank === 3001) {
-    rankText = "[super]";
+    rankText = "[관리자]";
   } else if (rank === 3002) {
-    rankText = "[owner]";
+    rankText = "[사장님]";
   } else if (rank === 3003) {
-    rankText = "[manager]";
+    rankText = "[매니저]";
   } else if (rank === 3004) {
-    rankText = "[emp]";
+    rankText = "[직원]";
   }
 
    return (
@@ -54,8 +54,7 @@ const Navbar = () => {
                   navigate("/login")
                 }}> 로그인 </Button>
                 
-              }
-              
+              }    
             </div>
           </CDBNavbar>
         </Header>
