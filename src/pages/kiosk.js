@@ -8,7 +8,9 @@ import UpdateModal from "../components/kiosk/UpdateModal";
 function Kiosk() {
   //페이지 정보를 저장하는 state
   const [pageInfo, setpageInfo] = useState({
-    list: [] //키오스크 리스트
+    list: [], //키오스크 리스트
+    sortBy: null,
+    sortOrder: 'asc'
   })
   //추가모달 state
   const [addModalShow, setAddModalShow] = useState(false)
@@ -163,6 +165,22 @@ function Kiosk() {
     setSelectedKiosk([])
   }
 
+  const handleSort = (columnName) => {
+    const sortOrder = (columnName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
+    setpageInfo({
+      ...pageInfo,
+      sortBy: columnName,
+      sortOrder: sortOrder,
+      list: [...pageInfo.list.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return a[columnName].localeCompare(b[columnName]);
+        } else {
+          return b[columnName].localeCompare(a[columnName]);
+        }
+      })],
+    });
+  };
+
   return (
     <Container>
       <Row className="justify-content-md-center">
@@ -186,7 +204,9 @@ function Kiosk() {
             </th>
             <th>ID</th>
             <th>Location</th>
-            <th>Power</th>
+            <th>
+              Power <Icon.ArrowDownUp onClick={()=> handleSort('power')}/>
+            </th>
           </tr>
         </thead>
         <tbody>
