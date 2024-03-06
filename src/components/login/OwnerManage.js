@@ -53,7 +53,7 @@ export default function OwnerMange() {
                 console.log(error)
             })
     }
-if(rank==3001){
+if(rank===3001){
     return (
         <div>
             <h1>super 전용 (관리자 모드)</h1>
@@ -103,9 +103,9 @@ if(rank==3001){
                 </tbody>
             </Table>
             <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
-            <UpModal show={showUpModal} setshow={setShowUpModal} item={currentItem} refresh={refresh} />ontent
+            <UpModal show={showUpModal} setshow={setShowUpModal} item={currentItem} refresh={refresh} />
         </div>
-    );
+    )
 }
 else{
     setTimeout(()=>{
