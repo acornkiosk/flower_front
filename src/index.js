@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 // App.js 를 import 해서 
@@ -16,25 +16,33 @@ import axios from 'axios';
 let userName=null
 let isLogin=false
 let rank=null
-if (localStorage.token) {
-  //토큰을 디코딩
-  const result = decodeToken(localStorage.token);
-  //초단위
-  const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
-  //현재시간
-  const now = new Date().getTime();
-  //만일 유효기간이 만료 되었다면 
-  if(expTime > now){
-    userName=result.payload.sub
-    isLogin=true
-    rank=result.payload.rank
-    //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
-    axios.defaults.headers.common["Authorization"]="Bearer+"+localStorage.token
-  }else{
-    //만료된 토큰은 삭제한다 
-    delete localStorage.token
+
+function test(){
+  if (localStorage.token) {
+    //토큰을 디코딩
+    const result = decodeToken(localStorage.token);
+    //초단위
+    const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
+    //현재시간
+    const now = new Date().getTime();
+    //만일 유효기간이 만료 되었다면 
+    if(expTime > now){
+      userName=result.payload.sub
+      isLogin=true
+      rank=result.payload.rank
+      //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
+      axios.defaults.headers.common["Authorization"]="Bearer+"+localStorage.token
+    }else{
+      //만료된 토큰은 삭제한다 
+      delete localStorage.token
+      alert("토큰이 만료되었습니다.") 
+      window.location.replace("/")
+    }
   }
 }
+
+setInterval(test,400)
+
 const initialstate={
   userName,
   commonTable : [],
