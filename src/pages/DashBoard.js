@@ -26,6 +26,7 @@ export default function DashBoard() {
             <CircleChart type={"바구니"} />
           </Col>
         </Row>
+        <hr />
         <DashTable />
       </div>
 
