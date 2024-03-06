@@ -183,10 +183,10 @@ function Main() {
           }} disabled={filteredMenuList.endPageNum >= filteredMenuList.totalPageCount}>&raquo;</Pagination.Item> 
       </Pagination>  
            
-      <WarningModal show={warning.show} value_id={warning.menu_id} onHide={()=>setWarning({show:false})} deleteMenu={()=>SetDeleteProcess(true)}></WarningModal>
+      <WarningModal show={warning.show} value_id={warning.menu_id} onHide={()=>setWarning({show:false})} deletemenu={()=>SetDeleteProcess(true)}></WarningModal>
       <InfoModal show={info.show} title={info.title} header={info.header} body={info.body} onHide={()=>{
         setInfo({show:false})
-        refresh()
+        refresh(1)
       }} ></InfoModal>
     </div>
   );
@@ -212,7 +212,7 @@ function WarningModal(props) {
         <h4>보고 계신 정보를 정말 삭제하시겠습니까?</h4>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={props.deleteMenu}>삭제</Button>
+        <Button variant="danger" onClick={props.deletemenu}>삭제</Button>
         <Button variant="warning" onClick={props.onHide}>취소</Button>
       </Modal.Footer>
     </Modal>

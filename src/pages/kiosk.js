@@ -165,7 +165,6 @@ function Kiosk() {
 
   return (
     <Container>
-
       <Row className="justify-content-md-center">
         <Col>
           <h1>키오스크 관리</h1>
