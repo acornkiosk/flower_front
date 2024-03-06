@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { Header } from "./NavBar.Style";
-import { CDBNavbar } from "cdbreact";
-import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
-import { useNavigate } from "react-router";
+import { CDBNavbar } from "cdbreact";
+import React from "react";
 import { Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { Header } from "./NavBar.Style";
 
 const Navbar = () => {
   const userName=useSelector(state=>state.userName)
@@ -13,10 +13,6 @@ const Navbar = () => {
 
   const navigate=useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log("Rank:", rank);
-  }, [rank]);
 
   //로그아웃 핸들러
   const handleLogout = () => {
