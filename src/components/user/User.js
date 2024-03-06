@@ -37,7 +37,6 @@ function User() {
   const pageRefresh = (pageNum) => {
     axios.post("/api/user/list", pageNum, { "headers": { "Content-Type": "application/json" } })
       .then(res => {
-        console.log(res.data)
         setPageInfo(res.data)
         const result = createArray(res.data.startPageNum, res.data.endPageNum)
         setPageArray(result)
