@@ -1,22 +1,19 @@
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
   // Authorization: localStorage.token 
   axios.defaults.baseURL = process.env.PUBLIC_URL
-
   const dispatch = useDispatch()
-  
   // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
   const [login, setLogin] = useState({})
-
   const navigate=useNavigate();
-
-
+  //로그인실패시 alert 
+  const [showAlert,setShowAlert] = useState(false)
   // 로그인 버튼을 클릭할 때 실행되는 함수입니다.
   const handleLogin = () => {
     // Axios를 사용하여 Spring Boot와 통신합니다.
@@ -38,6 +35,7 @@ function Login() {
       })
       .catch(error => {
         console.error(error);
+        setShowAlert(true)
       });
   };
 
@@ -66,12 +64,12 @@ function Login() {
                 <Form.Group className="mb-3">
                   <Form.Control type="password" name="password" placeholder="PASSWORD" onChange={(e) => handleChange(e)} />
                 </Form.Group>
-
                 <div className="d-grid gap-2">
                   <Button type="button" variant="primary" onClick={handleLogin}>
                     로그인
                   </Button>
                 </div>
+                <Alert className='mt-1' variant='danger' show={showAlert}>아이디 혹은 비밀번호가 틀렸습니다!</Alert>
               </Form>
             </div>
           </Col>
