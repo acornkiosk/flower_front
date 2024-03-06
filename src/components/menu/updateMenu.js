@@ -169,7 +169,7 @@ function UpdateMenu() {
                             <Form.Label  >카테고리</Form.Label>
                             <Form.Select name="category_id" key={menuData.category_id} onChange={handleChange} defaultValue={menuData.category_id} placeholder="카테고리 선택">
                                 {category.map(item =>
-                                    <option value={item.code_id}>{item.code_name}</option>
+                                    <option key={item.code_id} value={item.code_id}>{item.code_name}</option>
                                 )}
                             </Form.Select>
                         </Form.Group>
