@@ -49,7 +49,7 @@ function Main() {
 // 가격 클릭 시 정렬 기능 추가
 const handleSortByPrice = () => {
   // 정렬 방식이 오름차순인 경우 내림차순으로 변경하고, 그 반대의 경우는 오름차순으로 변경
-  const newSortByPrice = sortByPrice === 'asc' ? 'desc' : 'asc';
+  const newSortByPrice = sortByPrice === 'asc' ? 'desc' : (sortByPrice === 'desc' ? null : 'asc');
   setSortByPrice(newSortByPrice);
  
 };
