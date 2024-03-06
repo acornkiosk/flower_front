@@ -3,38 +3,38 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 const data = [
   {
-    name: 'Page A',
-    uv: 4000,
+    name: 'Mon',
+    price: 4000,
     amt: 2400,
   },
   {
-    name: 'Page B',
-    uv: 3000,
+    name: 'Tue',
+    price: 3000,
     amt: 2210,
   },
   {
-    name: 'Page C',
-    uv: 2000,
+    name: 'Wed',
+    price: 2000,
     amt: 2290,
   },
   {
-    name: 'Page D',
-    uv: 2780,
+    name: 'Thu',
+    price: 2780,
     amt: 2000,
   },
   {
-    name: 'Page E',
-    uv: 1890,
+    name: 'Fri',
+    price: 1890,
     amt: 2181,
   },
   {
-    name: 'Page F',
-    uv: 2390,
+    name: 'Sat',
+    price: 2390,
     amt: 2500,
   },
   {
-    name: 'Page G',
-    uv: 3490,
+    name: 'Sun',
+    price: 3490,
     amt: 2100,
   },
 ];
@@ -62,8 +62,7 @@ export default class Example extends PureComponent {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="price" stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
     );
