@@ -2,14 +2,16 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import CategoryBtn from './categoryBtn';
-import { Button, Modal, Pagination } from 'react-bootstrap';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 /** HTML 본문 : 메뉴조회 전체 */ 
 function Main() {
 
+  /** 서버에서 가져온 데이터 배분 배열 변수 */ 
+  const [menuList, setMenuList] = useState([]);
   /** 필터링된 메뉴 데이터 배열 변수 */
-  const [filteredMenuList, setFilteredMenuList] = useState({list:[]});
+  const [filteredMenuList, setFilteredMenuList] = useState([]);
   /** 삭제버튼 눌렀을 때 경고알림으로 사용할 변수 */
   const [warning, setWarning] = useState({
     menu_id:0,
@@ -25,55 +27,44 @@ function Main() {
   })
   /** 삭제 프로세스 함수 실행여부 */
   const [deleteProcess, SetDeleteProcess] = useState(false)
-  
+
+
   /** 등록과 수정폼 이동처리 변수 */
   const navigate= useNavigate()
-
-  
-  //페이징 UI를 만들때 사용할 배열
-  const [pageArray,setPageArray]= useState([])
-
-  const [categoryNum,setCategoryNum]=useState(0)
-   
-  //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
-  function createArray(start,end){
-  const result=[];
-  for(let i=start; i<=end; i++){
-    result.push(i);
-  }
-  return result
-}
-
-
-
-  const refresh = (pageNum,category_id)=>{
-    axios.post("/api/menu/list", {pageNum:pageNum, category_id:category_id})
-    .then(res=>{ 
-      setFilteredMenuList(res.data)
-      
-      //페이징 UI출력
-      const result=createArray(res.data.startPageNum, res.data.endPageNum)
-      setPageArray(result)
+  const refresh = ()=>{
+    /** 메뉴정보 전체 요청하기 */
+    axios.post("/api/menu/list", {})
+    .then(res=>{
+      const menuDB = res.data.list; // menuListResponse.data.list = [{},{},{}...]
+      setMenuList(menuDB)
+      setFilteredMenuList(menuDB)
     })
     .catch(error=>{
-      console.log(error)
+      console.error('메뉴관리 : 메뉴리스트 요청 오류:', error);
     })
   }
   /** 화면에 접속하자마자 서버로부터 메뉴정보를 모두 가져오는 코드를 작성 */
   useEffect(() => {
-    //qeury 파라미터 값을 읽어와 본다.
-    let pageNum=1
-    //만일 존재 하지 않는다면 1페이지로 설정
-  
-    let category_id=categoryNum.code_id
-    if(category_id==null)category_id=0
-    refresh(pageNum,category_id)
-   
-  }, [categoryNum]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
+    refresh()
+  }, []); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
 
     /** 카테고리 드롭다운 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
     const handleCategoryChange = (item) => {
-      setCategoryNum(item)
+      try{
+        if(item === 1000 || item === 0){
+
+          // 아무 작업 없이 원본 데이터를 그대로 유지
+          setFilteredMenuList(menuList);
+        }else{
+  
+          // item.code_id와 일치하는 데이터만을 추려서 새로운 배열 생성
+          const filtered = menuList.filter(menu => menu.category_id === item.code_id);
+          // 새로운 배열을 상태로 설정
+          setFilteredMenuList(filtered);
+        }
+      }catch (e) {
+        console.error('메뉴관리 : 카테고리 드롭다운 버튼에서 가져온 값이 이상함', e);
+      }
       
     };
 
@@ -109,9 +100,6 @@ function Main() {
             show:false
           })
           SetDeleteProcess(false)
-          // 삭제가 성공했을 때 화면 갱신
-          refresh(1, categoryNum.code_id);
-
         }else{
           // 안내 메시지에 실패했다고 알리기 
           setInfo({
@@ -154,7 +142,7 @@ function Main() {
           </tr>
         </thead>
         <tbody>
-          {filteredMenuList.list.map(item => (
+          {filteredMenuList.map(item => (
             <tr key={item.id}>
               <td>{item.category}</td>
               <td>{item.name}</td>
@@ -165,24 +153,6 @@ function Main() {
           ))}
         </tbody>
       </Table>
-
-      <Pagination className="mt-3">
-        <Pagination.Item onClick={()=>{
-          refresh(filteredMenuList.startPageNum-1,categoryNum.code_id)
-          //setParams({pageNum:filteredMenuList.startPageNum-1})
-          }} disabled={filteredMenuList.startPageNum === 1}>&laquo;</Pagination.Item> 
-        {
-          pageArray.map(item=>(<Pagination.Item onClick={()=>{
-              //setParams({pageNum: item})
-            refresh(item,categoryNum.code_id)
-          }} key={item} active={filteredMenuList.pageNum===item}>{item}</Pagination.Item>))
-        }
-        <Pagination.Item onClick={()=>{
-          refresh(filteredMenuList.endPageNum+1,categoryNum.code_id)
-          //setParams({pageNum:filteredMenuList.endPageNum+1})
-          }} disabled={filteredMenuList.endPageNum >= filteredMenuList.totalPageCount}>&raquo;</Pagination.Item> 
-      </Pagination>  
-           
       <WarningModal show={warning.show} value_id={warning.menu_id} onHide={()=>setWarning({show:false})} deleteMenu={()=>SetDeleteProcess(true)}></WarningModal>
       <InfoModal show={info.show} title={info.title} header={info.header} body={info.body} onHide={()=>{
         setInfo({show:false})
@@ -242,4 +212,3 @@ function InfoModal(props){
     </Modal>
   );
 }
-

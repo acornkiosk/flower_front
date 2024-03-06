@@ -5,46 +5,79 @@ import OrderItem from "./orderItem"
 import ConvertOptions from "./util"
 
 export default function Order() {
-  const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
-  const connect = () =>{
-    ws.onopen = () => {
-      console.log("웹소켓 오픈")
-    }
-    ws.onmessage = (e) => {
-      console.log(e.data)
-      refresh()
-    }
-    ws.onerror = (e) => {
-      console.log(e)
-    }
-    ws.onclose = () => {
-      console.log("웹소켓 닫힘")
-    }
-  }
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
   const [showModal, setShowModal] = useState(false)
   //상세용 데이터
   const [data, setData] = useState([])
+
+  // 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결
+  const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+
+  /** 웹소켓 계획
+   * 1. 들어온 주문 개수만큼 sidebar.js 개수 표시
+   * 2. 다른 페이지에 있더라도 새로운 주문이 들어올 때마다 알림표시 
+   * 3. 키오스크 관리에서 off 하면 '점검중'으로 표기해서 주문이 불가하도록 만들기
+   * 4. 주문완료 진행시 손님 키오스크에 알림표시, 번호표기 
+   */
+
+  /** 웹소켓 연결관리 함수 */
+  const connect = () => {
+
+    /** 연결에 성공했을 경우 동작하는 메서드 */
+    ws.onopen = (e) => {
+      console.log("주문관리 : 실시간 화면연동 시작(웹소켓)")
+
+      /** 실시간 주문정보 확인될 경우 */
+      ws.onmessage = () => {
+        refresh()
+      }
+    }
+
+    /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
+    ws.onerror = (e) => {
+      alert("주문관리 : 화면 연동이 원활하게 이루어지지 않고 있습니다. 서버 확인이 필요합니다(웹소켓)")
+      /** 확인하고 이후 새로고침 */
+      refresh()
+    }
+
+    /** 연결을 종료하고 싶을 때 동작하는 메서드 */
+    ws.onclose = (e) => {
+      console.log("주문관리 : 실시간 화면연동 종료(웹소켓)")
+      /** 종료 이후 새로고침 */
+      refresh()
+    }
+  }
+
   //refresh
   const refresh = () => {
     //주문 db에 있는 정보 가져오기 
     axios.post("/api/order/list", {})
       .then(res => {
-        const orderData = res.data.list
-        //order_id를 기준으로 주문들을 묶어서 저장할 객체
-        let updatedOrders = {}
 
-        orderData.forEach(order => {
-          const orderId = order.order_id
-          if (updatedOrders[orderId]) {
-            updatedOrders[orderId].push(order)
-          } else {
-            updatedOrders[orderId] = [order]
-          }
-        })
-        setOrders(updatedOrders)
+        /** 들어온 주문이 있는 경우 */
+        if(res.data.list != null){
+
+          const orderData = res.data.list
+          //order_id를 기준으로 주문들을 묶어서 저장할 객체
+          let updatedOrders = {}
+  
+          orderData.forEach(order => {
+            const orderId = order.order_id
+            if (updatedOrders[orderId]) {
+              updatedOrders[orderId].push(order)
+            } else {
+              updatedOrders[orderId] = [order]
+            }
+          })
+          setOrders(updatedOrders)
+
+          /** 들어온 주문이 없는 경우(400에러 방지) */
+        }else{
+          
+        }
+        
       }
       )
       .catch(error => console.log(error))
@@ -53,12 +86,7 @@ export default function Order() {
   useEffect(() => {
     connect()
     refresh()
-    return () =>{
-      ws.close()
-    }
   }, [])
-
-  //모달에 있는 완료버튼을 누를 시 
 
   return (
     <div>
@@ -124,7 +152,7 @@ function DetailModal(props) {
             <Col>{order_id}번 주문 내역</Col>
             <Col>키오스크 : {kiosk_id}번</Col>
             <Col className="text-end"><CloseButton onClick={() => {
-              props.setShowMoadl(false)
+              props.setShowModal(false)
             }}></CloseButton></Col>
           </Row>
         </Modal.Title>

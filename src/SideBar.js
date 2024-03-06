@@ -10,6 +10,7 @@ import {
 } from 'cdbreact';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Badge from 'react-bootstrap/Badge';
 
 const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState('');
@@ -59,7 +60,7 @@ const Sidebar = () => {
           </a>
         </CDBSidebarHeader>
 
-        <CDBSidebarContent className="sidebar-content">
+        {isLogin && <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
             <NavLink onClick={() => toggleAccordion('kiosk')} exact to="/kiosk" className={activeStyle}>
               <CDBSidebarMenuItem icon="tablet">키오스크 관리</CDBSidebarMenuItem>
@@ -68,7 +69,7 @@ const Sidebar = () => {
               <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
             </NavLink>
             <NavLink onClick={() => toggleAccordion('order')} exact to="/order" className={activeStyle}>
-              <CDBSidebarMenuItem icon="money-check">주문 관리</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="money-check">주문 관리<Badge bg="warning">9(바꿀거임)</Badge></CDBSidebarMenuItem>
             </NavLink>
 
             <div>
@@ -93,9 +94,9 @@ const Sidebar = () => {
             </div>
 
           </CDBSidebarMenu>
-        </CDBSidebarContent>
+        </CDBSidebarContent>}
 
-        <CDBSidebarFooter style={{ textAlign: 'center' }}>
+        {isLogin && <CDBSidebarFooter style={{ textAlign: 'center' }}>
           <div
             style={{
               padding: '20px 5px',
@@ -103,7 +104,7 @@ const Sidebar = () => {
           >
             <p onClick={superin}>Kiosk</p>
           </div>
-        </CDBSidebarFooter>
+        </CDBSidebarFooter>}
       </CDBSidebar>
     </div>
   );
