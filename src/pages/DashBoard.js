@@ -2,6 +2,7 @@ import Chart from "../components/dashBoard/LineChart";
 import Header from "../components/dashBoard/Header";
 import CircleChart from "../components/dashBoard/CircleChart";
 import { Col, Row } from "react-bootstrap";
+import DashTable from "../components/dashBoard/DashTable";
 
 export default function DashBoard() {
   return (
@@ -16,15 +17,16 @@ export default function DashBoard() {
             <CircleChart type={"카테고리"} />
           </Col>
           <Col>
-            <CircleChart type={"한송이"}/>
+            <CircleChart type={"한송이"} />
           </Col>
           <Col>
-            <CircleChart type={"꽃다발"}/>
+            <CircleChart type={"꽃다발"} />
           </Col>
           <Col>
-            <CircleChart type={"바구니"}/>
+            <CircleChart type={"바구니"} />
           </Col>
         </Row>
+        <DashTable />
       </div>
 
     </>
