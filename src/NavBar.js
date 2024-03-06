@@ -9,6 +9,19 @@ import { Button } from "react-bootstrap";
 const Navbar = () => {
   const userName=useSelector(state=>state.userName)
   const isLogin=useSelector(state=>state.isLogin)
+  const rank=useSelector(state=>state.rank)
+  let userRank=null;
+  if(rank==3001){
+    userRank="super"
+  }else if(rank==3002){
+    userRank="owenr"
+  }else if(rank==3003){
+    userRank="manager"
+  }else if(rank==3004){
+    userRank="emp"
+  }else{
+    userRank="미확인"
+  }
   const navigate=useNavigate();
   const dispatch = useDispatch();
   //로그아웃 핸들러
@@ -29,7 +42,8 @@ const Navbar = () => {
             <div className="ml-auto">
               
               {
-                isLogin && <i className="mx-4"><strong>{userName} </strong>님 로그인중 <Button variant="secondary" onClick={handleLogout}>로그아웃</Button></i>
+                isLogin && <i className="mx-4"><strong>{userName} </strong> <em>({userRank})</em>
+                님 로그인중 <Button variant="secondary" onClick={handleLogout}>로그아웃</Button></i>
               }
               
               {
