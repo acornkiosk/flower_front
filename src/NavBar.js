@@ -54,8 +54,7 @@ const Navbar = () => {
                   navigate("/login")
                 }}> 로그인 </Button>
                 
-              }
-              
+              }    
             </div>
           </CDBNavbar>
         </Header>
