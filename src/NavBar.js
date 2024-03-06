@@ -10,6 +10,7 @@ const Navbar = () => {
   const userName=useSelector(state=>state.userName)
   const isLogin=useSelector(state=>state.isLogin)
   const rank=useSelector(state=>state.rank)
+
   const navigate=useNavigate();
   const dispatch = useDispatch();
 
@@ -46,6 +47,7 @@ const Navbar = () => {
             <div className="ml-auto">
 
               {
+
                 isLogin && <i className="mx-4"><strong>{rankText} {userName} </strong>님 로그인중 <Button variant="secondary" onClick={handleLogout}>로그아웃</Button></i>
               }
               

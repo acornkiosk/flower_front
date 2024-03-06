@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +43,7 @@ export default function OwnerMange() {
                 console.log(error)
             })
     }
-if(rank==3001){
+if(rank===3001){
     return (
         <div>
             <h1>super 전용 (관리자 모드)</h1>
@@ -71,7 +71,7 @@ if(rank==3001){
                         ownerlist.map((item) => <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.userName}</td>
-                            <td>{item.rank}</td>
+                            <td>{item.rank==3002 &&"super"}</td>
                             <td>{item.role}</td>
                             <td>{item.regdate}</td>
                             <td>
@@ -93,9 +93,9 @@ if(rank==3001){
                 </tbody>
             </Table>
             <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
-            <UpModal show={showUpModal} setshow={setShowUpModal} item={currentItem} refresh={refresh} />ontent
+            <UpModal show={showUpModal} setshow={setShowUpModal} item={currentItem} setCurrentItem={setCurrentItem} refresh={refresh} />
         </div>
-    );
+    )
 }
 else{
     setTimeout(()=>{
@@ -138,7 +138,12 @@ function AddModal(props) {
     };
 
     //사장님(owner) 추가 
-    const [ownerdata, setOwnerdata] = useState({});
+    const [ownerdata, setOwnerdata] = useState({
+        userName: "",
+        id: "",
+        password: "",
+        rank: 3002 // 초기값으로 설정해야 할 경우 여기에 넣으세요
+    });
     return (
         <Modal
             {...props}
@@ -152,10 +157,22 @@ function AddModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <input type="text" placeholder="ID" name="id" onChange={ownerChange} />
-                <input type="text" placeholder="Password" name="password" onChange={ownerChange} />
-                <input type="text" placeholder="userName" name="userName" onChange={ownerChange} />
 
+            <Form.Group as={Row} className="mb-4">
+                <Form.Label  column md="2"> 이름 : </Form.Label>
+                <Col md="10"><Form.Control type='text' name="userName" onChange={ownerChange} placeholder="userName" /></Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-4">
+                <Form.Label    column md="2"> 아이디 : </Form.Label>
+                <Col md="10"><Form.Control type='text' name='id'onChange={ownerChange} placeholder="ID 입력해주세요"  /></Col>
+            </Form.Group>
+            
+            <Form.Group as={Row} className="mb-4">
+             <Form.Label  column md="2"> 비밀번호 : </Form.Label>
+                <Col md="10"><Form.Control type='password' name='password' onChange={ownerChange} placeholder="Password" /></Col>
+            </Form.Group>
+           
             </Modal.Body>
             <Modal.Footer>
 
@@ -167,24 +184,24 @@ function AddModal(props) {
 }
 
 function UpModal(props) {
-    //state로 값을 관리
-    const [owner, setOwner] = useState(props.item);
+
+    const {item, setCurrentItem,refresh,setshow} = props
     //모달창에 입력값 바뀌면 state 값 바꾸기
     const handleChange = (e) => {
-        setOwner({
-            ...owner,
+        setCurrentItem({
+            ...item,
             [e.target.name]: e.target.value
-
+       
         })
     }
 
 
     const handleSave = () => {
-        axios.post("/api/user/update", owner)
+        axios.post("/api/user/update", item)
             .then(res => {
                 //회원 목록 보기로 이동
-                props.refresh()
-                props.setshow(false)
+                refresh()
+                setshow(false)
             })
             .catch(error => {
                 console.log(error)
@@ -200,22 +217,27 @@ function UpModal(props) {
         >
             <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {props.item.userName} 사장님 정보
+                 사장님 정보 수정
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <label htmlFor="newId">새로운 아이디</label>
-                <input type="text" name="newId" onChange={handleChange} />
-                <label htmlFor="userName">이름</label>
-                <input type="text" name="userName" value={props.item.userName} onChange={handleChange} />
+           
+            <Form.Group as={Row} className="mb-3">
+                <Form.Label   column md="2"> 이름 </Form.Label>
+                <Col md="3"><Form.Control type='text' name='userName' onChange={handleChange} value={item.userName}/></Col>
+                <Form.Label  column md="2"> 아이디 </Form.Label>
+                <Col md="3"><Form.Control type='text' name='id' value={item.id} readOnly /></Col>
+            </Form.Group>
+
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => {
                     handleSave()
                 }}>수정</Button>
                 <Button onClick={() => {
-                    props.setshow(false)
+                  setshow(false)
                 }}>취소</Button>
+                
             </Modal.Footer>
         </Modal>
     );
