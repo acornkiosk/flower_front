@@ -15,12 +15,14 @@ import Badge from 'react-bootstrap/Badge';
 const Sidebar = () => {
   /** 주문정보 개수 */
   const [orderCount, setOrderCount] = useState(0)
-  /** 주문정보 개수창 */
+   /** 주문정보 UI */
   const [show, setShow] = useState(false)
   /** 용도 : 주문현황 개수 실시간 표기 */
   const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
-
+  /** 웹소켓 관리 useEffect */
   useEffect(() => {
+    /** 수정이 필요한 코드
+     * 주문관리 텍스트 옆에 나오는 주문개수 UI 반응속도가 한박자 느리게 동작함 */
     const connect = () => {
       ws.onopen = () => {
         console.log("사이드 바: 실시간 화면연동 시작(웹소켓)");
@@ -44,7 +46,7 @@ const Sidebar = () => {
   
     connect();
   }, []); // 한 번만 연결하도록 빈 배열을 넣음  
-
+  /** 웹 실시간 반영 useEffect */
   useEffect(() => {
     setShow(orderCount > 0);
     console.log(show)
