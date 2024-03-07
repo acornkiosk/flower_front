@@ -3,11 +3,21 @@ import Header from "../components/dashBoard/Header";
 import CircleChart from "../components/dashBoard/CircleChart";
 import { Col, Row } from "react-bootstrap";
 import DashTable from "../components/dashBoard/DashTable";
+import { useState } from "react";
 
 export default function DashBoard() {
+  const [selectedDate, setSelectedDate] = useState("오늘")
+  const [selectedCategory, setSelectedCategory] = useState("전체")
+  //드롭다운을 누를때 텍스트 변경함수
+  function changeDate(text) {
+    setSelectedDate(text)
+  }
+  function changeCategory(text) {
+    setSelectedCategory(text)
+  }
   return (
     <>
-      <Header />
+      <Header selectedDate = {selectedDate} changeDate={changeDate} selectedCategory={selectedCategory} changeCategory={changeCategory}/>
       <Chart />
       <br />
       <hr />
@@ -27,7 +37,7 @@ export default function DashBoard() {
           </Col>
         </Row>
         <hr />
-        <DashTable />
+        <DashTable selectedDate = {selectedDate} changeDate={changeDate} selectedCategory={selectedCategory} changeCategory={changeCategory}/>
       </div>
 
     </>
