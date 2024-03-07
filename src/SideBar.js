@@ -18,7 +18,6 @@ const Sidebar = () => {
   /** 용도 : 주문현황 개수 실시간 표기 */
   const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
 
-
   const [activeMenu, setActiveMenu] = useState('');
 
   const toggleAccordion = (menuName) => {
