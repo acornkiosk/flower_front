@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import {
   CDBSidebar,
@@ -13,10 +13,42 @@ import { useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
 
 const Sidebar = () => {
-  /** 로그인 여부에 따라 웹소켓 연결을 결정짓는다 */
-  const [showOrderCount, setShowOrderCount] = useState(false)
+  /** 주문정보 개수 */
+  const [orderCount, setOrderCount] = useState(0)
+  /** 주문정보 개수창 */
+  const [show, setShow] = useState(false)
   /** 용도 : 주문현황 개수 실시간 표기 */
   const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+
+  useEffect(() => {
+    const connect = () => {
+      ws.onopen = () => {
+        console.log("사이드 바: 실시간 화면연동 시작(웹소켓)");
+      };
+  
+      ws.onerror = () => {
+        console.log("사이드 바: 화면 연동이 원활하게 이루어지지 않고 있습니다. 서버 확인이 필요합니다(웹소켓)");
+        ws.onopen();
+      };
+  
+      ws.onmessage = (msg) => {
+        var count = JSON.parse(msg.data);
+
+        if (count.type === "ORDER_COUNT") {
+          console.log("사이드 바: " + count.num + "개 전달받음");
+          setOrderCount(count.num);
+          setShow(count.num > 0);
+        }
+      };
+    };
+  
+    connect();
+  }, []); // 한 번만 연결하도록 빈 배열을 넣음  
+
+  useEffect(() => {
+    setShow(orderCount > 0);
+    console.log(show)
+  }, [orderCount]); // orderCount가 변경될 때마다 호출되도록 의존성 배열에 추가
 
   const [activeMenu, setActiveMenu] = useState('');
 
@@ -41,14 +73,14 @@ const Sidebar = () => {
   const isLogin = useSelector(state => state.isLogin)
   const rank = useSelector(state => state.rank)
   //여기서 부터 super(관리자모드) 필요한 코드
-  let count=0;
-  const superin=()=>{
-    count+=1;
-    setTimeout(()=>{
-      count=0;
-    },1000)
-    if(count===5 && isLogin ===true && rank==3001){
-      count=0;
+  let count = 0;
+  const superin = () => {
+    count += 1;
+    setTimeout(() => {
+      count = 0;
+    }, 1000)
+    if (count === 5 && isLogin === true && rank == 3001) {
+      count = 0;
       navigate("/owner")
     }
   }
@@ -66,7 +98,7 @@ const Sidebar = () => {
 
         {isLogin && <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-          <NavLink onClick={() => toggleAccordion('dash')} to="/dash" className={activeStyle}>
+            <NavLink onClick={() => toggleAccordion('dash')} to="/dash" className={activeStyle}>
               <CDBSidebarMenuItem icon="tablet">대쉬보드</CDBSidebarMenuItem>
             </NavLink>
             <NavLink onClick={() => toggleAccordion('kiosk')} to="/kiosk" className={activeStyle}>
@@ -76,7 +108,7 @@ const Sidebar = () => {
               <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
             </NavLink>
             <NavLink onClick={() => toggleAccordion('order')} to="/order" className={activeStyle}>
-              <CDBSidebarMenuItem icon="money-check">주문 관리{showOrderCount && <Badge bg="warning" >1</Badge>}</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="money-check">주문 관리{show && <Badge bg="warning" >{orderCount}</Badge>}</CDBSidebarMenuItem>
             </NavLink>
 
             <div>
