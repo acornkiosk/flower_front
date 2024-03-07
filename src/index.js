@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 // App.js 를 import 해서 
@@ -45,7 +45,7 @@ function test(){
 }
 
 
-setInterval(test,3600)
+setInterval(test,3600*1000)
 
 const initialstate={
   userName,
@@ -96,6 +96,7 @@ root.render(
       </React.StrictMode>
     </BrowserRouter>
   </Provider>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function
