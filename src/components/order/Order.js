@@ -53,13 +53,14 @@ export default function Order() {
           order_id: newOrder.order_id,
           regdate: time
         };
-        console.log("새로 들어온 주문관리 info")
+        console.log("주문관리 : 새로 들어온 주문관리 info")
         console.log(info)
         refresh()
       }
       /** 리팩토링 대상 코드입니다.
        * 현재 : 연습코드는 잘 건너왔는지 확인용도일 뿐 들어오면 refresh 하는 것이 전부
-       * 예정 : 리팩토링한 flower_kiosk 의 Cart.js 부터 건내받은 list 정보로 setOrders() 함수에 담아보자 */
+       * 예정1 : 리팩토링한 flower_kiosk 의 Cart.js 부터 건내받은 list 정보로 setOrders() 함수에 담아보자 
+       * 예정2 : flower_kiosk 의 Cart.js 에서 건내받은 주문정보 dto를 store 에서 관리하자 */
     }
   }
 
@@ -92,20 +93,20 @@ export default function Order() {
       .catch(error => {
         console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
         console.log(error)
+        /** 주문개수 전달하기 */
+        send(0)
       })
   }
 
   /** 웹소켓 전송함수 */
-  const send = (num) => {
+  const send = (count) => {
     let msg = {
       type: "ORDER_COUNT",
-      count: num
+      num: count
     }
-    if (num > 0) {
-      /** '사이드바'로 보내기 위함 */
-      ws.send(JSON.stringify(msg))
-      console.log("전송됨")
-    }
+    /** '사이드바'로 보내기 위함 */
+    ws.send(JSON.stringify(msg))
+    console.log("주문관리 : 주문정보 " + count + "개 전송됨")
   }
 
   return (
@@ -134,6 +135,7 @@ function DetailModal(props) {
     order_id = props.data[0].order_id
     kiosk_id = props.data[0].kiosk_id
   }
+
   //완료버튼을 누를시 
   function onCompleted() {
     for (let item of props.data) {
