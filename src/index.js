@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 // App.js 를 import 해서 
@@ -12,10 +12,13 @@ import { Provider} from 'react-redux';
 import { decodeToken } from 'jsontokens';
 import axios from 'axios';
 
+
+
 //userName,isLogin 초기값을 설정해준다.
 let userName=null
 let isLogin=false
 let rank=null
+
 
 function test(){
   if (localStorage.token) {
@@ -41,7 +44,8 @@ function test(){
   }
 }
 
-setInterval(test,400)
+
+setInterval(test,3600*1000)
 
 const initialstate={
   userName,
@@ -80,17 +84,19 @@ const reducer=(state=initialstate,action)=>{
   return newState
 }
 const store = createStore(reducer)
-
+        
 //id 가 root 인 곳에 UI 출력하기 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  
   <Provider store={store}>
     <BrowserRouter>
       <React.StrictMode>
-        <App />
+         <App />
       </React.StrictMode>
     </BrowserRouter>
   </Provider>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function

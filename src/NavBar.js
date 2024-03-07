@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { CDBNavbar } from "cdbreact";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -19,7 +19,6 @@ const Navbar = () => {
     //localStorage 에 저장된 토큰 삭제
     delete localStorage.token
     //store 의 상태 바꾸기
-    dispatch({ type: "SET_LOGIN", payload: false })
     delete axios.defaults.headers.common["Authorization"]
     dispatch({type:"SET_LOGIN",payload:false})
     dispatch({type:"SET_RANK",payload:false})
@@ -36,6 +35,7 @@ const Navbar = () => {
   } else if (rank === 3004) {
     rankText = "[직원]";
   }
+
 
    return (
         <Header style={{background:"#333", color:"#fff", minHeight:'73.5px' , display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
