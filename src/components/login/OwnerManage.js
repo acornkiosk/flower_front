@@ -15,8 +15,9 @@ export default function OwnerMange() {
     const rank=useSelector(state=>state.rank)
     //화면 refresh 하기
     const refresh = () => {
-        axios.post("/api/user/list",{rank : 3002})
+        axios.post("/api/user/list",{rank : 3002,pageNum:0})
             .then(res => {
+                console.log(res.data.list)
                 setOwnerlist(res.data.list);
             })
             .catch(error => {
