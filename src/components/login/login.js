@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ function Login() {
   const dispatch = useDispatch()
   // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
   const [login, setLogin] = useState({
-    id: cookies.get('cid')
+    id:cookies.get('cid')
   })
 
   const navigate=useNavigate();
@@ -32,7 +32,7 @@ function Login() {
         dispatch({ type: "SET_RANK", payload: result.payload.rank})
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
-       alert(result.payload.sub+"님 로그인 했습니다.");
+        alert(result.payload.sub+"님 로그인 했습니다.");
         //home으로 보내기
         navigate("/")
       })
@@ -41,9 +41,6 @@ function Login() {
         setShowAlert(true)
       });
   };
-  
-
-
 
   //input 요소에 문자열을 입력했을때 호출되는 함수 
   const handleChange = (e) => {
