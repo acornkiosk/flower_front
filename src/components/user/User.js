@@ -60,7 +60,7 @@ function User() {
 
   // 직원 목록 데이터를 읽어오는 함수
   const pageRefresh = (pageNum) => {
-    axios.post("/api/user/list", pageNum, { "headers": { "Content-Type": "application/json" } })
+    axios.post("/api/user/list", {pageNum: pageNum})
       .then(res => {
         let filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002)
         const newResult = {
