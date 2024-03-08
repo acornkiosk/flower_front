@@ -77,6 +77,7 @@
 ## 요구사항 
 ![image](https://github.com/acornkiosk/flower_front/assets/94777814/7f4898f3-3d46-4847-bcb2-83a72e4bd486)
 ![image](https://github.com/acornkiosk/flower_front/assets/94777814/cf28fd98-06cc-4549-bbb4-b0bb1d886a17)
+![image](https://github.com/acornkiosk/flower_front/assets/94777814/fa1fdfc7-661d-4663-9396-5a35d28c06bb)
 
 
 ## 개발 역할분담 (프론트)
