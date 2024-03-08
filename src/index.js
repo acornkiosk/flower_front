@@ -21,18 +21,7 @@ let rank=null
 
 axios.defaults.baseURL = process.env.PUBLIC_URL
 
-
-
-
-const initialstate={
-  userName,
-  commonTable : [],
-  orders : [],
-  isLogin,
-  rank
-}
-
-
+function test(){
   if (localStorage.token) {
     
     //토큰을 디코딩
@@ -41,7 +30,6 @@ const initialstate={
     const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
     //현재시간
     const now = new Date().getTime();
-
     if(expTime > now){
       userName=result.payload.sub
       isLogin=true
@@ -55,7 +43,18 @@ const initialstate={
       window.location.replace("/")
     }
   }
+}
 
+const initialstate={
+  userName,
+  commonTable : [],
+  orders : [],
+  isLogin,
+  rank
+}
+
+
+setInterval(test,3600*1000)
 const reducer=(state=initialstate,action)=>{
   let newState
 
