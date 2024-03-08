@@ -19,16 +19,17 @@ let userName=null
 let isLogin=false
 let rank=null
 
+axios.defaults.baseURL = process.env.PUBLIC_URL
 
 function test(){
   if (localStorage.token) {
+    
     //토큰을 디코딩
     const result = decodeToken(localStorage.token);
     //초단위
     const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
     //현재시간
     const now = new Date().getTime();
-    //만일 유효기간이 만료 되었다면 
     if(expTime > now){
       userName=result.payload.sub
       isLogin=true
@@ -44,9 +45,6 @@ function test(){
   }
 }
 
-
-setInterval(test,3600*1000)
-
 const initialstate={
   userName,
   commonTable : [],
@@ -55,6 +53,8 @@ const initialstate={
   rank
 }
 
+
+setInterval(test,3600*1000)
 const reducer=(state=initialstate,action)=>{
   let newState
 
