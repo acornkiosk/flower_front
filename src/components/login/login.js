@@ -26,10 +26,13 @@ function Login() {
         localStorage.token = res.data
         //저장된 토큰 디코딩 후 result에 저장하기
         const result = decodeToken(localStorage.token)
-        //redux 에 로그인 상태 , 사용자 이름 저장하기
-        dispatch({ type: "UPDATE_USER", payload: result.payload.sub })
-        dispatch({ type: "SET_LOGIN", payload: true })
-        dispatch({ type: "SET_RANK", payload: result.payload.rank})
+        const data={
+          userName: result.payload.sub, 
+          isLogin:true,
+          rank:result.payload.rank
+        }  
+          dispatch({type:"SET_LOGIN", payload:data})
+    
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
         alert(result.payload.sub+"님 로그인 했습니다.");
