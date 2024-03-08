@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import CategoryBtn from './categoryBtn';
 import { Button, Modal, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { PencilFill, XLg } from 'react-bootstrap-icons';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
@@ -26,7 +27,7 @@ function Main() {
   const [pageArray, setPageArray] = useState([])
 
   const [categoryNum, setCategoryNum] = useState(0)
-  const [sortByPrice, setSortByPrice] = useState(null); 
+  const [sortByPrice, setSortByPrice] = useState(null);
 
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
@@ -37,17 +38,17 @@ function Main() {
     return result
   }
 
-// 가격 클릭 시 정렬 기능 추가
-const handleSortByPrice = () => {
-  // 정렬 방식이 오름차순인 경우 내림차순으로 변경하고, 그 반대의 경우는 오름차순으로 변경
-  const newSortByPrice = sortByPrice === 'asc' ? 'desc' : (sortByPrice === 'desc' ? null : 'asc');
-  setSortByPrice(newSortByPrice);
- 
-};
+  // 가격 클릭 시 정렬 기능 추가
+  const handleSortByPrice = () => {
+    // 정렬 방식이 오름차순인 경우 내림차순으로 변경하고, 그 반대의 경우는 오름차순으로 변경
+    const newSortByPrice = sortByPrice === 'asc' ? 'desc' : (sortByPrice === 'desc' ? null : 'asc');
+    setSortByPrice(newSortByPrice);
+
+  };
 
 
-  const refresh = (pageNum, category_id ,sortByPrice) => {
-    axios.post("/api/menu/list", { pageNum: pageNum, category_id: category_id, sort:sortByPrice })
+  const refresh = (pageNum, category_id, sortByPrice) => {
+    axios.post("/api/menu/list", { pageNum: pageNum, category_id: category_id, sort: sortByPrice })
       .then(res => {
         setFilteredMenuList(res.data)
 
@@ -67,9 +68,9 @@ const handleSortByPrice = () => {
 
     let category_id = categoryNum.code_id
     if (category_id == null) category_id = 0
-    refresh(pageNum, categoryNum.code_id,sortByPrice)
+    refresh(pageNum, categoryNum.code_id, sortByPrice)
 
-  }, [categoryNum,sortByPrice]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
+  }, [categoryNum, sortByPrice]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
 
   /** 카테고리 드롭다운 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
   const handleCategoryChange = (item) => {
@@ -89,12 +90,12 @@ const handleSortByPrice = () => {
 
   //메뉴 삭제 함수
   const deleteMenu = (id) => {
-    axios.post("/api/menu/delete",{id:id})
-    .then(res => {
-      setWarning(false)
-      refresh(1,categoryNum.code_id)
-    })
-    .catch(error => console.log(error))
+    axios.post("/api/menu/delete", { id: id })
+      .then(res => {
+        setWarning(false)
+        refresh(1, categoryNum.code_id)
+      })
+      .catch(error => console.log(error))
   }
 
 
@@ -111,16 +112,16 @@ const handleSortByPrice = () => {
           <tr>
             <th>카테고리</th>
             <th>상품명</th>
-            <th onClick={handleSortByPrice} style={{cursor:'pointer'}}>가격 
-            { sortByPrice==null ?
-            <svg xmlns="http://www.w3.org/2000/svg" style={{width:'13px',marginBottom:'2px'}}  viewBox="0 0 320 512"><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>
-            :(
-              sortByPrice==='asc'?
-              <svg xmlns="http://www.w3.org/2000/svg" style={{width:'13px',marginBottom:'2px'}} viewBox="0 0 320 512"><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
-              :
-              <svg xmlns="http://www.w3.org/2000/svg" style={{width:'13px',marginBottom:'2px'}} viewBox="0 0 320 512"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"/></svg>
-            )
-            }
+            <th onClick={handleSortByPrice} style={{ cursor: 'pointer' }}>가격
+              {sortByPrice == null ?
+                <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '13px', marginBottom: '2px' }} viewBox="0 0 320 512"><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" /></svg>
+                : (
+                  sortByPrice === 'asc' ?
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '13px', marginBottom: '2px' }} viewBox="0 0 320 512"><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z" /></svg>
+                    :
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '13px', marginBottom: '2px' }} viewBox="0 0 320 512"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z" /></svg>
+                )
+              }
             </th>
             <th>수정</th>
             <th>삭제</th>
@@ -131,16 +132,16 @@ const handleSortByPrice = () => {
             <tr key={item.id}>
               <td>{item.category}</td>
               <td>{item.name}</td>
-              <td>{item.price+"원"}</td>
-              <td><Button onClick={() => goToUpdateMenu(item.id)}>수정</Button></td>
-              <td><Button onClick={() => { setWarning({ menu_id: item.id, category_id: item.category_id, show: true }) }}>삭제</Button></td>
+              <td>{item.price + "원"}</td>
+              <td><Button variant="" onClick={() => goToUpdateMenu(item.id)}><PencilFill /></Button></td>
+              <td><Button variant="" onClick={() => { setWarning({ menu_id: item.id, category_id: item.category_id, show: true }) }}><XLg /></Button></td>
             </tr>
           ))}
         </tbody>
       </Table>
       <Pagination className="mt-3">
         <Pagination.Item onClick={() => {
-          refresh(filteredMenuList.startPageNum - 1, categoryNum.code_id,sortByPrice)
+          refresh(filteredMenuList.startPageNum - 1, categoryNum.code_id, sortByPrice)
         }} disabled={filteredMenuList.startPageNum === 1}>&laquo;</Pagination.Item>
         {
           pageArray.map(item => (<Pagination.Item onClick={() => {
@@ -161,7 +162,7 @@ export default Main;
 
 /** 경고 메시지 */
 function WarningModal(props) {
-  const {deletemenu, onHide,value_id} = props
+  const { deletemenu, onHide, value_id } = props
   return (
     <Modal
       {...props}
@@ -177,7 +178,7 @@ function WarningModal(props) {
         <h4>보고 계신 정보를 정말 삭제하시겠습니까?</h4>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={() =>{deletemenu(value_id)}}>삭제</Button>
+        <Button variant="danger" onClick={() => { deletemenu(value_id) }}>삭제</Button>
         <Button variant="warning" onClick={onHide}>취소</Button>
       </Modal.Footer>
     </Modal>
