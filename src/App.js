@@ -14,6 +14,7 @@ import Order from './components/order/Order';
 import User from './components/user/User';
 import Home from './components/Home';
 import Kiosk from './pages/kiosk';
+import DashBoard from './pages/DashBoard';
 
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
   return (
     <div className="d-flex">
       <div>
-        <Sidebar />
+        <Sidebar/>
       </div>
       <div style={{ flex: "1 1 auto", display: "flex", flexFlow: "column", height: "100vh", overflowY: "hidden" }}>
         <Navbar />
@@ -52,6 +53,7 @@ function App() {
               <Route path='/menu/*' Component={Menu} />
               <Route path='/login' element={<Login isLogin={isLogin} handleLogin={handleLogin} />} />
               <Route path='/owner' Component={OwnerMange} />
+              <Route path='/dash' Component={DashBoard}/>
             </Routes>
           </div>
         </div>

@@ -1,22 +1,23 @@
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import  React, { useState } from 'react';
+import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 function Login() {
+  const cookies=new Cookies();
   // Authorization: localStorage.token 
   axios.defaults.baseURL = process.env.PUBLIC_URL
-
   const dispatch = useDispatch()
-  
   // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
-  const [login, setLogin] = useState({})
-
+  const [login, setLogin] = useState({
+    id: cookies.get('cid')
+  })
   const navigate=useNavigate();
-
-
+  //로그인실패시 alert 
+  const [showAlert,setShowAlert] = useState(false)
   // 로그인 버튼을 클릭할 때 실행되는 함수입니다.
   const handleLogin = () => {
     // Axios를 사용하여 Spring Boot와 통신합니다.
@@ -38,8 +39,12 @@ function Login() {
       })
       .catch(error => {
         console.error(error);
+        setShowAlert(true)
       });
   };
+  
+
+
 
   //input 요소에 문자열을 입력했을때 호출되는 함수 
   const handleChange = (e) => {
@@ -61,17 +66,21 @@ function Login() {
               <p className="text-center fs-4 fw-bold mb-5"> 키오스크 로그인 </p>
               <Form>
                 <Form.Group className="mb-3" controlId="formbasicEmail" >
-                  <Form.Control type="text" name="id" placeholder="USER ID" onChange={(e) => handleChange(e)} />
+                  <Form.Control type="text" name="id" placeholder="USER ID" value={login.id} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <Form.Control type="password" name="password" placeholder="PASSWORD" onChange={(e) => handleChange(e)} />
+                  <Form.Control type="password" name="password" placeholder="PASSWORD" onChange={handleChange} />
                 </Form.Group>
-
+                <Form.Group className="mb-3">
+                  <input type="checkbox" name="save" value="save" onChange={handleChange}  />
+                   아이디 저장
+                </Form.Group>
                 <div className="d-grid gap-2">
                   <Button type="button" variant="primary" onClick={handleLogin}>
                     로그인
                   </Button>
                 </div>
+                <Alert className='mt-1' variant='danger' show={showAlert}>아이디 혹은 비밀번호가 틀렸습니다!</Alert>
               </Form>
             </div>
           </Col>
