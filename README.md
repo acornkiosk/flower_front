@@ -69,28 +69,21 @@
   * 그래프를 사용하기 위한 패키지
 * cdbreact
   * 사이드바를 사용하기 위한 패키지
-
-## 테이블 설계
-![flowerDB](https://github.com/acornkiosk/flower_front/assets/94777814/b7e18eef-0821-4096-9b0a-5901e8ba38c2)
-
-## API 설계
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/9009d22c-debf-45c1-9502-144bbc5a843e)
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/e7564ea9-07cb-4164-b72a-0dce3870981f)
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/0734253a-81c6-4287-8f1c-b72decbc88fb)
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/6cc545d5-9c34-42bd-801a-a726668b17e3)
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/25801c98-c4d8-4412-ac83-8e2f92960691)
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/6cf3f077-8d32-4299-ac7f-a5696261be1b)
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/81dad43d-1cbe-48e9-817a-631494b2b34e)
-## 로그인 프로세스
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/769b7e44-8d16-45f4-808d-7af70177fd63)
-![image](https://github.com/acornkiosk/Flower_back/assets/94777814/957b97ec-fc02-4e73-a76b-cb2fe456cd52)
+* universal-cookie
+  * 쿠키 사용을 위한 패키지
+* cross-env
+  * mac, window port 설정을 위한 패키지
+ 
+## 요구사항 
+![image](https://github.com/acornkiosk/flower_front/assets/94777814/7f4898f3-3d46-4847-bcb2-83a72e4bd486)
+![image](https://github.com/acornkiosk/flower_front/assets/94777814/91822c32-596a-420c-b326-f24d5a916d08)
+![image](https://github.com/acornkiosk/flower_front/assets/94777814/fb897dd0-ac42-43fb-aa5f-c23f99f74ec8)
 
 ## 개발 역할분담 (프론트)
 
 | 이름       | 진행 목록                                                    |
 | ------------ | ------------------------------------------------------------- |
 | 김동주         | 주문관리 키오스크 관리 페이지, 초기 프로젝트 셋팅, 대시보드 페이지, 대시보드 csv파일 다운 기능 |  |                          
-
 
 | 이름       | 진행 목록                                                    |
 | ------------ | ------------------------------------------------------------- |
