@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import InsertModal from './addUserModal';
 import DeleteModal from './deleteModal';
 import UpdateModal from './updateUserModal';
+import { PencilFill, SortDown, SortUp } from 'react-bootstrap-icons';
 
 function User() {
   const [insertShow, setInsertShow] = useState(false);
@@ -22,7 +23,7 @@ function User() {
   // 페이징 UI 를 만들 때 사용할 배열
   const [pageArray, setPageArray] = useState([])
 
-  // 페이징 UI 를 만들 떄 사용할 배열을 리턴해주는 함수
+  // 페이징 UI 를 만들 때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = [];
     for (let i = start; i <= end; i++) {
@@ -48,6 +49,23 @@ function User() {
       + convertTwoLength(calendar.getDate()) + '일'
     return date
   }
+
+  // 직급과 입사일자를 오름차순, 내림차순으로 정렬해주는 함수
+  const sortArray = (dateName) => {
+    const sortOrder = (dateName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
+    pageRefresh({
+      ...pageInfo,
+      sortBy: dateName,
+      sortOrder: sortOrder,
+      list: [...pageInfo.list.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return a[dateName].localeCompare(b[dateName]);
+        } else {
+          return b[dateName].localeCompare(a[dateName]);
+        }
+      })],
+    });
+  };
 
   // 월, 일을 두 자리수로 표현하기 위한 함수
   const convertTwoLength = (str) => {
@@ -93,7 +111,7 @@ function User() {
           <tr>
             <th>이름</th>
             <th>직급</th>
-            <th>입사일자</th>
+            <th>입사일자 <span className='btn'><SortUp/></span></th>
             <th>관리</th>
           </tr>
         </thead>
@@ -103,11 +121,11 @@ function User() {
               <td>{item.userName}</td>
               <td>{convertRank(item.rank)}</td>
               <td>{converRegDate(item.regdate)}</td>
-              <Button className='d-flex justify-content-center' onClick={() => { setUpdateShow(true); setSelectedUserId(item.id); }}>
-                <div style={{ width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <CDBSidebarMenuItem icon="pen" style={{ width: '245%', height: '245%', marginLeft: '11px', marginBottom: '8px' }} />
-                </div>
-              </Button>
+              <td>
+                <Button className='d-flex justify-content-center' onClick={() => { setUpdateShow(true); setSelectedUserId(item.id); }}>
+                  <PencilFill/>
+                </Button>
+              </td>
             </tr>
           )}
         </tbody>
