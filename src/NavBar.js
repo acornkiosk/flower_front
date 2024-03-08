@@ -1,17 +1,16 @@
 import axios from 'axios';
 import { CDBNavbar } from "cdbreact";
-import React, { useEffect } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Header } from "./NavBar.Style";
 
 const Navbar = () => {
-  const userName=useSelector(state=>state.userName)
-  const isLogin=useSelector(state=>state.isLogin)
-  const rank=useSelector(state=>state.rank)
-
-  const navigate=useNavigate();
+  const userName = useSelector(state => state.userName)
+  const isLogin = useSelector(state => state.isLogin)
+  const rank = useSelector(state => state.rank)
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   //로그아웃 핸들러
@@ -20,8 +19,8 @@ const Navbar = () => {
     delete localStorage.token
     //store 의 상태 바꾸기
     delete axios.defaults.headers.common["Authorization"]
-    dispatch({type:"SET_LOGIN",payload:false})
-    dispatch({type:"SET_RANK",payload:false})
+    dispatch({ type: "SET_LOGIN", payload: false })
+    dispatch({ type: "SET_RANK", payload: false })
     navigate("/")
   }
 
@@ -37,26 +36,25 @@ const Navbar = () => {
   }
 
 
-   return (
-        <Header style={{background:"#333", color:"#fff", minHeight:'73.5px' , display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-          <CDBNavbar dark expand="md" scrolling >
-            <div className="ml-auto">
+  return (
+    <Header style={{ background: "#333", color: "#fff", minHeight: '73.5px', display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+      <CDBNavbar dark expand="md" scrolling >
+        <div className="ml-auto">
 
-              {
+          {
+            isLogin && <i className="mx-4"><strong>{rankText} {userName} </strong>님 로그인중 <Button variant="secondary" className='ms-3' onClick={handleLogout}>로그아웃</Button></i>
+          }
 
-                isLogin && <i className="mx-4"><strong>{rankText} {userName} </strong>님 로그인중 <Button variant="secondary" onClick={handleLogout}>로그아웃</Button></i>
-              }
-              
-              {
-                !isLogin && <Button variant="secondary" className="mx-4" onClick={()=>{
-                  navigate("/login")
-                }}> 로그인 </Button>
-                
-              }    
-            </div>
-          </CDBNavbar>
-        </Header>
-   );
+          {
+            !isLogin && <Button variant="secondary" className="mx-4" onClick={() => {
+              navigate("/login")
+            }}> 로그인 </Button>
+
+          }
+        </div>
+      </CDBNavbar>
+    </Header>
+  );
 }
 
 export default Navbar;

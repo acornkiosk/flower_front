@@ -182,7 +182,7 @@ function Kiosk() {
   };
 
   return (
-    <Container>
+    <div>
       <Row className="justify-content-md-center">
         <Col>
           <h1>키오스크 관리</h1>
@@ -238,7 +238,7 @@ function Kiosk() {
           refresh(pageInfo.endPageNum + 1)
         }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
       </Pagination>
-    </Container>
+    </div>
   )
 }
 

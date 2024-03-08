@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import InsertModal from './addUserModal';
 import DeleteModal from './deleteModal';
 import UpdateModal from './updateUserModal';
+import { PencilFill, SortDown, SortUp } from 'react-bootstrap-icons';
 
 function User() {
   const [insertShow, setInsertShow] = useState(false);
@@ -15,8 +16,6 @@ function User() {
   // 직원 정보를 저장하는 State
   const [userList, setUserList] = useState([])
   const commonTable = useSelector(state => state.commonTable)
-
-  // const [userList, setUserList] = useState([])
   const [pageInfo, setPageInfo] = useState({
     list: []
   })
@@ -24,26 +23,13 @@ function User() {
   // 페이징 UI 를 만들 때 사용할 배열
   const [pageArray, setPageArray] = useState([])
 
-  // 페이징 UI 를 만들 떄 사용할 배열을 리턴해주는 함수
+  // 페이징 UI 를 만들 때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = [];
     for (let i = start; i <= end; i++) {
       result.push(i)
     }
     return result;
-  }
-
-  // 직원 목록 데이터를 읽어오는 함수
-  const pageRefresh = (pageNum) => {
-    axios.post("/api/user/list", pageNum, { "headers": { "Content-Type": "application/json" } })
-      .then(res => {
-        setPageInfo(res.data)
-        const result = createArray(res.data.startPageNum, res.data.endPageNum)
-        setPageArray(result)
-      })
-      .catch(error => {
-        console.log(error)
-      })
   }
 
   // rank 를 실제 text 로 변환해주는 함수
@@ -64,6 +50,23 @@ function User() {
     return date
   }
 
+  // 직급과 입사일자를 오름차순, 내림차순으로 정렬해주는 함수
+  const sortArray = (dateName) => {
+    const sortOrder = (dateName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
+    pageRefresh({
+      ...pageInfo,
+      sortBy: dateName,
+      sortOrder: sortOrder,
+      list: [...pageInfo.list.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return a[dateName].localeCompare(b[dateName]);
+        } else {
+          return b[dateName].localeCompare(a[dateName]);
+        }
+      })],
+    });
+  };
+
   // 월, 일을 두 자리수로 표현하기 위한 함수
   const convertTwoLength = (str) => {
     let tmp = String(str)
@@ -73,14 +76,22 @@ function User() {
     return str
   }
 
-  const refresh = (pageNum) => {
-    axios.post("/api/user/list", pageNum)
+  // 직원 목록 데이터를 읽어오는 함수
+  const pageRefresh = (pageNum) => {
+    axios.post("/api/user/list", {pageNum: pageNum})
       .then(res => {
-        let filterList = res.data.list.filter(item => item.rank !== 3001)
-          .filter(item => item.rank !== 3002)
-        setUserList(filterList)
+        let filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002)
+        const newResult = {
+          ...res.data,
+          list: filterList
+        }
+        setPageInfo(newResult)
+        const result = createArray(res.data.startPageNum, res.data.endPageNum)
+        setPageArray(result)
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   useEffect(() => {
@@ -89,7 +100,7 @@ function User() {
 
   return (
     <>
-      <h1>직원 관리 페이지 입니다.</h1>
+      <h1>직원 관리</h1>
       <div className='d-flex justify-content-end'>
         <Button variant="light" onClick={() => { setInsertShow(true) }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" style={{ cursor: "pointer" }} width={"40"} onClick={() => { setInsertShow(true) }}><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" /></svg>
@@ -100,7 +111,7 @@ function User() {
           <tr>
             <th>이름</th>
             <th>직급</th>
-            <th>입사일자</th>
+            <th>입사일자 <span className='btn'><SortUp/></span></th>
             <th>관리</th>
           </tr>
         </thead>
@@ -110,11 +121,11 @@ function User() {
               <td>{item.userName}</td>
               <td>{convertRank(item.rank)}</td>
               <td>{converRegDate(item.regdate)}</td>
-              <Button className='d-flex justify-content-center' onClick={() => { setUpdateShow(true); setSelectedUserId(item.id); }}>
-                <div style={{ width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <CDBSidebarMenuItem icon="pen" style={{ width: '245%', height: '245%', marginLeft: '11px', marginBottom: '8px' }} />
-                </div>
-              </Button>
+              <td>
+                <Button className='d-flex justify-content-center' onClick={() => { setUpdateShow(true); setSelectedUserId(item.id); }}>
+                  <PencilFill/>
+                </Button>
+              </td>
             </tr>
           )}
         </tbody>
@@ -132,9 +143,9 @@ function User() {
           pageRefresh(pageInfo.endPageNum + 1)
         }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
       </Pagination>
-      <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={refresh}></UpdateModal>
-      <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={refresh}></InsertModal>
-      <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={refresh}></DeleteModal>
+      <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={() => { pageRefresh(1) }}></UpdateModal>
+      <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
+      <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={() => { pageRefresh(1) }}></DeleteModal>
     </>
   )
 }
