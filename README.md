@@ -76,8 +76,8 @@
  
 ## 요구사항 
 ![image](https://github.com/acornkiosk/flower_front/assets/94777814/7f4898f3-3d46-4847-bcb2-83a72e4bd486)
-![image](https://github.com/acornkiosk/flower_front/assets/94777814/91822c32-596a-420c-b326-f24d5a916d08)
-![image](https://github.com/acornkiosk/flower_front/assets/94777814/fb897dd0-ac42-43fb-aa5f-c23f99f74ec8)
+![image](https://github.com/acornkiosk/flower_front/assets/94777814/cf28fd98-06cc-4549-bbb4-b0bb1d886a17)
+
 
 ## 개발 역할분담 (프론트)
 
@@ -116,6 +116,7 @@
 | 2024.02.27 | 주문 관리 기능 완료|
 | 2024.02.28 | 사이드바 기능 완료|
 | 2024.03.03 | 키오스크 메인 화면 레포 이전|
+| 2024.03.08 | 요구사항 수정|
 
 
 ## Contents
