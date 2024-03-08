@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

@@ -20,7 +20,19 @@ let isLogin=false
 let rank=null
 
 axios.defaults.baseURL = process.env.PUBLIC_URL
-function test(){
+
+
+
+
+const initialstate={
+  userName,
+  commonTable : [],
+  orders : [],
+  isLogin,
+  rank
+}
+
+
   if (localStorage.token) {
     
     //토큰을 디코딩
@@ -29,7 +41,7 @@ function test(){
     const expTime = result.payload.exp * 1000; // *1000 을 해서 ms 단위로 만들고 
     //현재시간
     const now = new Date().getTime();
-    //만일 유효기간이 만료 되었다면 
+
     if(expTime > now){
       userName=result.payload.sub
       isLogin=true
@@ -43,18 +55,6 @@ function test(){
       window.location.replace("/")
     }
   }
-}
-
-
-setInterval(test,3600*1000)
-
-const initialstate={
-  userName,
-  commonTable : [],
-  orders : [],
-  isLogin,
-  rank
-}
 
 const reducer=(state=initialstate,action)=>{
   let newState
