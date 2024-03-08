@@ -1,5 +1,8 @@
+import axios from 'axios';
 import React, { PureComponent } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+
+
 
 const data = [
   { name: '한송이', value: 400 },
@@ -25,12 +28,38 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   );
 };
 
+
+let name="gura"
 export default class CircleChart extends PureComponent {
+  state={
+
+  }
   constructor(props) {
     super(props)
     this.type = props.type
+    this.codeId = props.codeId
+    this.dateCode = props.dateCode
   }
   static demoUrl = 'https://codesandbox.io/s/pie-chart-with-customized-label-dlhhj';
+
+  componentDidMount(){
+    
+    
+  }
+
+  refresh = ( codeId,dateCode) => {
+    axios.post("/api/order/list", { order_id:-1, dayOfMonth:dateCode, category_id:codeId})
+      .then(res => {
+        console.log("안뇽안용"+res.data.list)
+      })
+      .catch(error => {
+        const status = error.response.data.status
+        if(status === "BAD_REQUEST") {
+          console.log("데이터 없음")
+          //데이터가 없을때 실행할 로직 
+        }
+      })
+  }
 
   render() {
     return (
