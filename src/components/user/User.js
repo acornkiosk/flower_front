@@ -15,8 +15,6 @@ function User() {
   // 직원 정보를 저장하는 State
   const [userList, setUserList] = useState([])
   const commonTable = useSelector(state => state.commonTable)
-
-  // const [userList, setUserList] = useState([])
   const [pageInfo, setPageInfo] = useState({
     list: []
   })
@@ -31,19 +29,6 @@ function User() {
       result.push(i)
     }
     return result;
-  }
-
-  // 직원 목록 데이터를 읽어오는 함수
-  const pageRefresh = (pageNum) => {
-    axios.post("/api/user/list", pageNum, { "headers": { "Content-Type": "application/json" } })
-      .then(res => {
-        setPageInfo(res.data)
-        const result = createArray(res.data.startPageNum, res.data.endPageNum)
-        setPageArray(result)
-      })
-      .catch(error => {
-        console.log(error)
-      })
   }
 
   // rank 를 실제 text 로 변환해주는 함수
@@ -73,14 +58,22 @@ function User() {
     return str
   }
 
-  const refresh = (pageNum) => {
-    axios.post("/api/user/list", pageNum)
+  // 직원 목록 데이터를 읽어오는 함수
+  const pageRefresh = (pageNum) => {
+    axios.post("/api/user/list", pageNum, { "headers": { "Content-Type": "application/json" } })
       .then(res => {
-        let filterList = res.data.list.filter(item => item.rank !== 3001)
-          .filter(item => item.rank !== 3002)
-        setUserList(filterList)
+        let filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002)
+        const newResult = {
+          ...res.data,
+          list: filterList
+        }
+        setPageInfo(newResult)
+        const result = createArray(res.data.startPageNum, res.data.endPageNum)
+        setPageArray(result)
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   useEffect(() => {
@@ -132,9 +125,9 @@ function User() {
           pageRefresh(pageInfo.endPageNum + 1)
         }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
       </Pagination>
-      <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={refresh}></UpdateModal>
-      <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={refresh}></InsertModal>
-      <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={refresh}></DeleteModal>
+      <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={() => { pageRefresh(1) }}></UpdateModal>
+      <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
+      <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={() => { pageRefresh(1) }}></DeleteModal>
     </>
   )
 }
