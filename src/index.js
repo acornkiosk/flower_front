@@ -21,7 +21,12 @@ let rank=null
 
 axios.defaults.baseURL = process.env.PUBLIC_URL
 
-
+function deleteToken(){
+ //만료된 토큰은 삭제한다 
+ delete localStorage.token
+ alert("토큰이 만료되었습니다.") 
+ window.location.replace("/")
+}
 if (localStorage.token) {
   
   //토큰을 디코딩
@@ -37,10 +42,7 @@ if (localStorage.token) {
     //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
     axios.defaults.headers.common["Authorization"]="Bearer+"+localStorage.token
   }else{
-    //만료된 토큰은 삭제한다 
-    delete localStorage.token
-    alert("토큰이 만료되었습니다.") 
-    window.location.replace("/")
+    deleteToken()
   }
 }
 let timeoutId
@@ -56,9 +58,7 @@ const checkTokenTimeout = ()=>{
   let remain=expTime-now
   //남은 시간이 경과하면 호출되는 함수 등록
   timeoutId = setTimeout(()=>{
-    delete localStorage.token
-    alert("토큰이 만료되었습니다.") 
-    window.location.replace("/")
+    deleteToken()
   }, remain)
 }
 
