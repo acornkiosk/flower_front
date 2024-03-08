@@ -11,17 +11,17 @@ export default function CategoryBtn(props) {
   })
 
 
-  
 
-/** 공통코드에서 카테고리 리스트 별도로 추출 */
-const commonList = useSelector((state) => state.commonTable); // state = {commonTable:[{},{},{}...]}
+
+  /** 공통코드에서 카테고리 리스트 별도로 추출 */
+  const commonList = useSelector((state) => state.commonTable); // state = {commonTable:[{},{},{}...]}
 
 
   /** commonList가 업데이트될 때마다 newArray를 다시 계산하고 categoryList 상태를 업데이트 */
   useEffect(() => {
-   
-   
-    try{
+
+
+    try {
 
       const newArray = commonList.filter(item => item.p_code_id === 1000);
       setCategory(newArray);
@@ -29,9 +29,9 @@ const commonList = useSelector((state) => state.commonTable); // state = {common
     } catch (e) {
       console.error("카테고리 : 공통코드에서 가져온 값 확인 어려움 " + e)
     }
-    
 
-    
+
+
   }, [commonList]);
 
 
@@ -54,11 +54,9 @@ const commonList = useSelector((state) => state.commonTable); // state = {common
 
   return (
     <>
-      <DropdownButton id="dropdown-basic-button" title={checked.title}>
-
-
-          {/* 메뉴 전체를 불러오기 */}
-          <Dropdown.Item onClick={() => handleDropdownItemClick(0)}>전체</Dropdown.Item>
+      <DropdownButton variant='' id="dropdown-basic-button" title={checked.title}>
+        {/* 메뉴 전체를 불러오기 */}
+        <Dropdown.Item onClick={() => handleDropdownItemClick(0)}>전체</Dropdown.Item>
         {/*항목별 메뉴 불러오기*/}
         {categoryList.map(item => (
           <Dropdown.Item key={item.code_id} onClick={() => handleDropdownItemClick(item)}>
