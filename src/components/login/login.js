@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
-import  React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,13 +8,12 @@ import Cookies from 'universal-cookie';
 
 function Login() {
   const cookies=new Cookies();
-  // Authorization: localStorage.token 
-  axios.defaults.baseURL = process.env.PUBLIC_URL
   const dispatch = useDispatch()
   // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
   const [login, setLogin] = useState({
     id: cookies.get('cid')
   })
+
   const navigate=useNavigate();
   //로그인실패시 alert 
   const [showAlert,setShowAlert] = useState(false)
@@ -72,7 +71,7 @@ function Login() {
                   <Form.Control type="password" name="password" placeholder="PASSWORD" onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <input type="checkbox" name="save" value="save" onChange={handleChange}  />
+                  <input type="checkbox" name="save" value="save" onChange={handleChange} />
                    아이디 저장
                 </Form.Group>
                 <div className="d-grid gap-2">

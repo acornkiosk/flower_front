@@ -19,9 +19,10 @@ let userName=null
 let isLogin=false
 let rank=null
 
-
+axios.defaults.baseURL = process.env.PUBLIC_URL
 function test(){
   if (localStorage.token) {
+    
     //토큰을 디코딩
     const result = decodeToken(localStorage.token);
     //초단위
