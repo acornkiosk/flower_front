@@ -1,22 +1,22 @@
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 
 function Login() {
-  const cookies=new Cookies();
+  const cookies = new Cookies();
   const dispatch = useDispatch()
   // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
   const [login, setLogin] = useState({
-    id:cookies.get('cid')
+    id: cookies.get('cid')
   })
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   //로그인실패시 alert 
-  const [showAlert,setShowAlert] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
   // 로그인 버튼을 클릭할 때 실행되는 함수입니다.
   const handleLogin = () => {
     // Axios를 사용하여 Spring Boot와 통신합니다.
@@ -26,16 +26,16 @@ function Login() {
         localStorage.token = res.data
         //저장된 토큰 디코딩 후 result에 저장하기
         const result = decodeToken(localStorage.token)
-        const data={
-          userName: result.payload.sub, 
-          isLogin:true,
-          rank:result.payload.rank
-        }  
-          dispatch({type:"SET_LOGIN", payload:data})
-    
+        const data = {
+          userName: result.payload.sub,
+          isLogin: true,
+          rank: result.payload.rank
+        }
+        dispatch({ type: "SET_LOGIN", payload: data })
+
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
-        alert(result.payload.sub+"님 로그인 했습니다.");
+        alert(result.payload.sub + "님 로그인 했습니다.");
         //home으로 보내기
         navigate("/")
       })
@@ -72,7 +72,7 @@ function Login() {
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <input type="checkbox" name="save" value="save" onChange={handleChange} />
-                   아이디 저장
+                  아이디 저장
                 </Form.Group>
                 <div className="d-grid gap-2">
                   <Button type="button" variant="primary" onClick={handleLogin}>
