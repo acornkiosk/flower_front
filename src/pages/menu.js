@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router"
-import Main from "./main"
-import AddMenu from "./addMenu"
-import UpdateMenu from "./updateMenu"
+import Main from "../components/menu/main"
+import AddMenu from "../components/menu/addMenu"
+import UpdateMenu from "../components/menu/updateMenu"
 
 function Menu() {
   return (

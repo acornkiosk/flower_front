@@ -5,16 +5,16 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Home from './components/Home';
-import OwnerMange from './components/login/OwnerManage';
-import Login from './components/login/login';
-import Menu from './components/menu/menu';
+import Home from './pages/Home';
+import OwnerMange from './pages/OwnerManage';
+import Menu from './pages/menu';
 import Order from './pages/Order';
 import Navbar from './components/toolbar/NavBar';
 import Sidebar from './components/toolbar/SideBar';
-import User from './components/user/User';
+import User from './pages/User';
 import DashBoard from './pages/DashBoard';
 import Kiosk from './pages/kiosk';
+import Login from './pages/login';
 
 
 function App() {

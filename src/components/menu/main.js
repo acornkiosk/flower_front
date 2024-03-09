@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Table from 'react-bootstrap/Table';
-import CategoryBtn from './categoryBtn';
 import { Button, Modal, Pagination } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import { PencilFill, XLg } from 'react-bootstrap-icons';
+import Table from 'react-bootstrap/Table';
+import { useNavigate } from 'react-router-dom';
+import CategoryBtn from './categoryBtn';
+import WarningModal from './WarningModal';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
 function Main() {
-
   /** 필터링된 메뉴 데이터 배열 변수 */
   const [filteredMenuList, setFilteredMenuList] = useState({ list: [] });
   /** 삭제버튼 눌렀을 때 경고알림으로 사용할 변수 */
@@ -18,17 +18,12 @@ function Main() {
     category_id: 0,
     show: false
   });
-
   /** 등록과 수정폼 이동처리 변수 */
   const navigate = useNavigate()
-
-
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
-
   const [categoryNum, setCategoryNum] = useState(0)
   const [sortByPrice, setSortByPrice] = useState(null);
-
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = [];
@@ -37,21 +32,16 @@ function Main() {
     }
     return result
   }
-
   // 가격 클릭 시 정렬 기능 추가
   const handleSortByPrice = () => {
     // 정렬 방식이 오름차순인 경우 내림차순으로 변경하고, 그 반대의 경우는 오름차순으로 변경
     const newSortByPrice = sortByPrice === 'asc' ? 'desc' : (sortByPrice === 'desc' ? null : 'asc');
     setSortByPrice(newSortByPrice);
-
   };
-
-
   const refresh = (pageNum, category_id, sortByPrice) => {
     axios.post("/api/menu/list", { pageNum: pageNum, category_id: category_id, sort: sortByPrice })
       .then(res => {
         setFilteredMenuList(res.data)
-
         //페이징 UI출력
         const result = createArray(res.data.startPageNum, res.data.endPageNum)
         setPageArray(result)
@@ -65,29 +55,22 @@ function Main() {
     //qeury 파라미터 값을 읽어와 본다.
     let pageNum = 1
     //만일 존재 하지 않는다면 1페이지로 설정
-
     let category_id = categoryNum.code_id
     if (category_id == null) category_id = 0
     refresh(pageNum, categoryNum.code_id, sortByPrice)
-
   }, [categoryNum, sortByPrice]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
-
   /** 카테고리 드롭다운 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
   const handleCategoryChange = (item) => {
     setCategoryNum(item)
-
   };
-
   /** 메뉴 수정 폼으로 가기 */
   const goToUpdateMenu = (MenuId) => {
     navigate(`/menu/updateMenu/${MenuId}`)
   }
-
   /** 메뉴등록 폼으로가기 */
   const goToAddMenu = () => {
     navigate("/menu/addMenu")
   };
-
   //메뉴 삭제 함수
   const deleteMenu = (id) => {
     axios.post("/api/menu/delete", { id: id })
@@ -97,9 +80,6 @@ function Main() {
       })
       .catch(error => console.log(error))
   }
-
-
-
   /** 화면 구현 */
   return (
     <div>
@@ -159,29 +139,3 @@ function Main() {
 }
 
 export default Main;
-
-/** 경고 메시지 */
-function WarningModal(props) {
-  const { deletemenu, onHide, value_id } = props
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title >
-          경고
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <h4>보고 계신 정보를 정말 삭제하시겠습니까?</h4>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="danger" onClick={() => { deletemenu(value_id) }}>삭제</Button>
-        <Button variant="warning" onClick={onHide}>취소</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
-
