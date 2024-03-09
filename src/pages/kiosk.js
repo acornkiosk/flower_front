@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Pagination, Row, Table } from "react-bootstrap";
+import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
@@ -205,7 +205,7 @@ function Kiosk() {
             <th>ID</th>
             <th>Location</th>
             <th>
-              Power <Icon.ArrowDownUp onClick={()=> handleSort('power')}/>
+              Power <Icon.ArrowDownUp onClick={() => handleSort('power')} />
             </th>
           </tr>
         </thead>

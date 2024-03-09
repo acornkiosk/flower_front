@@ -5,16 +5,16 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Navbar from './NavBar';
-import Sidebar from './SideBar';
+import Home from './components/Home';
 import OwnerMange from './components/login/OwnerManage';
 import Login from './components/login/login';
 import Menu from './components/menu/menu';
-import Order from './components/order/Order';
+import Order from './pages/Order';
+import Navbar from './components/toolbar/NavBar';
+import Sidebar from './components/toolbar/SideBar';
 import User from './components/user/User';
-import Home from './components/Home';
-import Kiosk from './pages/kiosk';
 import DashBoard from './pages/DashBoard';
+import Kiosk from './pages/kiosk';
 
 
 function App() {
@@ -39,21 +39,21 @@ function App() {
   return (
     <div className="d-flex">
       <div>
-        <Sidebar/>
+        <Sidebar />
       </div>
       <div style={{ flex: "1 1 auto", display: "flex", flexFlow: "column", height: "100vh", overflowY: "hidden" }}>
         <Navbar />
         <div style={{ height: "100%" }}>
           <div style={{ height: "calc(100% - 64px)", padding: "20px 5%", overflowY: "scroll" }}>
             <Routes>
-            <Route path='/' Component={Home}/>
+              <Route path='/' Component={Home} />
               <Route path='/kiosk' Component={Kiosk} />
               <Route path='/order' Component={Order} />
               <Route path='/user' Component={User} />
               <Route path='/menu/*' Component={Menu} />
               <Route path='/login' element={<Login isLogin={isLogin} handleLogin={handleLogin} />} />
               <Route path='/owner' Component={OwnerMange} />
-              <Route path='/dash' Component={DashBoard}/>
+              <Route path='/dash' Component={DashBoard} />
             </Routes>
           </div>
         </div>
