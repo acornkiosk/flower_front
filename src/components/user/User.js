@@ -41,7 +41,20 @@ function User() {
     }
   }
 
-  // regdate를 2024년 03월 03일로 변환해주는 함수 
+  const convertRole = (role) => {
+    const list = role.split(",")
+    let result = ""
+    for (let item of commonTable) {
+      for (let tmp of list) {
+        if (item.code_id == tmp) {
+          result += item.code_name + " "
+        }
+      }
+    }
+    return result
+  }
+
+  // regdate를 2024년 03월 03일 형태로 변환해주는 함수 
   const converRegDate = (regdate) => {
     const calendar = new Date(regdate)
     let date = (calendar.getFullYear()) + '년 '
@@ -78,7 +91,7 @@ function User() {
 
   // 직원 목록 데이터를 읽어오는 함수
   const pageRefresh = (pageNum) => {
-    axios.post("/api/user/list", {pageNum: pageNum})
+    axios.post("/api/user/list", { pageNum: pageNum })
       .then(res => {
         let filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002)
         const newResult = {
@@ -110,8 +123,10 @@ function User() {
         <thead>
           <tr>
             <th>이름</th>
+            <th>아이디</th>
             <th>직급</th>
-            <th>입사일자 <span className='btn'><SortUp/></span></th>
+            <th>접근 권한</th>
+            <th>입사일자 <span className='btn'><SortUp /></span></th>
             <th>관리</th>
           </tr>
         </thead>
@@ -119,11 +134,13 @@ function User() {
           {pageInfo.list.map(item =>
             <tr key={item.userName}>
               <td>{item.userName}</td>
+              <td>{item.id}</td>
               <td>{convertRank(item.rank)}</td>
+              <td>{convertRole(item.role)}</td>
               <td>{converRegDate(item.regdate)}</td>
               <td>
                 <Button className='d-flex justify-content-center' onClick={() => { setUpdateShow(true); setSelectedUserId(item.id); }}>
-                  <PencilFill/>
+                  <PencilFill />
                 </Button>
               </td>
             </tr>
