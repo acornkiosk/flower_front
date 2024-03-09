@@ -12,7 +12,7 @@ import Menu from './pages/menu';
 import Order from './pages/Order';
 import Navbar from './components/toolbar/NavBar';
 import Sidebar from './components/toolbar/SideBar';
-import User from './components/user/User';
+import User from './pages/User';
 import DashBoard from './pages/DashBoard';
 import Kiosk from './pages/kiosk';
 
