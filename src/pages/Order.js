@@ -1,8 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Button, CloseButton, Col, Container, Modal, Row } from "react-bootstrap"
-import OrderItem from "./orderItem"
-import ConvertOptions from "./util"
+import { Col, Container, Row } from "react-bootstrap"
+import DetailModal from "../components/order/DetailModal"
+import OrderItem from "../components/order/orderItem"
 
 /** 웹소켓 계획
  * 1. 들어온 주문 개수만큼 sidebar.js 개수 표시
@@ -111,7 +111,7 @@ export default function Order() {
 
   return (
     <div>
-      <h1>주문 관리 페이지 입니다.</h1>
+      <h1>주문 관리 페이지</h1>
       <div className="album py-5">
         <Container>
           <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -126,76 +126,4 @@ export default function Order() {
       <DetailModal show={showModal} data={data} setShowModal={setShowModal} refresh={refresh} onHide={() => setShowModal(false)} />
     </div>
   )
-}
-
-function DetailModal(props) {
-  let order_id
-  let kiosk_id
-  if (props.data.length !== 0) {
-    order_id = props.data[0].order_id
-    kiosk_id = props.data[0].kiosk_id
-  }
-
-  //완료버튼을 누를시 
-  function onCompleted() {
-    for (let item of props.data) {
-      item.is_completed = 'true'
-      axios.post("/api/order/update", item)
-        .then(res => {
-          if (res.data.status === 'OK') {
-            props.refresh()
-          }
-        })
-        .catch(error => console.log(error))
-    }
-    props.setShowModal(false)
-  }
-
-  //주문취소 버튼을 누를시
-  function onDelete() {
-    axios.post("/api/order/deleteAll", { order_id: order_id })
-      .then(res => {
-        if (res.data.status === 'OK') {
-          props.refresh()
-          props.setShowModal(false)
-        }
-      })
-  }
-
-  return (
-    <Modal
-      show={props.show}
-      size="lg"
-      centered
-    >
-      <Modal.Header className="d-flex">
-        <Modal.Title className="flex-fill">
-          <Row className="justify-content-between">
-            <Col>{order_id}번 주문 내역</Col>
-            <Col>키오스크 : {kiosk_id}번</Col>
-            <Col className="text-end"><CloseButton onClick={() => {
-              props.setShowModal(false)
-            }}></CloseButton></Col>
-          </Row>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {props.data.map(item =>
-          <>
-            <Row className="mb-3 ms-3">
-              <Col>
-                <Row>{item.menu_name} X {item.menu_count}</Row>
-                <Row>{ConvertOptions(item.options)}</Row>
-              </Col>
-              <Col>주문 시간 : {item.regdate}</Col>
-            </Row>
-          </>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={onCompleted}>완료</Button>
-        <Button onClick={onDelete}>주문 취소</Button>
-      </Modal.Footer>
-    </Modal>
-  );
 }
