@@ -54,7 +54,7 @@ function UpdateMenu() {
             })
 
     }
-    
+
     useEffect(() => {
         getCategory()
         getMenuInfo(parseInt(menuId, 10))
@@ -76,7 +76,7 @@ function UpdateMenu() {
                 setCategory(res.data.list)
             })
     }
-    
+
     // 서버에서 이미지 가져오기
     const getMenuImage = (img_name) => {
         axios.post("/upload/images", { name: img_name },
@@ -222,7 +222,7 @@ function UpdateMenu() {
                         <Form.Control as="textarea" style={{ height: '100px' }} name="description" onChange={handleChange} value={menuData.description} placeholder="상세설명" />
                     </Form.Group>
                     <div className="d-flex justify-content-center ">
-                        <Button onClick={() =>{navigate('/menu')}} style={{marginRight: '15px'}}>취소</Button>
+                        <Button onClick={() => { navigate('/menu') }} style={{ marginRight: '15px' }}>취소</Button>
                         <Button variant="success" type="submit" style={{ marginRight: '15px' }} >수정</Button>
                         <Button variant="btn btn-danger" onClick={deleteMenu}>삭제</Button>
                     </div>
