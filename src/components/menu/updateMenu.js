@@ -91,7 +91,6 @@ function UpdateMenu() {
     }
     const menuUpdate = (e) => {
         e.preventDefault();
-
         // 요청 url 
         const url = "/api/menu/update";
         // 요청 방식
@@ -148,6 +147,7 @@ function UpdateMenu() {
         const newValue = e.target.checked;
         setIsSold(newValue);
     };
+
     const previewStyle = {
         "width": "200px",
         "height": "200px",
@@ -159,9 +159,7 @@ function UpdateMenu() {
 
     return (
         <Container>
-
             <h1>메뉴 수정하기</h1>
-
             <Form onSubmit={(e) => menuUpdate(e)} className="text-bg-secondary p-3 rounded">
                 <div className="d-flex justify-content-between" >
                     <div className="" style={{ width: '400px' }}>
@@ -211,7 +209,7 @@ function UpdateMenu() {
                                     <input type="file" name="image" onClick={() => { fileInputRef.current.click(); }} ref={fileInputRef} style={{ display: "none" }} onChange={handleImageChange} accept="image/*" />
                                 </div>
                                 <div className="d-flex justify-content-center mt-2 ">
-                                    <input type="text" name="img_name" style={{ display: "none" }} onChange={handleChange} value={deleteImage} accept="image/*" />
+                                    <input type="text" name="img_name" style={{ display: "none" }} onChange={handleChange} value={menuData.img_name} accept="image/*" />
                                     <Button onClick={handleFileReset}>이미지 취소</Button>
                                 </div>
                             </Form.Group>

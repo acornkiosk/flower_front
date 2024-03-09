@@ -18,7 +18,7 @@ const Sidebar = () => {
   /** 주문정보 개수창 */
   const [show, setShow] = useState(false)
   /** 용도 : 주문현황 개수 실시간 표기 */
-  const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+  const ws = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/order")
 
   useEffect(() => {
     const connect = () => {

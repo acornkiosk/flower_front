@@ -8,7 +8,7 @@ export default function ConvertOptions(options) {
   const common = useSelector((state) => {
     return state.commonTable
   })
-  if (options === null) return "옵션 없음"
+  if (options === null || options === "2019, ") return "옵션 없음"
   const newOptions = options.split(',').map(tmp => parseInt(tmp))
   let result = ""
   for (let item of common) {
