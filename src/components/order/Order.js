@@ -19,7 +19,7 @@ export default function Order() {
   //상세용 데이터
   const [data, setData] = useState([])
   // 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결
-  const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+  const ws = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/order")
 
   /** 화면 로딩시  */
   useEffect(() => {
