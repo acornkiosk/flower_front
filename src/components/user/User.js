@@ -1,12 +1,11 @@
 import axios from 'axios';
-import { CDBSidebarMenuItem } from 'cdbreact';
 import { useEffect, useState } from 'react';
 import { Button, Pagination, Table } from 'react-bootstrap';
+import { PencilFill, SortUp } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
 import InsertModal from './addUserModal';
 import DeleteModal from './deleteModal';
 import UpdateModal from './updateUserModal';
-import { PencilFill, SortDown, SortUp } from 'react-bootstrap-icons';
 
 function User() {
   const [insertShow, setInsertShow] = useState(false);
@@ -16,6 +15,7 @@ function User() {
   // 직원 정보를 저장하는 State
   const [userList, setUserList] = useState([])
   const commonTable = useSelector(state => state.commonTable)
+  const [sortByDate, setSortByDate] = useState(null)
   const [pageInfo, setPageInfo] = useState({
     list: []
   })
@@ -63,23 +63,6 @@ function User() {
     return date
   }
 
-  // 직급과 입사일자를 오름차순, 내림차순으로 정렬해주는 함수
-  const sortArray = (dateName) => {
-    const sortOrder = (dateName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
-    pageRefresh({
-      ...pageInfo,
-      sortBy: dateName,
-      sortOrder: sortOrder,
-      list: [...pageInfo.list.sort((a, b) => {
-        if (sortOrder === 'asc') {
-          return a[dateName].localeCompare(b[dateName]);
-        } else {
-          return b[dateName].localeCompare(a[dateName]);
-        }
-      })],
-    });
-  };
-
   // 월, 일을 두 자리수로 표현하기 위한 함수
   const convertTwoLength = (str) => {
     let tmp = String(str)
@@ -107,13 +90,22 @@ function User() {
       })
   }
 
+  // 직원의 입사일자로 정렬할 수 있는 함수
+  const handleSortByDate = () => {
+    // 입사일자 오름차순, 내림차순으로 정렬함
+    const newSortByDate = sortByDate === 'asc' ? 'desc' : (sortByDate === 'desc' ? null : 'asc');
+    setSortByDate(newSortByDate)
+
+  }
+
   useEffect(() => {
     pageRefresh(1)
+    setSortByDate(null)
   }, [])
 
   return (
     <>
-      <h1>직원 관리</h1>
+      <h1>직원 관리 페이지 입니다.</h1>
       <div className='d-flex justify-content-end'>
         <Button variant="light" onClick={() => { setInsertShow(true) }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" style={{ cursor: "pointer" }} width={"40"} onClick={() => { setInsertShow(true) }}><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" /></svg>
@@ -126,7 +118,9 @@ function User() {
             <th>아이디</th>
             <th>직급</th>
             <th>접근 권한</th>
-            <th>입사일자 <span className='btn'><SortUp /></span></th>
+            <th onClick={handleSortByDate}>입사일자 <span className='btn'><SortUp />
+              {/* { sortByDate == null ? : ( sortByDate === 'asc' ? 'desc' )} */}
+            </span></th>
             <th>관리</th>
           </tr>
         </thead>
