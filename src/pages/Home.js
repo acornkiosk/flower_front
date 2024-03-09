@@ -1,7 +1,7 @@
 
 import { useSelector } from "react-redux"
 import Kiosk from "./kiosk"
-import Login from "../components/login/login"
+import Login from "./login"
 
 
 export default function Home() {
