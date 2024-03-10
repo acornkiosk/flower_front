@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Pagination, Row, Table } from "react-bootstrap";
+import { useSelector } from 'react-redux';
 import * as Icon from 'react-bootstrap-icons';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
@@ -16,9 +17,9 @@ function Kiosk() {
   const [addModalShow, setAddModalShow] = useState(false)
   //수정 모달 state
   const [updateModalShow, setUpdateModalShow] = useState(false)
-  // 수정시 data state
+  //수정시 data state
   const [data, setData] = useState({})
-  // 체크박스 state
+  //체크박스 state
   const [checked, setChecked] = useState({})
   //추가 form
   const [location, setLocation] = useState("")
@@ -28,6 +29,22 @@ function Kiosk() {
   const [allCheck, setAllCheck] = useState(false)
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
+
+  /** 이것만 있으면 웹소켓 ID를 유지한 채로 사용가능함! */
+  const ws = useSelector((state) => state.ws)
+  const connect = () => {
+    /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
+    if(ws == null){console.log("키오스크 관리 : 웹소켓 정보 => 없음")}
+    console.log("키오스크 관리 : 웹소켓 정보")
+    console.log(ws)
+  }
+  const send = () => {
+    var info = {
+      type: "SET_KIOSK"
+    }
+    ws.send(JSON.stringify(info))
+    console.log(info)
+  }
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = []
@@ -49,8 +66,8 @@ function Kiosk() {
   //화면 로딩시
   useEffect(() => {
     refresh(1)
+    connect()
   }, [])
-
 
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
@@ -99,7 +116,7 @@ function Kiosk() {
   }
   //수정 요청 함수
   const updateKiosk = (action) => {
-    //키오스크 위치 수정
+    /** UpdateModal.js 를 통해 키오스크 위치만 수정할 때 */
     if (action === 'location') {
       axios.post('/api/kiosk/update', data)
         .then(res => {
@@ -117,6 +134,8 @@ function Kiosk() {
             refresh(1)
           })
       })
+      /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
+      send()
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -128,6 +147,8 @@ function Kiosk() {
             refresh(1)
           })
       })
+      /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
+      send()
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -205,7 +226,7 @@ function Kiosk() {
             <th>ID</th>
             <th>Location</th>
             <th>
-              Power <Icon.ArrowDownUp onClick={()=> handleSort('power')}/>
+              Power <Icon.ArrowDownUp onClick={() => handleSort('power')} />
             </th>
           </tr>
         </thead>

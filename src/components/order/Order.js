@@ -15,6 +15,13 @@ export default function Order() {
   /** 이것만 있으면 웹소켓 ID를 유지한 채로 사용가능함! */
   const ws = useSelector((state) => state.ws)
 
+  useEffect(()=>{
+    connect()
+  })
+  const connect = ()=>{
+    ws.send("보냄")
+  }
+
   //refresh
   const refresh = () => {
 

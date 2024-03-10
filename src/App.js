@@ -42,8 +42,9 @@ function App() {
   
   /** 화면 실행시 */
   useEffect(()=>{
-    console.log("app.js 에 잘 건너왔다!"+ws)
-
+    if(ws){
+      console.log("app.js 에 잘 건너왔다!"+ws)
+    }
   },[ws])
 
   /** 레이아웃 무시하고 강제로 만든 뀌뀌스러운 주문 알림창 */
