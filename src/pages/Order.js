@@ -1,16 +1,15 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Col, Container, Row } from "react-bootstrap"
+import { useSelector } from 'react-redux'
 import DetailModal from "../components/order/DetailModal"
 import OrderItem from "../components/order/orderItem"
-import { useSelector } from 'react-redux';
 /** 웹소켓 계획
  * 1. 들어온 주문 개수만큼 sidebar.js 개수 표시
  * 2. 다른 페이지에 있더라도 새로운 주문이 들어올 때마다 알림표시 
  * 3. 키오스크 관리에서 off 하면 '점검중'으로 표기해서 주문이 불가하도록 만들기
  * 4. 주문완료 진행시 손님 키오스크에 알림표시, 번호표기 
  */
-
 export default function Order() {
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
@@ -20,17 +19,16 @@ export default function Order() {
   const [data, setData] = useState([])
   /** 이것만 있으면 웹소켓 ID를 유지한 채로 사용가능함! */
   const ws = useSelector((state) => state.ws)
-
-  useEffect(()=>{
+  useEffect(() => {
     connect()
-  })
-  const connect = ()=>{
-    // ws.send("보냄")
-
+  }, [])
+  const connect = () => {
+    if(ws !== null){
+      ws.send("보냄")
+    }
   }
   //refresh
   const refresh = () => {
-
     //주문 db에 있는 정보 가져오기 
     axios.post("/api/order/list", {})
       .then(res => {

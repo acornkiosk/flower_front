@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// App.js 를 import 해서 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-//라우터를 사용할 준비
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
 import { legacy_createStore as createStore } from 'redux';
@@ -16,7 +14,6 @@ import axios from 'axios';
 let userName = null
 let isLogin = false
 let rank = null
-
 axios.defaults.baseURL = process.env.PUBLIC_URL
 
 function deleteToken() {
@@ -25,9 +22,7 @@ function deleteToken() {
   alert("토큰이 만료되었습니다.")
   window.location.replace("/")
 }
-
 if (localStorage.token) {
-
   //토큰을 디코딩
   const result = decodeToken(localStorage.token);
   //초단위
@@ -44,7 +39,6 @@ if (localStorage.token) {
     deleteToken()
   }
 }
-
 let timeoutId
 const checkTokenTimeout = () => {
   if (!localStorage.token) return;
@@ -61,12 +55,9 @@ const checkTokenTimeout = () => {
     deleteToken()
   }, remain)
 }
-
 checkTokenTimeout()
-
 /** 웹소켓 참조값을 담을 필드 */
 let ws
-
 /** 웹소켓 연결관리 함수 */
 const connect = () => {
   /** 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결 */
@@ -84,8 +75,7 @@ const connect = () => {
   /** 반환처리를 통해 undefined 방지 */
   return ws;
 }
-
-const initialstate={
+const initialstate = {
   userName,
   commonTable: [],
   orders: [],
@@ -93,11 +83,8 @@ const initialstate={
   rank,
   ws: null // 웹소켓 요청 객체를 담는 변수(초기에는 null로 설정)
 }
-
-
 const reducer = (state = initialstate, action) => {
   let newState
-
   if (action.type === "UPDATE_COMMON") {
     newState = {
       ...state,
@@ -120,21 +107,16 @@ const reducer = (state = initialstate, action) => {
   return newState
 }
 const store = createStore(reducer)
-
 //id 가 root 인 곳에 UI 출력하기 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-
   <Provider store={store}>
     <BrowserRouter>
-
       <React.StrictMode>
         <App />
       </React.StrictMode>
-
     </BrowserRouter>
   </Provider>
-
 );
 
 // If you want to start measuring performance in your app, pass a function

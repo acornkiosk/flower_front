@@ -1,22 +1,19 @@
-
 import axios from 'axios';
-
-import { Alert } from "react-bootstrap"
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { Alert } from "react-bootstrap";
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import './App.css';
-import Home from './pages/Home';
-import OwnerMange from './pages/OwnerManage';
-import Menu from './pages/menu';
-import Order from './pages/Order';
 import Navbar from './components/toolbar/NavBar';
 import Sidebar from './components/toolbar/SideBar';
-import User from './pages/User';
 import DashBoard from './pages/DashBoard';
+import Home from './pages/Home';
+import Order from './pages/Order';
+import OwnerMange from './pages/OwnerManage';
+import User from './pages/User';
 import Kiosk from './pages/kiosk';
 import Login from './pages/login';
+import Menu from './pages/menu';
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -34,19 +31,15 @@ function App() {
         dispatch(action)
       })
       .catch(error => console.log(error))
-
   }, [])
-
   /** 이것만 있으면 웹소켓 ID를 유지한 채로 사용가능함! */
   const ws = useSelector((state) => state.ws)
-  
   /** 화면 실행시 */
-  useEffect(()=>{
-    if(ws){
-      console.log("app.js 에 잘 건너왔다!"+ws)
+  useEffect(() => {
+    if (ws) {
+      console.log("app.js 에 잘 건너왔다!" + ws)
     }
-  },[ws])
-
+  }, [ws])
   /** 레이아웃 무시하고 강제로 만든 뀌뀌스러운 주문 알림창 */
   const alertLocation = {
     position: "fixed",
@@ -60,7 +53,6 @@ function App() {
   })
   /** 주문 알림창 */
   const [alertShow, setAlertShow] = useState(false);
-
   return (
     <div className="d-flex">
       <div>

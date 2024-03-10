@@ -12,7 +12,6 @@ export default function DashBoard() {
   const [categoryCode,setCategoryCode] =useState(0)
   const [dateCode, setDateCode]= useState(1)
   const [orderData,setorderData]=useState([])
-
   //드롭다운을 누를때 텍스트 변경함수
   function changeDate(text) {
     setSelectedDate(text)
@@ -20,9 +19,6 @@ export default function DashBoard() {
   function changeCategory(text) {
     setSelectedCategory(text)
   }
-
-
-
   const refresh = ( dayOfMonth,category_id) => {
     axios.post("/api/order/list", { order_id:-1, dayOfMonth:dayOfMonth, category_id:category_id})
       .then(res => {
@@ -37,12 +33,8 @@ export default function DashBoard() {
         }
       })
   }
-  
-
   useEffect(() => {
-
     refresh( dateCode, categoryCode)
-
   }, [dateCode,categoryCode])
   return (
     <>
@@ -68,7 +60,6 @@ export default function DashBoard() {
         <hr />
         <DashTable selectedDate = {selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory}/>
       </div>
-
     </>
   )
 }

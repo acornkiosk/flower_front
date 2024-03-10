@@ -13,9 +13,7 @@ import { useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
 
 const Sidebar = () => {
-
   const [activeMenu, setActiveMenu] = useState('');
-
   const toggleAccordion = (menuName) => {
     setActiveMenu(activeMenu === menuName ? '' : menuName);
   };
@@ -28,9 +26,7 @@ const Sidebar = () => {
       return "";
     }
   };
-
   const navigate = useNavigate();
-
   const home = () => {
     navigate("/")
   }
@@ -48,7 +44,6 @@ const Sidebar = () => {
       navigate("/owner")
     }
   }
-
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
       <CDBSidebar textColor="#fff" backgroundColor="#333">
@@ -59,7 +54,6 @@ const Sidebar = () => {
             </svg> Flower
           </div>
         </CDBSidebarHeader>
-
         {isLogin && <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
             <NavLink onClick={() => toggleAccordion('dash')} to="/dash" className={activeStyle}>
@@ -74,7 +68,6 @@ const Sidebar = () => {
             <NavLink onClick={() => toggleAccordion('order')} to="/order" className={activeStyle}>
               <CDBSidebarMenuItem icon="money-check">주문 관리</CDBSidebarMenuItem>
             </NavLink>
-
             <div>
               <NavLink to="/menu" className={activeStyle} >
                 <CDBSidebarMenuItem
@@ -95,10 +88,8 @@ const Sidebar = () => {
                 </div>
               )}
             </div>
-
           </CDBSidebarMenu>
         </CDBSidebarContent>}
-
         {isLogin && <CDBSidebarFooter style={{ textAlign: 'center' }}>
           <div
             style={{
