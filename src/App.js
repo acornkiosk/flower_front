@@ -7,16 +7,16 @@ import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './App.css';
-import Navbar from './NavBar';
-import Sidebar from './SideBar';
-import OwnerMange from './components/login/OwnerManage';
-import Login from './components/login/login';
-import Menu from './components/menu/menu';
-import Order from './components/order/Order';
-import User from './components/user/User';
-import Home from './components/Home';
-import Kiosk from './pages/kiosk';
+import Home from './pages/Home';
+import OwnerMange from './pages/OwnerManage';
+import Menu from './pages/menu';
+import Order from './pages/Order';
+import Navbar from './components/toolbar/NavBar';
+import Sidebar from './components/toolbar/SideBar';
+import User from './pages/User';
 import DashBoard from './pages/DashBoard';
+import Kiosk from './pages/kiosk';
+import Login from './pages/login';
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);

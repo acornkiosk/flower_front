@@ -1,7 +1,7 @@
 import { Dropdown } from "react-bootstrap"
 
 export default function DashTable(props) {
-  const { selectedDate, changeDate, selectedCategory, changeCategory } = props
+  const { selectedDate, changeDate, selectedCategory, changeCategory ,setDateCode,setCategoryCode ,orderData} = props
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
@@ -12,10 +12,10 @@ export default function DashTable(props) {
               {selectedCategory}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>전체</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>한송이</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>꽃다발</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>바구니</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(0)  }}>전체</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(1001) }}>한송이</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(1002) }}>꽃다발</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(1003) }}>바구니</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           <Dropdown>
@@ -23,9 +23,9 @@ export default function DashTable(props) {
               {selectedDate}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText) }}>오늘</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText) }}>최근 7일</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText) }}>최근 30일</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText); setDateCode(1) }}>오늘</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText); setDateCode(7) }}>최근 7일</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText); setDateCode(30) }}>최근 30일</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -42,118 +42,18 @@ export default function DashTable(props) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,004</td>
-              <td>text</td>
-              <td>random</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,005</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>placeholder</td>
-            </tr>
-            <tr>
-              <td>1,006</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,007</td>
-              <td>placeholder</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>irrelevant</td>
-            </tr>
-            <tr>
-              <td>1,008</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,009</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,010</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,011</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,012</td>
-              <td>text</td>
-              <td>placeholder</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,013</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>visual</td>
-            </tr>
-            <tr>
-              <td>1,014</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,015</td>
-              <td>random</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>text</td>
-            </tr>
+            {
+              orderData.map(item=>
+                <tr>
+                  <td>{item.order_id}</td>
+                  <td>{item.category_name}</td>
+                  <td>{item.menu_name}</td>
+                  <td>{item.options}</td>
+                  <td>{item.menu_price}</td>
+                </tr>
+              )
+            }
+           
           </tbody>
         </table>
       </div>

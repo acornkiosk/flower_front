@@ -1,28 +1,23 @@
 import axios from 'axios';
-import { CDBSidebarMenuItem } from 'cdbreact';
 import { useEffect, useState } from 'react';
 import { Button, Pagination, Table } from 'react-bootstrap';
+import { PencilFill, SortUp } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
-import InsertModal from './addUserModal';
-import DeleteModal from './deleteModal';
-import UpdateModal from './updateUserModal';
-import { PencilFill, SortDown, SortUp } from 'react-bootstrap-icons';
+import InsertModal from '../components/user/addUserModal';
+import DeleteModal from '../components/user/deleteModal';
+import UpdateModal from '../components/user/updateUserModal';
 
 function User() {
   const [insertShow, setInsertShow] = useState(false);
   const [updateShow, setUpdateShow] = useState(false);
   const [deleteShow, setDeleteShow] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null); // 선택된 사용자의 id를 저장
-  // 직원 정보를 저장하는 State
-  const [userList, setUserList] = useState([])
   const commonTable = useSelector(state => state.commonTable)
   const [pageInfo, setPageInfo] = useState({
     list: []
   })
-
   // 페이징 UI 를 만들 때 사용할 배열
   const [pageArray, setPageArray] = useState([])
-
   // 페이징 UI 를 만들 때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = [];
@@ -31,7 +26,6 @@ function User() {
     }
     return result;
   }
-
   // rank 를 실제 text 로 변환해주는 함수
   const convertRank = (rank) => {
     for (let item of commonTable) {
@@ -40,8 +34,19 @@ function User() {
       }
     }
   }
-
-  // regdate를 2024년 03월 03일로 변환해주는 함수 
+  const convertRole = (role) => {
+    const list = role.split(",")
+    let result = ""
+    for (let item of commonTable) {
+      for (let tmp of list) {
+        if (item.code_id == tmp) {
+          result += item.code_name + " "
+        }
+      }
+    }
+    return result
+  }
+  // regdate를 2024년 03월 03일 형태로 변환해주는 함수 
   const converRegDate = (regdate) => {
     const calendar = new Date(regdate)
     let date = (calendar.getFullYear()) + '년 '
@@ -49,7 +54,6 @@ function User() {
       + convertTwoLength(calendar.getDate()) + '일'
     return date
   }
-
   // 직급과 입사일자를 오름차순, 내림차순으로 정렬해주는 함수
   const sortArray = (dateName) => {
     const sortOrder = (dateName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
@@ -66,7 +70,6 @@ function User() {
       })],
     });
   };
-
   // 월, 일을 두 자리수로 표현하기 위한 함수
   const convertTwoLength = (str) => {
     let tmp = String(str)
@@ -75,10 +78,9 @@ function User() {
     }
     return str
   }
-
   // 직원 목록 데이터를 읽어오는 함수
   const pageRefresh = (pageNum) => {
-    axios.post("/api/user/list", {pageNum: pageNum})
+    axios.post("/api/user/list", { pageNum: pageNum })
       .then(res => {
         let filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002)
         const newResult = {
@@ -93,7 +95,6 @@ function User() {
         console.log(error)
       })
   }
-
   useEffect(() => {
     pageRefresh(1)
   }, [])
@@ -110,8 +111,10 @@ function User() {
         <thead>
           <tr>
             <th>이름</th>
+            <th>아이디</th>
             <th>직급</th>
-            <th>입사일자 <span className='btn'><SortUp/></span></th>
+            <th>접근 권한</th>
+            <th>입사일자 <span className='btn'><SortUp /></span></th>
             <th>관리</th>
           </tr>
         </thead>
@@ -119,11 +122,13 @@ function User() {
           {pageInfo.list.map(item =>
             <tr key={item.userName}>
               <td>{item.userName}</td>
+              <td>{item.id}</td>
               <td>{convertRank(item.rank)}</td>
+              <td>{convertRole(item.role)}</td>
               <td>{converRegDate(item.regdate)}</td>
               <td>
                 <Button className='d-flex justify-content-center' onClick={() => { setUpdateShow(true); setSelectedUserId(item.id); }}>
-                  <PencilFill/>
+                  <PencilFill />
                 </Button>
               </td>
             </tr>

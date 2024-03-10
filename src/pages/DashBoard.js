@@ -11,6 +11,8 @@ export default function DashBoard() {
   const [selectedCategory, setSelectedCategory] = useState("전체")
   const [categoryCode,setCategoryCode] =useState(0)
   const [dateCode, setDateCode]= useState(1)
+  const [orderData,setorderData]=useState([])
+
   //드롭다운을 누를때 텍스트 변경함수
   function changeDate(text) {
     setSelectedDate(text)
@@ -19,50 +21,32 @@ export default function DashBoard() {
     setSelectedCategory(text)
   }
 
-  const codeId =()=>{
-    if(selectedDate==="오늘"){
-      setDateCode(1)
-    }else if(selectedDate==="최근 7일"){
-      setDateCode(7)
-    }else if(selectedDate==="최근 30일"){
-      setDateCode(30)
-    }
-
-    if(selectedCategory==="전체"){
-      setCategoryCode(0)
-    }else if(selectedCategory==="한송이"){
-      setCategoryCode(1001)
-    }else if(selectedCategory==="꽃다발"){
-      setCategoryCode(1002)
-    }else if(selectedCategory==="바구니"){
-      setCategoryCode(1003)
-    }
-  }
 
 
   const refresh = ( dayOfMonth,category_id) => {
     axios.post("/api/order/list", { order_id:-1, dayOfMonth:dayOfMonth, category_id:category_id})
       .then(res => {
-        console.log(res.data)
+        console.log(res.data.list)
+        setorderData(res.data.list)
       })
       .catch(error => {
         const status = error.response.data.status
         if(status === "BAD_REQUEST") {
           console.log("데이터 없음")
-          //데이터가 없을때 실행할 로직 
+          setorderData([])
         }
       })
   }
   
 
   useEffect(() => {
-    codeId()
+
     refresh( dateCode, categoryCode)
 
-  }, [codeId])
+  }, [dateCode,categoryCode])
   return (
     <>
-      <Header selectedDate = {selectedDate} changeDate={changeDate} selectedCategory={selectedCategory} changeCategory={changeCategory}/>
+      <Header selectedDate = {selectedDate} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory}/>
       <Chart />
       <br />
       <hr />
@@ -82,7 +66,7 @@ export default function DashBoard() {
           </Col>
         </Row>
         <hr />
-        <DashTable selectedDate = {selectedDate} changeDate={changeDate} selectedCategory={selectedCategory} changeCategory={changeCategory}/>
+        <DashTable selectedDate = {selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory}/>
       </div>
 
     </>

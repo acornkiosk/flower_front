@@ -3,7 +3,9 @@ import ExcelButton from "./ExcelButton";
 
 
 export default function Header(props) {
-  const { selectedDate, changeDate, selectedCategory, changeCategory } = props
+  const { selectedDate, changeDate, selectedCategory, changeCategory,setDateCode,setCategoryCode } = props
+  //카테고리 가져오기
+
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -15,10 +17,10 @@ export default function Header(props) {
               {selectedCategory}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>전체</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>한송이</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>꽃다발</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText) }}>바구니</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(0) }}>전체</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(1001) }}>한송이</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(1002) }}>꽃다발</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeCategory(e.target.innerText); setCategoryCode(1003) }}>바구니</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           <Dropdown>
@@ -26,9 +28,9 @@ export default function Header(props) {
               {selectedDate}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText) }}>오늘</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText) }}>최근 7일</Dropdown.Item>
-              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText) }}>최근 30일</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText); setDateCode(1) }}>오늘</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText); setDateCode(7) }}>최근 7일</Dropdown.Item>
+              <Dropdown.Item onClick={(e) => { changeDate(e.target.innerText); setDateCode(30) }}>최근 30일</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>

@@ -39,9 +39,7 @@ function Kiosk() {
     console.log(ws)
   }
   const send = () => {
-    var info = {
-      type: "SET_KIOSK"
-    }
+    var info = {type: "SET_KIOSK"}
     ws.send(JSON.stringify(info))
     console.log(info)
   }
