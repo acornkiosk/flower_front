@@ -74,11 +74,11 @@ const connect = () => {
   /** 연결에 성공했을 경우 동작하는 메서드 */
   ws.onopen = () => { console.log("index.js : 실시간 화면연동 시작(웹소켓)") }
   /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
-  ws.onerror = () => { console.log("index.js : 화면 연동이 원활하게 이루어지지 않고 있습니다. 서버 확인이 필요합니다(웹소켓)") }
+  ws.onerror = () => { console.log("index.js : 화면 연동이 원활하게 이루어지지 않고 있습니다. 재로그인 혹은 서버 확인이 필요합니다(웹소켓)") }
   /** 연결이 끊겼을 때 동작하는 메서드 */
   ws.onclose = () =>{
     setTimeout(()=>{
-      connect()
+      ws.onopen()
     }, 3000)
   }
   /** 반환처리를 통해 undefined 방지 */
