@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Pagination, Row, Table } from "react-bootstrap";
-import { useSelector } from 'react-redux';
+import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
+import { useSelector } from 'react-redux';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
 
@@ -29,17 +29,16 @@ function Kiosk() {
   const [allCheck, setAllCheck] = useState(false)
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
-
   /** 이것만 있으면 웹소켓 ID를 유지한 채로 사용가능함! */
   const ws = useSelector((state) => state.ws)
   const connect = () => {
     /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
-    if(ws == null){console.log("키오스크 관리 : 웹소켓 정보 => 없음")}
+    if (ws == null) { console.log("키오스크 관리 : 웹소켓 정보 => 없음") }
     console.log("키오스크 관리 : 웹소켓 정보")
     console.log(ws)
   }
   const send = () => {
-    var info = {type: "SET_KIOSK"}
+    var info = { type: "SET_KIOSK" }
     ws.send(JSON.stringify(info))
     console.log(info)
   }
@@ -66,7 +65,6 @@ function Kiosk() {
     refresh(1)
     connect()
   }, [])
-
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
     const isChecked = e.target.checked
@@ -183,7 +181,6 @@ function Kiosk() {
     //선택된 키오스크 초기화
     setSelectedKiosk([])
   }
-
   const handleSort = (columnName) => {
     const sortOrder = (columnName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
     setpageInfo({
@@ -199,7 +196,6 @@ function Kiosk() {
       })],
     });
   };
-
   return (
     <div>
       <Row className="justify-content-md-center">
@@ -260,6 +256,5 @@ function Kiosk() {
     </div>
   )
 }
-
 
 export default Kiosk
