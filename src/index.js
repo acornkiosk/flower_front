@@ -12,8 +12,6 @@ import { Provider } from 'react-redux';
 import { decodeToken } from 'jsontokens';
 import axios from 'axios';
 
-
-
 //userName,isLogin 초기값을 설정해준다.
 let userName = null
 let isLogin = false
@@ -66,12 +64,34 @@ const checkTokenTimeout = () => {
 
 checkTokenTimeout()
 
-const initialstate = {
+/** 웹소켓 참조값을 담을 필드 */
+let ws
+
+/** 웹소켓 연결관리 함수 */
+const connect = () => {
+  /** 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결 */
+  ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+  /** 연결에 성공했을 경우 동작하는 메서드 */
+  ws.onopen = () => { console.log("index.js : 실시간 화면연동 시작(웹소켓)") }
+  /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
+  ws.onerror = () => { console.log("index.js : 화면 연동이 원활하게 이루어지지 않고 있습니다. 서버 확인이 필요합니다(웹소켓)") }
+  /** 연결이 끊겼을 때 동작하는 메서드 */
+  ws.onclose = () =>{
+    setTimeout(()=>{
+      connect()
+    }, 3000)
+  }
+  /** 반환처리를 통해 undefined 방지 */
+  return ws;
+}
+
+const initialstate={
   userName,
   commonTable: [],
   orders: [],
   isLogin,
-  rank
+  rank,
+  ws: null // 웹소켓 요청 객체를 담는 변수(초기에는 null로 설정)
 }
 
 
@@ -90,6 +110,7 @@ const reducer = (state = initialstate, action) => {
       userName: action.payload.userName
       , isLogin: action.payload.isLogin
       , rank: action.payload.rank
+      , ws: connect() // connect 함수를 호출하여 ws 객체를 설정
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()
