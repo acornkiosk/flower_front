@@ -23,7 +23,10 @@ export default function Order() {
     connect()
   }, [])
   const connect = () => {
-    ws.send("보냄")
+    if(ws !== null){
+      ws.send("보냄")
+    }
+    
   }
   //refresh
   const refresh = () => {

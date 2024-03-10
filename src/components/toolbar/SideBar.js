@@ -40,7 +40,6 @@ const Sidebar = () => {
   }, []); // 한 번만 연결하도록 빈 배열을 넣음  
   useEffect(() => {
     setShow(orderCount > 0);
-    console.log(show)
   }, [orderCount]); // orderCount가 변경될 때마다 호출되도록 의존성 배열에 추가
   const [activeMenu, setActiveMenu] = useState('');
   const toggleAccordion = (menuName) => {
