@@ -35,12 +35,10 @@ function Kiosk() {
     /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
     if (ws == null) { console.log("키오스크 관리 : 웹소켓 정보 => 없음") }
     console.log("키오스크 관리 : 웹소켓 정보")
-    console.log(ws)
   }
   const send = () => {
     var info = { type: "SET_KIOSK" }
     ws.send(JSON.stringify(info))
-    console.log(info)
   }
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {

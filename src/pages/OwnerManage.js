@@ -16,7 +16,6 @@ export default function OwnerMange() {
     const refresh = () => {
         axios.post("/api/user/list", { rank: 3002, pageNum: 0 })
             .then(res => {
-                console.log(res.data.list)
                 setOwnerlist(res.data.list);
             })
             .catch(error => {
