@@ -26,7 +26,6 @@ export default function Order() {
     if(ws !== null){
       ws.send("보냄")
     }
-    
   }
   //refresh
   const refresh = () => {

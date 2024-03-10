@@ -30,13 +30,20 @@ function Kiosk() {
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
   /** 이것만 있으면 웹소켓 ID를 유지한 채로 사용가능함! */
-  const ws = useSelector((state) => state.ws)
+  let ws;
+  ws = useSelector((state) => state.ws)
+
   const connect = () => {
     /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
     if (ws == null) { console.log("키오스크 관리 : 웹소켓 정보 => 없음") }
     console.log("키오스크 관리 : 웹소켓 정보")
   }
   const send = () => {
+    if(ws == null){
+      console.log("키오스크 관리 : 웹소켓 ws 참고값 없음")
+      return
+      /** 이걸 넣었더니 null 인데도 정상동작됨... 잘된 일이지만... 왜 잘되는 걸까?... */
+    }
     var info = { type: "SET_KIOSK" }
     ws.send(JSON.stringify(info))
   }
@@ -129,7 +136,7 @@ function Kiosk() {
           })
       })
       /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
-      send()
+      send(ws)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -142,7 +149,7 @@ function Kiosk() {
           })
       })
       /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
-      send()
+      send(ws)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)

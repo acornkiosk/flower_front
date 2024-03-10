@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import '../../App.css';
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -6,41 +8,11 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem
 } from 'cdbreact';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import '../../App.css'
+import { useSelector } from 'react-redux';
+import Badge from 'react-bootstrap/Badge';
 
 const Sidebar = () => {
-  /** 주문정보 개수 */
-  const [orderCount, setOrderCount] = useState(0)
-  /** 주문정보 개수창 */
-  const [show, setShow] = useState(false)
-  /** 용도 : 주문현황 개수 실시간 표기 */
-  const ws = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/order")
-  useEffect(() => {
-    const connect = () => {
-      ws.onopen = () => {
-        console.log("사이드 바: 실시간 화면연동 시작(웹소켓)");
-      };
-      ws.onerror = () => {
-        console.log("사이드 바: 화면 연동이 원활하게 이루어지지 않고 있습니다. 서버 확인이 필요합니다(웹소켓)");
-        ws.onopen();
-      };
-      ws.onmessage = (msg) => {
-        var count = JSON.parse(msg.data);
-        if (count.type === "ORDER_COUNT") {
-          console.log("사이드 바: " + count.num + "개 전달받음");
-          setOrderCount(count.num);
-          setShow(count.num > 0);
-        }
-      };
-    };
-    connect();
-  }, []); // 한 번만 연결하도록 빈 배열을 넣음  
-  useEffect(() => {
-    setShow(orderCount > 0);
-  }, [orderCount]); // orderCount가 변경될 때마다 호출되도록 의존성 배열에 추가
   const [activeMenu, setActiveMenu] = useState('');
   const toggleAccordion = (menuName) => {
     setActiveMenu(activeMenu === menuName ? '' : menuName);
