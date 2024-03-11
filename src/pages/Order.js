@@ -40,14 +40,14 @@ export default function Order() {
       if (msg != null) {
         console.log("주문관리 : 웹소켓 주문 들어옴")
         var result = JSON.parse(msg.data);
-        if (result.type === "UPDATE_ORDERS") console.log(result.type)
+        if (result.type === "UPDATE_ORDERS") refresh() //console.log(result.type)
       } else { console.log(msg) }
     }
   }
   const orderPage = (socket) => {
     socket.onopen = () => {
       console.log("주문관리 : 웹소켓 오픈")
-      //refresh()
+      refresh()
     }
   }
   /** 화면 호출시 */
