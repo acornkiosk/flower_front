@@ -3,6 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 
+
+
+
+
 function UpdateMenu() {
     const [category, setCategory] = useState([])
     const [menuData, setMenuData] = useState({
@@ -13,18 +17,26 @@ function UpdateMenu() {
         img_name: '',
         description: ''
     });
+
     const navigate = useNavigate()
-    const [isSold, setIsSold] = useState(false);
+    const [isSold, setIsSold] = useState(false);  // "true" true
     const [getViewImage, setGetViewImage] = useState(null)
     const [previewImage, setPreviewImage] = useState(null)
+    const [deleteImage, setDeleteImage] = useState(menuData.img_name)
     const fileInputRef = useRef(null);
+
     const { menuId } = useParams();
+
     const goToMenuMain = () => {
         navigate("/menu")
     };
+
     //메뉴 가져오기
     const getMenuInfo = (menuId) => {
-        axios.post("/api/menu/get", {id: menuId})
+        const requestData = {
+            id: menuId,
+        };
+        axios.post("/api/menu/get", requestData)
             .then(res => {
                 let checkedValue = res.data.dto.is_sold
                 if (checkedValue === "true") {
@@ -33,22 +45,33 @@ function UpdateMenu() {
                     res.data.dto.is_sold = false;
                 }
                 setMenuData(res.data.dto)
+                console.log(res.data.dto)
                 setIsSold(res.data.dto.is_sold)
+
                 if (res.data.dto.img_name != null) {
-                    getMenuImage(res.data.dto.img_name)
+                    let img_name = res.data.dto.img_name
+                    getMenuImage(img_name)
                 }
             })
+
     }
+    
     useEffect(() => {
+        
         getCategory()
         getMenuInfo(parseInt(menuId, 10))
+
+        
+
     }, [])
+
     const deleteMenu = () => {
         axios.post("/api/menu/delete", { "id": menuData.id })
             .then(res => {
                 goToMenuMain()
             })
     }
+
     //카테고리 가져오기
     const getCategory = () => {
         axios.post("/api/common/child", { "code_id": 1000 })
@@ -56,6 +79,7 @@ function UpdateMenu() {
                 setCategory(res.data.list)
             })
     }
+    
     // 서버에서 이미지 가져오기
     const getMenuImage = (img_name) => {
         axios.post("/upload/images", { name: img_name },
@@ -70,6 +94,7 @@ function UpdateMenu() {
     }
     const menuUpdate = (e) => {
         e.preventDefault();
+
         // 요청 url 
         const url = "/api/menu/update";
         // 요청 방식
@@ -77,20 +102,33 @@ function UpdateMenu() {
         const formData = new FormData(e.target);
         formData.append("id", parseInt(menuId))
         formData.append("is_sold", isSold.toString())
+        
+
         axios.post(url, formData,
             { headers: { "Content-Type": "multipart/form-data" } })
             .then(res => {
                 goToMenuMain()
+
             })
+
     }
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(value)
         setMenuData({ ...menuData, [name]: value });
+        
+        
     };
+
+
     const handleImageChange = (e) => {
         //선택한 파일 얻어내기 or 불러온 파일
         const file = e.target.files[0]
-        if (!file) return; // 함수 종료
+        if (!file) {
+            return; // 함수 종료
+        }
         //선택한 파일로 부터 이미지 로딩하기
         const reader = new FileReader()
         reader.readAsDataURL(file)
@@ -102,12 +140,20 @@ function UpdateMenu() {
         }
     }
     const handleFileReset = () => {
-        setPreviewImage(null)
+        
+        setPreviewImage(null)   
         // 파일 입력(input) 요소를 초기화하려면 ref를 사용하여 해당 요소를 찾아서 초기화합니다.
         if (fileInputRef.current) {
+
             fileInputRef.current.value = ''; // 파일 입력 요소의 값(value)을 비웁니다.
+            setDeleteImage(null)
             setGetViewImage(null)
+            const result = {...menuData, img_name:null}
+            setMenuData(result)
+            
+
         }
+
     };
     const handleCheckboxChange = (e) => {
         const newValue = e.target.checked;
@@ -116,12 +162,17 @@ function UpdateMenu() {
     const previewStyle = {
         "width": "200px",
         "height": "200px",
-        borderRadius: "10px",
+        borderRadius: "10px", // 여러단어 조합인 경우에는 카멜 케이스로 작성 가능
         cursor: "pointer"
     }
+
+
+
     return (
         <Container>
+
             <h1>메뉴 수정하기</h1>
+
             <Form onSubmit={(e) => menuUpdate(e)} className="text-bg-secondary p-3 rounded">
                 <div className="d-flex justify-content-between" >
                     <div className="" style={{ width: '400px' }}>
@@ -167,11 +218,11 @@ function UpdateMenu() {
                                         </svg>
                                         :
                                         (!previewImage ? <img src={getViewImage} onClick={() => { fileInputRef.current.click(); }} style={previewStyle} alt="메뉴 이미지" /> :
-                                            <img src={previewImage} onClick={() => { fileInputRef.current.click(); }} style={previewStyle} alt='미리보기 이미지' />)} <br />
+                                    <img src={previewImage} onClick={() => { fileInputRef.current.click(); }} style={previewStyle} alt='미리보기 이미지' />)} <br />
                                     <input type="file" name="image" onClick={() => { fileInputRef.current.click(); }} ref={fileInputRef} style={{ display: "none" }} onChange={handleImageChange} accept="image/*" />
                                 </div>
                                 <div className="d-flex justify-content-center mt-2 ">
-                                    <input type="text" name="img_name" style={{ display: "none" }} onChange={handleChange} value={menuData.img_name} accept="image/*" />
+                                    <input type="text" name="img_name" style={{ display: "none" }} onChange={handleChange} value={deleteImage} accept="image/*" />
                                     <Button onClick={handleFileReset}>이미지 취소</Button>
                                 </div>
                             </Form.Group>
@@ -184,13 +235,15 @@ function UpdateMenu() {
                         <Form.Control as="textarea" style={{ height: '100px' }} name="description" onChange={handleChange} value={menuData.description} placeholder="상세설명" />
                     </Form.Group>
                     <div className="d-flex justify-content-center ">
-                        <Button onClick={() => { navigate('/menu') }} style={{ marginRight: '15px' }}>취소</Button>
+                        <Button onClick={() =>{navigate('/menu')}} style={{marginRight: '15px'}}>취소</Button>
                         <Button variant="success" type="submit" style={{ marginRight: '15px' }} >수정</Button>
                         <Button variant="btn btn-danger" onClick={deleteMenu}>삭제</Button>
                     </div>
                 </div>
             </Form>
+
         </Container>
+
     )
 }
 

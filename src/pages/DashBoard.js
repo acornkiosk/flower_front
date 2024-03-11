@@ -45,16 +45,16 @@ export default function DashBoard() {
       <div style={{ width: '100%', height: '50vh' }}>
         <Row>
           <Col>
-            <CircleChart type={"카테고리"} />
+            <CircleChart dayOfMonth={dateCode} categoryCode={0} type={"전체"} />
           </Col>
           <Col>
-            <CircleChart type={"한송이"} />
+            <CircleChart dayOfMonth={dateCode} categoryCode={1001} type={"한송이"} />
           </Col>
           <Col>
-            <CircleChart type={"꽃다발"} />
+            <CircleChart  dayOfMonth={dateCode} categoryCode={1002} type={"꽃다발"} />
           </Col>
           <Col>
-            <CircleChart type={"바구니"} />
+            <CircleChart  dayOfMonth={dateCode} categoryCode={1003} type={"바구니"} />
           </Col>
         </Row>
         <hr />
