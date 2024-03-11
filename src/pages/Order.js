@@ -19,21 +19,35 @@ export default function Order() {
   const connect = () => {
     /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
     if (ws == null) {
+      /** 수정이 필요한 구간
+       * index.js 에 생성 했음에도 새로고침 이후 state 가 사라짐
+       * 또 객체를 호출하는 중, useRef 도 잘 되는 건지도 모르겠음
+       */
       ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+      console.log("주문관리 : ws 생성 후 connect 동작")
       orderMessage(ws)
+      orderPage(ws)
     }
     else {
+      console.log("주문관리 : connect 동작")
       orderMessage(ws)
+      orderPage(ws)
     }
   }
   const orderMessage = (socket) => {
     /** 손님 키오스크로부터 정보가 왔는 지 확인한다. */
     socket.onmessage = (msg) => {
       if (msg != null) {
-        console.log(msg)
+        console.log("주문관리 : 웹소켓 주문 들어옴")
         var result = JSON.parse(msg.data);
         if (result.type === "UPDATE_ORDERS") console.log(result.type)
       } else { console.log(msg) }
+    }
+  }
+  const orderPage = (socket) => {
+    socket.onopen = () => {
+      console.log("주문관리 : 웹소켓 오픈")
+      //refresh()
     }
   }
   /** 화면 호출시 */
@@ -47,50 +61,35 @@ export default function Order() {
  * 3. 주문완료 진행시 손님 키오스크에 알림표시, 번호표기 
  */
 
-  /** 주석처리 사유 : 무한요청 증상 개선 */
+  /** 주석처리 사유 : 무한요청 증상 개선 
+   * getOrders={getOrders()} : DetailModal 연결 함수가 범인임
+  */
   
-  // const getOrders=() => {
-  //   //주문 db에 있는 정보 가져오기 
-  //   axios.post("/api/order/list", {})
-  //     .then(res => {
-  //       const orderData = res.data.list
-  //       //order_id를 기준으로 주문들을 묶어서 저장할 객체
-  //       let updatedOrders = {}
-  //       orderData.forEach(order => {
-  //         const orderId = order.order_id
-  //         if (updatedOrders[orderId]) {
-  //           /** 동일한 정보가 있는 경우는 덮어쓰기 */
-  //           updatedOrders[orderId].push(order)
-  //         } else {
-  //           /** 새로운 정보는 추가하기 */
-  //           updatedOrders[orderId] = [order]
-  //         }
-  //       })
-  //       setOrders(updatedOrders)
-  //     })
-  //     .catch(error => {
-  //       console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
-  //       console.log(error)
-  //     })
-  // }
+  const refresh = () => {
+    //주문 db에 있는 정보 가져오기 
+    axios.post("/api/order/list", {})
+      .then(res => {
+        const orderData = res.data.list
+        //order_id를 기준으로 주문들을 묶어서 저장할 객체
+        let updatedOrders = {}
+        orderData.forEach(order => {
+          const orderId = order.order_id
+          if (updatedOrders[orderId]) {
+            /** 동일한 정보가 있는 경우는 덮어쓰기 */
+            updatedOrders[orderId].push(order)
+          } else {
+            /** 새로운 정보는 추가하기 */
+            updatedOrders[orderId] = [order]
+          }
+        })
+        setOrders(updatedOrders)
+      })
+      .catch(error => {
+        console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
+        console.log(error)
+      })
+  }
 
-  // const connect = () => {
-  //   /** 웹브라우저 새로고침 이후로 정보를 확인하기 위해 if문 작성 */
-  //   if (ws == null || ws === undefined) {
-  //     console.log("주문관리 : 웹소켓 정보 => 없음")
-  //   } else {
-  //     console.log("주문관리 : 웹소켓 정보 => 확인")
-  //     /** flower_kiosk 의 Cart.js 에서 주문이 들어왔을 때 동작된다. */
-  //     ws.onmessage = (msg) => {
-  //       if (msg != null) {
-  //         var result = JSON.parse(msg.data);
-  //         if (result.type === "UPDATE_ORDERS") getOrders()
-  //       } else {
-  //         console.log("주문없엉")
-  //       }
-  //     }
-  //   }
-  // getOrders={getOrders()} }
   return (
     <div>
       <h1>주문 관리</h1>
