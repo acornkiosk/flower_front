@@ -18,6 +18,7 @@ import axios from 'axios';
 let userName = null
 let isLogin = false
 let rank = null
+let role = []
 
 axios.defaults.baseURL = process.env.PUBLIC_URL
 
@@ -40,13 +41,15 @@ if (localStorage.token) {
     userName = result.payload.sub
     isLogin = true
     rank = result.payload.rank
+    role = result.payload.role
+    console.log(rank)
+    console.log("index.js 에서 role 값"+role)
     //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
     axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
   } else {
     deleteToken()
   }
 }
-
 let timeoutId
 const checkTokenTimeout = () => {
   if (!localStorage.token) return;
@@ -71,7 +74,8 @@ const initialstate = {
   commonTable: [],
   orders: [],
   isLogin,
-  rank
+  rank,
+  role
 }
 
 
@@ -90,6 +94,7 @@ const reducer = (state = initialstate, action) => {
       userName: action.payload.userName
       , isLogin: action.payload.isLogin
       , rank: action.payload.rank
+      , role: action.payload.role
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()

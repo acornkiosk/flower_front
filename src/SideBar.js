@@ -19,7 +19,8 @@ const Sidebar = () => {
   const [show, setShow] = useState(false)
   /** 용도 : 주문현황 개수 실시간 표기 */
   const ws = new WebSocket("ws://localhost:9000/flower/ws/order")
-
+  //권한 관리 state => {"4001" : false, "4002" : false, "4003": false, "4004" : false}
+  const [roleState, setRoleState] = useState({})
   useEffect(() => {
     const connect = () => {
       ws.onopen = () => {
@@ -40,6 +41,10 @@ const Sidebar = () => {
           setShow(count.num > 0);
         }
       };
+
+      //처음 들어오면 권한  state를 업데이트
+      //만약 role= 4001, 4002
+      //role을 반복문을 돌면서 4001 : true setRoleSate({...roleState, item: t})
     };
   
     connect();
@@ -65,13 +70,16 @@ const Sidebar = () => {
     }
   };
 
+  
   const navigate = useNavigate();
 
   const home = () => {
     navigate("/")
   }
   const isLogin = useSelector(state => state.isLogin)
+  const role  = useSelector(state => state.role)
   const rank = useSelector(state => state.rank)
+  console.log(role)
   //여기서 부터 super(관리자모드) 필요한 코드
   let count = 0;
   const superin = () => {
@@ -95,22 +103,33 @@ const Sidebar = () => {
             </svg> Flower
           </div>
         </CDBSidebarHeader>
+    /*4001:직원관리
+4002:메뉴관리 
+4003:키오스크관리
+4004 :주문관리
+ */      
+      <CDBSidebarContent className="sidebar-content">
+      
+      <CDBSidebarMenu>
 
-        {isLogin && <CDBSidebarContent className="sidebar-content">
-          <CDBSidebarMenu>
-            <NavLink onClick={() => toggleAccordion('dash')} to="/dash" className={activeStyle}>
+          <NavLink onClick={() => toggleAccordion('dash')} to="/dash" className={activeStyle}>
               <CDBSidebarMenuItem icon="th-large">대쉬보드</CDBSidebarMenuItem>
-            </NavLink>
+            </NavLink>  
+
+             
             <NavLink onClick={() => toggleAccordion('kiosk')} to="/kiosk" className={activeStyle}>
               <CDBSidebarMenuItem icon="tablet">키오스크 관리</CDBSidebarMenuItem>
             </NavLink>
+ 
+       
             <NavLink onClick={() => toggleAccordion('user')} to="/user" className={activeStyle}>
               <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
             </NavLink>
+          
             <NavLink onClick={() => toggleAccordion('order')} to="/order" className={activeStyle}>
               <CDBSidebarMenuItem icon="money-check">주문 관리{show && <Badge bg="warning" >{orderCount}</Badge>}</CDBSidebarMenuItem>
             </NavLink>
-
+ 
             <div>
               <NavLink to="/menu" className={activeStyle} >
                 <CDBSidebarMenuItem
@@ -131,11 +150,13 @@ const Sidebar = () => {
                 </div>
               )}
             </div>
+            
 
           </CDBSidebarMenu>
-        </CDBSidebarContent>}
+        </CDBSidebarContent> 
 
-        {isLogin && <CDBSidebarFooter style={{ textAlign: 'center' }}>
+
+        {isLogin && role=="4004" && <CDBSidebarFooter style={{ textAlign: 'center' }}>
           <div
             style={{
               padding: '20px 5px',
