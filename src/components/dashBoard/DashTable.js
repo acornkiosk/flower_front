@@ -60,7 +60,7 @@ export default function DashTable(props) {
             }
           </tbody>
         </table>
-      </div>
+      </div >
     </>
   )
 }
