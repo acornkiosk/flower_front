@@ -19,8 +19,13 @@ const Navbar = () => {
     delete localStorage.token
     //store 의 상태 바꾸기
     delete axios.defaults.headers.common["Authorization"]
-    dispatch({ type: "SET_LOGIN", payload: false })
-    dispatch({ type: "SET_RANK", payload: false })
+    const data = {
+      userName: null,
+      isLogin: false,
+      rank: null,
+      role: []
+    }
+    dispatch({ type: "SET_LOGIN", payload: data })
     navigate("/")
   }
 

@@ -68,7 +68,7 @@ function App() {
               <Route path='/order' Component={Order} />
               <Route path='/user' Component={User} />
               <Route path='/menu/*' Component={Menu} />
-              <Route path='/login' element={<Login isLogin={isLogin} handleLogin={handleLogin} />} />
+              <Route path='/login' Component={Login}/>
               <Route path='/owner' Component={OwnerMange} />
               <Route path='/dash' Component={DashBoard} />
             </Routes>
