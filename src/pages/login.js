@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
 import React, { useState } from 'react';
@@ -28,7 +29,8 @@ function Login() {
         const data = {
           userName: result.payload.sub,
           isLogin: true,
-          rank: result.payload.rank
+          rank: result.payload.rank,
+          role: result.payload.role
         }
         dispatch({ type: "SET_LOGIN", payload: data })
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
@@ -87,3 +89,4 @@ function Login() {
 }
 
 export default Login;
+

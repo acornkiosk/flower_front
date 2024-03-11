@@ -14,6 +14,8 @@ import axios from 'axios';
 let userName = null
 let isLogin = false
 let rank = null
+let role = []
+
 axios.defaults.baseURL = process.env.PUBLIC_URL
 
 function deleteToken() {
@@ -33,6 +35,9 @@ if (localStorage.token) {
     userName = result.payload.sub
     isLogin = true
     rank = result.payload.rank
+    role = result.payload.role
+    console.log(rank)
+    console.log("index.js 에서 role 값"+role)
     //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
     axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
   } else {
@@ -87,7 +92,9 @@ const initialstate = {
   orders: [],
   isLogin,
   rank,
+  role,
   ws: null // 웹소켓 요청 객체를 담는 변수(초기에는 null로 설정)
+
 }
 const reducer = (state = initialstate, action) => {
   let newState
@@ -103,7 +110,9 @@ const reducer = (state = initialstate, action) => {
       userName: action.payload.userName
       , isLogin: action.payload.isLogin
       , rank: action.payload.rank
+      , role: action.payload.role
       , ws: connect() // connect 함수를 호출하여 ws 객체를 설정
+
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()

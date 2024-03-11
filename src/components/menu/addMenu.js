@@ -59,7 +59,7 @@ function AddMenu() {
         if (fileInputRef.current) {
             fileInputRef.current.value = ''; // 파일 입력 요소의 값(value)을 비웁니다.
         }
-    };
+    }
     return (
         <Container>
             <h1>메뉴 등록하기</h1>
