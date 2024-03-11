@@ -41,7 +41,6 @@ function Kiosk() {
   const send = () => {
     if(ws == null){
       console.log("키오스크 관리 : 웹소켓 ws 참고값 없음")
-      return
       /** 이걸 넣었더니 null 인데도 정상동작됨... 잘된 일이지만... 왜 잘되는 걸까?... */
     }
     var info = { type: "SET_KIOSK" }
