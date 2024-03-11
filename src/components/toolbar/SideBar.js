@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import '../../App.css';
+
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -13,6 +15,7 @@ import { useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
 
 const Sidebar = () => {
+
   const [activeMenu, setActiveMenu] = useState('');
   const toggleAccordion = (menuName) => {
     setActiveMenu(activeMenu === menuName ? '' : menuName);

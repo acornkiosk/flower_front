@@ -38,7 +38,9 @@ export default function DashTable(props) {
               <th scope="col">카테고리</th>
               <th scope="col">상품명</th>
               <th scope="col">옵션</th>
+              <th scope="col">개수</th>
               <th scope="col">가격</th>
+              <th scope="col">주문일시</th>
             </tr>
           </thead>
           <tbody>
@@ -49,7 +51,10 @@ export default function DashTable(props) {
                   <td>{item.category_name}</td>
                   <td>{item.menu_name}</td>
                   <td>{item.options}</td>
+                  <td>{item.menu_count}</td>
                   <td>{item.menu_price}</td>
+                  <td>{item.regdate}</td>
+                  
                 </tr>
               )
             }
