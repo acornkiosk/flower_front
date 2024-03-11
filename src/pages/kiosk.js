@@ -29,14 +29,14 @@ function Kiosk() {
   const [allCheck, setAllCheck] = useState(false)
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
-  /** 이것만 있으면 웹소켓 ID를 유지한 채로 사용가능함! */
+  /** 웹소켓 참조값을 담을 필드 */
   let ws;
   ws = useSelector((state) => state.ws)
 
   const connect = () => {
     /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
-    if (ws == null) { console.log("키오스크 관리 : 웹소켓 정보 => 없음") }
-    console.log("키오스크 관리 : 웹소켓 정보")
+    if (ws == null) { console.log("키오스크 관리 : 웹소켓 객체 => 없음") }
+    else{ console.log("키오스크 관리 : 웹소켓 객체 정상")} 
   }
   const send = () => {
     if(ws == null){

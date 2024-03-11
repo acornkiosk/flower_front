@@ -60,20 +60,26 @@ checkTokenTimeout()
 let ws
 /** 웹소켓 연결관리 함수 */
 const connect = () => {
-  /** 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결 */
-  ws = new WebSocket("ws://localhost:9000/flower/ws/order")
-  /** 연결에 성공했을 경우 동작하는 메서드 */
-  ws.onopen = () => { console.log("index.js : 실시간 화면연동 시작(웹소켓)") }
-  /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
-  ws.onerror = () => { console.log("index.js : 화면 연동이 원활하게 이루어지지 않고 있습니다. 재로그인 혹은 서버 확인이 필요합니다(웹소켓)") }
-  /** 연결이 끊겼을 때 동작하는 메서드 */
-  ws.onclose = () =>{
-    setTimeout(()=>{
-      ws.onopen()
-    }, 3000)
+  if (ws === null || ws === undefined) {
+    /** 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결 */
+    ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+    /** 연결에 성공했을 경우 동작하는 메서드 */
+    ws.onopen = () => { console.log("index.js : 실시간 화면연동 시작(웹소켓)") }
+    /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
+    ws.onerror = () => { console.log("index.js : 화면 연동이 원활하게 이루어지지 않고 있습니다. 재로그인 혹은 서버 확인이 필요합니다(웹소켓)") }
+    /** 연결이 끊겼을 때 동작하는 메서드 */
+    ws.onclose = () => {
+      console.log("웹소켓이 종료되어 3초 뒤에 다시 연결을 시도합니다.")
+      setTimeout(() => {
+        connect();
+      }, 3000)
+    }
+    /** 반환처리를 통해 undefined 방지 */
+    return ws;
+  }else{
+    /** 반환처리를 통해 undefined 방지 */
+    return ws;
   }
-  /** 반환처리를 통해 undefined 방지 */
-  return ws;
 }
 const initialstate = {
   userName,
