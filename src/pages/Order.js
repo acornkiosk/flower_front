@@ -12,8 +12,10 @@ export default function Order() {
   const [showModal, setShowModal] = useState(false)
   //상세용 데이터
   const [data, setData] = useState([])
-  /** 주문완료 혹은 취소처리시 */
-  const [upToDate, setUpToDate] = useState(false)
+  /** 디테일 모달을 통해 정보를 처리했을 경우 */
+  const [deleteModal, setDeleteModal] = useState({
+    target:0
+  })
   /** 웹소켓 참조값을 담을 필드 */
   let ws
   /** index.js 에서 생성한 웹소켓 함수를 이어서 사용하기 위함 */
@@ -56,13 +58,6 @@ export default function Order() {
   useEffect(() => {
     connect()
   }, [])
-  /** 주문완료 혹은 취소처리시 */
-  useEffect(() => {
-    if(upToDate){
-      setUpToDate(false)
-      refresh()
-    }
-  }, [upToDate])
 
   /** 웹소켓 계획
  * 1. 들어온 주문 개수만큼 sidebar.js 개수 표시
@@ -70,13 +65,9 @@ export default function Order() {
  * 3. 주문완료 진행시 손님 키오스크에 알림표시, 번호표기 
  */
 
-  /** 주석처리 사유 : 무한요청 증상 개선 
-   * getOrders={getOrders()} : DetailModal 연결 함수가 범인임
-  */
-  
   const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
-    axios.post("/api/order/list", {}) 
+    axios.post("/api/order/list", {})
       .then(res => {
         const orderData = res.data.list
         //order_id를 기준으로 주문들을 묶어서 저장할 객체
@@ -96,6 +87,7 @@ export default function Order() {
       .catch(error => {
         console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
         console.log(error)
+  
       })
   }
 
@@ -107,13 +99,14 @@ export default function Order() {
           <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {Object.keys(orders).map(key =>
               <Col key={key}>
-                <OrderItem orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} />
+                <OrderItem orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal}/>
               </Col>
             )}
           </Row>
         </Container>
       </div>
-      <DetailModal show={showModal} data={data} setUpToDate={setUpToDate} setShowModal={setShowModal} onHide={() => setShowModal(false)} />
+      {/** 주의 : refresh={refresh()} => 무한요청 원인!! */}
+      <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal}/>
     </div>
   )
 }

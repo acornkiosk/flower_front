@@ -2,6 +2,7 @@ import axios from "axios";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { Justify } from "react-bootstrap-icons";
 import ConvertOptions from "./util";
+import { useState } from "react"
 
 export default function OrderItem(props) {
   const orderId = props.orders[0].order_id
@@ -20,6 +21,10 @@ export default function OrderItem(props) {
     return timeDiff
   }
 
+/** DetailModal.js 완료 혹은 취소 처리시 제거 */
+if(props.deleteModal.target === orderId){
+  onComplted()
+}
 
   //완료 버튼 누를 시 
   function onComplted() {

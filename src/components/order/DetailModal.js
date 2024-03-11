@@ -10,8 +10,9 @@ export default function DetailModal(props) {
     order_id = props.data[0].order_id
     kiosk_id = props.data[0].kiosk_id
   }
-  /** 주문관리 페이지를 통해 데이터 처리전달 */
-  const { setUpToDate } = props
+  /** DetailModal.js <--> Order.js <--> orderItem.js  */
+  const { setShowModal } = props
+  const { setDeleteModal } = props
 
   //완료버튼을 누를시 
   function onCompleted() {
@@ -21,14 +22,13 @@ export default function DetailModal(props) {
       axios.post("/api/order/update", item)
         .then(res => {
           if (res.data.status === 'OK') {
-            /** 동작되지 않음을 확인 */
             console.log("부자되자!")
-            setUpToDate(true)
+            setDeleteModal({target:item.order_id})
           }
         })
         .catch(error => console.log(error))
     }
-    props.setShowModal(false)
+    setShowModal(false)
   }
 
   //주문취소 버튼을 누를시
@@ -37,12 +37,11 @@ export default function DetailModal(props) {
     axios.post("/api/order/deleteAll", { order_id: order_id })
       .then(res => {
         if (res.data.status === 'OK') {
-          /** 동작되지 않음을 확인 */
           console.log("배가 불렀네")
-          setUpToDate(true)
-          props.setShowModal(false)
+          setShowModal(false)
         }
       })
+    setDeleteModal({target:order_id})
   }
 
   return (
