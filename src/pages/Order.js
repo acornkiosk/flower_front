@@ -12,6 +12,8 @@ export default function Order() {
   const [showModal, setShowModal] = useState(false)
   //상세용 데이터
   const [data, setData] = useState([])
+  /** 주문완료 혹은 취소처리시 */
+  const [upToDate, setUpToDate] = useState(false)
   /** 웹소켓 참조값을 담을 필드 */
   let ws
   /** index.js 에서 생성한 웹소켓 함수를 이어서 사용하기 위함 */
@@ -40,7 +42,7 @@ export default function Order() {
       if (msg != null) {
         console.log("주문관리 : 웹소켓 주문 들어옴")
         var result = JSON.parse(msg.data);
-        if (result.type === "UPDATE_ORDERS") refresh() //console.log(result.type)
+        if (result.type === "UPDATE_ORDERS") refresh()
       } else { console.log(msg) }
     }
   }
@@ -54,6 +56,13 @@ export default function Order() {
   useEffect(() => {
     connect()
   }, [])
+  /** 주문완료 혹은 취소처리시 */
+  useEffect(() => {
+    if(upToDate){
+      setUpToDate(false)
+      refresh()
+    }
+  }, [upToDate])
 
   /** 웹소켓 계획
  * 1. 들어온 주문 개수만큼 sidebar.js 개수 표시
@@ -66,8 +75,8 @@ export default function Order() {
   */
   
   const refresh = () => {
-    //주문 db에 있는 정보 가져오기 
-    axios.post("/api/order/list", {})
+    // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
+    axios.post("/api/order/list", {}) 
       .then(res => {
         const orderData = res.data.list
         //order_id를 기준으로 주문들을 묶어서 저장할 객체
@@ -104,7 +113,7 @@ export default function Order() {
           </Row>
         </Container>
       </div>
-      <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} />
+      <DetailModal show={showModal} data={data} setUpToDate={setUpToDate} setShowModal={setShowModal} onHide={() => setShowModal(false)} />
     </div>
   )
 }

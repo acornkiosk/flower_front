@@ -29,6 +29,8 @@ export default function OrderItem(props) {
       axios.post("/api/order/update", item)
         .then(res => {
           if (res.data.status === 'OK') {
+            console.log("부자되자!")
+            console.log(res.data.status)
             const newList = { ...props.list }
             delete newList[props.id]
             props.setOrders(newList)

@@ -1,6 +1,7 @@
 import axios from "axios"
 import { Button, CloseButton, Col, Modal, Row } from "react-bootstrap"
 import ConvertOptions from "./util"
+import React from "react"
 
 export default function DetailModal(props) {
   let order_id
@@ -9,15 +10,20 @@ export default function DetailModal(props) {
     order_id = props.data[0].order_id
     kiosk_id = props.data[0].kiosk_id
   }
+  /** 주문관리 페이지를 통해 데이터 처리전달 */
+  const { setUpToDate } = props
 
   //완료버튼을 누를시 
   function onCompleted() {
     for (let item of props.data) {
       item.is_completed = 'true'
+      console.log(item)
       axios.post("/api/order/update", item)
         .then(res => {
           if (res.data.status === 'OK') {
-            props.getOrders()
+            /** 동작되지 않음을 확인 */
+            console.log("부자되자!")
+            setUpToDate(true)
           }
         })
         .catch(error => console.log(error))
@@ -27,10 +33,13 @@ export default function DetailModal(props) {
 
   //주문취소 버튼을 누를시
   function onDelete() {
+    console.log(order_id)
     axios.post("/api/order/deleteAll", { order_id: order_id })
       .then(res => {
         if (res.data.status === 'OK') {
-          props.getOrders()
+          /** 동작되지 않음을 확인 */
+          console.log("배가 불렀네")
+          setUpToDate(true)
           props.setShowModal(false)
         }
       })
@@ -43,7 +52,7 @@ export default function DetailModal(props) {
       centered
     >
       <Modal.Header className="d-flex">
-        <Modal.Title className="flex-fill">
+        <Modal.Title className="flex-fill" >
           <Row className="justify-content-between">
             <Col>{order_id}번 주문 내역</Col>
             <Col>키오스크 : {kiosk_id}번</Col>
@@ -55,7 +64,7 @@ export default function DetailModal(props) {
       </Modal.Header>
       <Modal.Body>
         {props.data.map(item =>
-          <>
+          <React.Fragment key={item.order_id}>
             <Row className="mb-3 ms-3">
               <Col>
                 <Row>{item.menu_name} X {item.menu_count}</Row>
@@ -63,7 +72,7 @@ export default function DetailModal(props) {
               </Col>
               <Col>주문 시간 : {item.regdate}</Col>
             </Row>
-          </>
+          </React.Fragment>
         )}
       </Modal.Body>
       <Modal.Footer>
