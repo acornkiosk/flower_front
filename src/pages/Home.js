@@ -1,7 +1,7 @@
 
 import { useSelector } from "react-redux"
-import Kiosk from "./kiosk"
 import Login from "./login"
+import Order from "./Order"
 
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
     return (
         <>
             {/* 주문관리로 변경 */}
-            {localStorage.token && userName && <Kiosk />}
+            {localStorage.token && userName && <Order />}
             {(!localStorage.token || !userName) && <Login/>}
         </>
     )

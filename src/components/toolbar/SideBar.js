@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import '../../App.css';
+
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -13,6 +15,30 @@ import { useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
 
 const Sidebar = () => {
+  //index.js redux 값 가져오는것
+  const isLogin = useSelector(state => state.isLogin)
+  const role  = useSelector(state => state.role)
+  const rank = useSelector(state => state.rank)
+
+    //권한 관리 state => {"4001" : false, "4002" : false, "4003": false, "4004" : false}
+    const [roleState, setRoleState] = useState({
+      4001:false,
+      4002:false,
+      4003:false,
+      4004:false
+    })
+
+     //role 값 가져와서 상태 변경
+  useEffect(()=>{
+    setRoleState({
+      ...roleState,
+      4001: role.includes('4001')
+      ,4002: role.includes('4002')
+      ,4003: role.includes('4003')
+      ,4004: role.includes('4004')
+    })
+    console.log(roleState)
+},[isLogin])
   const [activeMenu, setActiveMenu] = useState('');
   const toggleAccordion = (menuName) => {
     setActiveMenu(activeMenu === menuName ? '' : menuName);
@@ -30,8 +56,7 @@ const Sidebar = () => {
   const home = () => {
     navigate("/")
   }
-  const isLogin = useSelector(state => state.isLogin)
-  const rank = useSelector(state => state.rank)
+
   //여기서 부터 super(관리자모드) 필요한 코드
   let count = 0;
   const superin = () => {
@@ -55,40 +80,65 @@ const Sidebar = () => {
           </div>
         </CDBSidebarHeader>
         {isLogin && <CDBSidebarContent className="sidebar-content">
+          {
+            roleState[4001] &&
           <CDBSidebarMenu>
             <NavLink onClick={() => toggleAccordion('dash')} to="/dash" className={activeStyle}>
               <CDBSidebarMenuItem icon="th-large">대쉬보드</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink onClick={() => toggleAccordion('kiosk')} to="/kiosk" className={activeStyle}>
-              <CDBSidebarMenuItem icon="tablet">키오스크 관리</CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink onClick={() => toggleAccordion('user')} to="/user" className={activeStyle}>
-              <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink onClick={() => toggleAccordion('order')} to="/order" className={activeStyle}>
-              <CDBSidebarMenuItem icon="money-check">주문 관리</CDBSidebarMenuItem>
-            </NavLink>
-            <div>
-              <NavLink to="/menu" className={activeStyle} >
-                <CDBSidebarMenuItem
-                  icon="boxes"
-                  onClick={() => toggleAccordion('menu')}
->
-                  메뉴 관리
-                </CDBSidebarMenuItem>
-              </NavLink>
-              {activeMenu === 'menu' && (
-                <div style={{ marginLeft: 20 }}>
-                  <NavLink to="/menu" >
-                    <CDBSidebarMenuItem>메뉴조회</CDBSidebarMenuItem>
-                  </NavLink>
-                  <NavLink to="/menu/addMenu">
-                    <CDBSidebarMenuItem>등록하기</CDBSidebarMenuItem>
-                  </NavLink>
-                </div>
-              )}
-            </div>
           </CDBSidebarMenu>
+          }
+
+          {
+            roleState[4003] &&
+            <CDBSidebarMenu>
+              <NavLink onClick={() => toggleAccordion('kiosk')} to="/kiosk" className={activeStyle}>
+                <CDBSidebarMenuItem icon="tablet">키오스크 관리</CDBSidebarMenuItem>
+              </NavLink>
+            </CDBSidebarMenu>
+          }
+
+          {
+            roleState[4001] &&
+            <CDBSidebarMenu>
+              <NavLink onClick={() => toggleAccordion('user')} to="/user" className={activeStyle}>
+                <CDBSidebarMenuItem icon="address-book">직원 관리</CDBSidebarMenuItem>
+              </NavLink>
+            </CDBSidebarMenu>
+          }
+          {
+            roleState[4004] &&
+            <CDBSidebarMenu>
+              <NavLink onClick={() => toggleAccordion('order')} to="/order" className={activeStyle}>
+                <CDBSidebarMenuItem icon="money-check">주문 관리</CDBSidebarMenuItem>
+              </NavLink>
+            </CDBSidebarMenu>
+          }
+          
+          {
+            roleState[4002] &&
+              <CDBSidebarMenu>
+                <div>
+                  <NavLink to="/menu" className={activeStyle} >
+                    <CDBSidebarMenuItem
+                      icon="boxes"
+                      onClick={() => toggleAccordion('menu')}>
+                      메뉴 관리
+                    </CDBSidebarMenuItem>
+                  </NavLink>
+                  {activeMenu === 'menu' && (
+                    <div style={{ marginLeft: 20 }}>
+                      <NavLink to="/menu" >
+                        <CDBSidebarMenuItem>메뉴조회</CDBSidebarMenuItem>
+                      </NavLink>
+                      <NavLink to="/menu/addMenu">
+                        <CDBSidebarMenuItem>등록하기</CDBSidebarMenuItem>
+                      </NavLink>
+                    </div>
+                  )}
+                </div>
+              </CDBSidebarMenu>
+          }
         </CDBSidebarContent>}
         {isLogin && <CDBSidebarFooter style={{ textAlign: 'center' }}>
           <div
@@ -103,5 +153,6 @@ const Sidebar = () => {
     </div>
   );
 };
+
 
 export default Sidebar;
