@@ -17,7 +17,7 @@ export default function DetailModal(props) {
       axios.post("/api/order/update", item)
         .then(res => {
           if (res.data.status === 'OK') {
-            props.refresh()
+            props.getOrders()
           }
         })
         .catch(error => console.log(error))
@@ -30,7 +30,7 @@ export default function DetailModal(props) {
     axios.post("/api/order/deleteAll", { order_id: order_id })
       .then(res => {
         if (res.data.status === 'OK') {
-          props.refresh()
+          props.getOrders()
           props.setShowModal(false)
         }
       })
