@@ -73,7 +73,7 @@ const Sidebar = () => {
                 <CDBSidebarMenuItem
                   icon="boxes"
                   onClick={() => toggleAccordion('menu')}
-                >
+>
                   메뉴 관리
                 </CDBSidebarMenuItem>
               </NavLink>
