@@ -14,11 +14,8 @@ import axios from 'axios';
 let userName = null
 let isLogin = false
 let rank = null
-<<<<<<< HEAD
 let role = []
 
-=======
->>>>>>> origin
 axios.defaults.baseURL = process.env.PUBLIC_URL
 
 function deleteToken() {
