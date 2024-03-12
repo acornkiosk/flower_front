@@ -1,4 +1,4 @@
-import { Dropdown } from "react-bootstrap"
+import { Dropdown } from "react-bootstrap";
 
 export default function DashTable(props) {
   const { selectedDate, changeDate, selectedCategory, changeCategory, setDateCode, setCategoryCode, orderData } = props

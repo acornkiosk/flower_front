@@ -17,13 +17,9 @@ export default function DashBoard() {
   //드롭다운을 누를때 텍스트 변경함수
   function changeDate(text) {
     setSelectedDate(text)
-    codeId(text)
-    refresh(dateCode, categoryCode)
   }
   function changeCategory(text) {
     setSelectedCategory(text)
-    codeId(text)
-    refresh(dateCode, categoryCode)
   }
   const refresh = (dayOfMonth, category_id) => {
     axios.post("/api/order/list", { order_id: -1, dayOfMonth: dayOfMonth, category_id: category_id })
@@ -33,31 +29,9 @@ export default function DashBoard() {
       .catch(error => {
         const status = error.response.data.status
         if (status === "BAD_REQUEST") {
-          console.log("데이터 없음")
           setorderData([])
         }
       })
-  }
-  const codeId = (text) => {
-    console.log(text)
-    if (text === "오늘") {
-      setDateCode(1)
-    } else if (text === "최근 7일") {
-      console.log("asdfasf")
-      setDateCode(7)
-    } else if (text === "최근 30일") {
-      setDateCode(30)
-    }
-
-    if (text === "전체") {
-      setCategoryCode(0)
-    } else if (text === "한송이") {
-      setCategoryCode(1001)
-    } else if (text === "꽃다발") {
-      setCategoryCode(1002)
-    } else if (text === "바구니") {
-      setCategoryCode(1003)
-    }
   }
   useEffect(() => {
     refresh(dateCode, categoryCode)
@@ -67,7 +41,7 @@ export default function DashBoard() {
   if (role.includes("4001")) {
     return (
       <>
-        <Header selectedDate={selectedDate} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+        <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
         <Chart />
         <br />
         <hr />
