@@ -5,6 +5,7 @@ import * as Icon from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
+import Error from "./Error";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -29,19 +30,9 @@ function Kiosk() {
   const [allCheck, setAllCheck] = useState(false)
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
-  /** 웹소켓 참조값을 담을 필드 */
-  let ws;
-  ws = useSelector((state) => state.ws)
-  const connect = () => {
-    /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
-    if (ws == null) { console.log("키오스크 관리 : 웹소켓 객체 => 없음") }
-    else{ console.log("키오스크 관리 : 웹소켓 객체 정상")} 
-  }
+  const role = useSelector(state => state.role)
+  let ws = useSelector((state) => state.ws)
   const send = () => {
-    if(ws == null){
-      console.log("키오스크 관리 : 웹소켓 ws 참고값 없음")
-      /** 이걸 넣었더니 null 인데도 정상동작됨... 잘된 일이지만... 왜 잘되는 걸까?... */
-    }
     var info = { type: "SET_KIOSK" }
     ws.send(JSON.stringify(info))
   }
@@ -66,7 +57,6 @@ function Kiosk() {
   //화면 로딩시
   useEffect(() => {
     refresh(1)
-    connect()
   }, [])
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
@@ -199,65 +189,72 @@ function Kiosk() {
       })],
     });
   };
-  return (
-    <div>
-      <Row className="justify-content-md-center">
-        <Col>
-          <h1>키오스크 관리</h1>
-        </Col>
-        <Col md="auto">
-          <Button variant="success" className="me-3" onClick={() => { updateKiosk('on') }}>전원 켜기</Button>
-          <Button variant="danger" className="me-3" onClick={() => { updateKiosk('off') }}>전원 끄기</Button>
-          <Button className="me-3" onClick={() => { setAddModalShow(true) }}>추가하기</Button>
-          <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
-        </Col>
-      </Row>
-      <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} />
-      <UpdateModal updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} />
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th style={{ width: '1%' }}>
-              <Form.Check type={`checkbox`} checked={allCheck} onChange={(e) => { handleAllCheckBox(e) }} />
-            </th>
-            <th>ID</th>
-            <th>Location</th>
-            <th>
-              Power <Icon.ArrowDownUp onClick={() => handleSort('power')} />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {pageInfo.list.map(item =>
-            <tr key={item.id}>
-              <td>
-                <Form.Check type={`checkbox`} id={item.id} checked={checked[item.id] || false} onChange={(e) => {
-                  handleCheckBoxChange(e, item)
-                }} />
-              </td>
-              <td className="justify-content-md-center">{item.id}</td>
-              <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)} /></td>
-              <td>{item.power}</td>
+  if (role.includes("4003")) {
+    return (
+      <div>
+        <Row className="justify-content-md-center">
+          <Col>
+            <h1>키오스크 관리</h1>
+          </Col>
+          <Col md="auto">
+            <Button variant="success" className="me-3" onClick={() => { updateKiosk('on') }}>전원 켜기</Button>
+            <Button variant="danger" className="me-3" onClick={() => { updateKiosk('off') }}>전원 끄기</Button>
+            <Button className="me-3" onClick={() => { setAddModalShow(true) }}>추가하기</Button>
+            <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
+          </Col>
+        </Row>
+        <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} />
+        <UpdateModal updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} />
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th style={{ width: '1%' }}>
+                <Form.Check type={`checkbox`} checked={allCheck} onChange={(e) => { handleAllCheckBox(e) }} />
+              </th>
+              <th>ID</th>
+              <th>Location</th>
+              <th>
+                Power <Icon.ArrowDownUp onClick={() => handleSort('power')} />
+              </th>
             </tr>
-          )}
-        </tbody>
-      </Table>
-      <Pagination>
-        <Pagination.Item onClick={() => {
-          refresh(pageInfo.startPageNum - 1)
-        }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
-        {pageArray.map(num =>
+          </thead>
+          <tbody>
+            {pageInfo.list.map(item =>
+              <tr key={item.id}>
+                <td>
+                  <Form.Check type={`checkbox`} id={item.id} checked={checked[item.id] || false} onChange={(e) => {
+                    handleCheckBoxChange(e, item)
+                  }} />
+                </td>
+                <td className="justify-content-md-center">{item.id}</td>
+                <td className="justify-content-md-center">{item.location} <Icon.Pencil onClick={() => showUpdateModal(item)} /></td>
+                <td>{item.power}</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+        <Pagination>
           <Pagination.Item onClick={() => {
-            refresh(num)
-            // setParams({ pageNum: num })
-          }} key={num} active={pageInfo.pageNum === num}>{num}</Pagination.Item>
-        )}
-        <Pagination.Item onClick={() => {
-          refresh(pageInfo.endPageNum + 1)
-        }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
-      </Pagination>
-    </div>
-  )
+            refresh(pageInfo.startPageNum - 1)
+          }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
+          {pageArray.map(num =>
+            <Pagination.Item onClick={() => {
+              refresh(num)
+              // setParams({ pageNum: num })
+            }} key={num} active={pageInfo.pageNum === num}>{num}</Pagination.Item>
+          )}
+          <Pagination.Item onClick={() => {
+            refresh(pageInfo.endPageNum + 1)
+          }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
+        </Pagination>
+      </div>
+    )
+  } else {
+    return (
+      <Error />
+    )
+  }
 }
+
 
 export default Kiosk
