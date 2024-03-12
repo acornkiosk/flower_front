@@ -28,8 +28,7 @@ function App() {
       .catch(error => console.log(error))
   }, [])
   /** 웹소켓 참조값을 담을 필드 */
-  let ws;
-  ws = useSelector((state) => state.ws)
+  let ws = useSelector((state) => state.ws)
   /** 화면 실행시 */
   useEffect(() => {
     /** 1차 웹브라우저 새로고침 대응 */
