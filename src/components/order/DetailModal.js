@@ -1,7 +1,7 @@
 import axios from "axios"
+import React from "react"
 import { Button, CloseButton, Col, Modal, Row } from "react-bootstrap"
 import ConvertOptions from "./util"
-import React from "react"
 
 export default function DetailModal(props) {
   let order_id
@@ -11,42 +11,34 @@ export default function DetailModal(props) {
     kiosk_id = props.data[0].kiosk_id
   }
   /** DetailModal.js <--> Order.js <--> orderItem.js  */
-  const { setShowModal } = props
-  const { setDeleteModal } = props
-
+  const { show, setShowModal, setDeleteModal, data } = props
   //완료버튼을 누를시 
   function onCompleted() {
-    for (let item of props.data) {
+    for (let item of data) {
       item.is_completed = 'true'
-      console.log(item)
       axios.post("/api/order/update", item)
         .then(res => {
           if (res.data.status === 'OK') {
-            console.log("부자되자!")
-            setDeleteModal({target:item.order_id})
+            setDeleteModal({ target: item.order_id })
           }
         })
         .catch(error => console.log(error))
     }
     setShowModal(false)
   }
-
   //주문취소 버튼을 누를시
   function onDelete() {
-    console.log(order_id)
     axios.post("/api/order/deleteAll", { order_id: order_id })
       .then(res => {
         if (res.data.status === 'OK') {
-          console.log("배가 불렀네")
           setShowModal(false)
         }
       })
-    setDeleteModal({target:order_id})
+    setDeleteModal({ target: order_id })
   }
-
   return (
     <Modal
-      show={props.show}
+      show={show}
       size="lg"
       centered
     >
@@ -56,13 +48,13 @@ export default function DetailModal(props) {
             <Col>{order_id}번 주문 내역</Col>
             <Col>키오스크 : {kiosk_id}번</Col>
             <Col className="text-end"><CloseButton onClick={() => {
-              props.setShowModal(false)
+              setShowModal(false)
             }}></CloseButton></Col>
           </Row>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {props.data.map(item =>
+        {data.map(item =>
           <React.Fragment key={item.order_id}>
             <Row className="mb-3 ms-3">
               <Col>

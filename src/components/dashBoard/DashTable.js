@@ -54,7 +54,6 @@ export default function DashTable(props) {
                   <td>{item.menu_count}</td>
                   <td>{item.menu_price}</td>
                   <td>{item.regdate}</td>
-                  
                 </tr>
               )
             }

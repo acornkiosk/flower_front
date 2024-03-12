@@ -3,13 +3,11 @@ import React, { PureComponent } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
   return (
     <>
       <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
@@ -18,7 +16,6 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     </>
   );
 };
-
 export default class CircleChart extends PureComponent {
   constructor(props) {
     super(props);
@@ -28,44 +25,35 @@ export default class CircleChart extends PureComponent {
       categoryCode: props.categoryCode,
     };
   }
-
   componentDidMount() {
     this.fetchData(this.state.dayOfMonth, this.state.categoryCode);
   }
-
   componentDidUpdate(prevProps) {
     // dayOfMonth prop이 변경되었을 때만 데이터를 다시 가져옴
     if (this.props.dayOfMonth !== prevProps.dayOfMonth) {
       this.fetchData(this.props.dayOfMonth, this.state.categoryCode);
     }
   }
-
   fetchData(dayOfMonth, categoryCode) {
     axios.post("/api/order/list", { order_id: -1, dayOfMonth: dayOfMonth, category_id: categoryCode })
       .then(res => {
         const responseData = res.data.list;
-        console.log(categoryCode);
-        console.log(responseData);
         // 중복된 이름을 찾아 가격을 합산하여 새로운 데이터 생성
         const mergedData = this.mergeDuplicateNames(responseData);
         this.setState({ data: mergedData });
       })
       .catch(error => {
         const status = error.response.data.status;
-        console.log();
         if (status === "BAD_REQUEST") {
-          console.log("데이터 없음");
           // 데이터가 없을 때 실행할 로직 
-          this.setState({ data:[] });
+          this.setState({ data: [] });
         }
       });
   }
-
   // 중복된 이름을 찾아서 가격을 합산하는 함수
   mergeDuplicateNames = (data) => {
     const mergedData = [];
     const nameMap = new Map();
-
     data.forEach((item) => {
       const { menu_name, menu_price } = item;
       if (nameMap.has(menu_name)) {
@@ -78,10 +66,8 @@ export default class CircleChart extends PureComponent {
         mergedData.push({ name: menu_name, value: menu_price });
       }
     });
-
     return mergedData;
   };
-
   render() {
     const { data } = this.state;
     return (
