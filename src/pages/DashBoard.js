@@ -37,13 +37,15 @@ export default function DashBoard() {
     refresh(dateCode, categoryCode)
   }, [dateCode, categoryCode])
 
+
   const role = useSelector(state => state.role)
   if (role.includes("4001")) {
     return (
       <>
         <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
-        <Chart />
+        <Chart orderData={orderData} dayOfMonth={dateCode} category_id={categoryCode} />
         <br />
+
         <hr />
         <div style={{ width: '100%', height: '50vh' }}>
           <Row>
