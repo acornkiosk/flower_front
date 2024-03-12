@@ -16,10 +16,6 @@ import Login from './pages/login';
 import Menu from './pages/menu';
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
-  const handleLogin = () => {
-    setIsLogin(true);
-  };
   const dispatch = useDispatch()
   useEffect(() => {
     axios.post("/api/common/child", { code_id: 0 })

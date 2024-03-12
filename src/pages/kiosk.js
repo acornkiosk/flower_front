@@ -5,6 +5,7 @@ import * as Icon from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
+import Error from "./Error";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -199,6 +200,9 @@ function Kiosk() {
       })],
     });
   };
+
+  const role=useSelector(state=>state.role)
+  if(role.includes("4003")){
   return (
     <div>
       <Row className="justify-content-md-center">
@@ -257,7 +261,13 @@ function Kiosk() {
         }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
       </Pagination>
     </div>
-  )
+  )} else {
+       
+    return (
+        <Error/>
+    )
 }
+}
+
 
 export default Kiosk

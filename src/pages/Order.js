@@ -4,6 +4,7 @@ import { Col, Container, Row } from "react-bootstrap"
 import { useSelector } from 'react-redux'
 import DetailModal from "../components/order/DetailModal"
 import OrderItem from "../components/order/orderItem"
+import Error from "./Error"
 
 export default function Order() {
   //들어온 주문을 저장
@@ -85,6 +86,8 @@ export default function Order() {
         console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
       })
   }
+  const role=useSelector(state=>state.role)
+  if(role.includes("4004")){
   return (
     <div>
       <h1>주문 관리</h1>
@@ -103,4 +106,10 @@ export default function Order() {
       <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal} />
     </div>
   )
+} else {
+       
+  return (
+      <Error/>
+  )
+}
 }

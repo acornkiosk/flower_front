@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AddModal from "../components/login/AddModal";
 import UpdateModal from "../components/login/UpdateModal";
+import Error from "./Error";
 
 export default function OwnerMange() {
     const navigate = useNavigate();
@@ -92,13 +93,9 @@ export default function OwnerMange() {
         )
     }
     else {
-        setTimeout(() => {
-            navigate("/")
-        }, 5000)
+       
         return (
-            <div>
-                <h1>잘못된 접근입니다. 로그인 후 이용해주세요</h1>
-            </div>
+            <Error/>
         )
     }
 }
