@@ -10,8 +10,8 @@ export default function Header(props) {
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h2>대쉬보드</h2>
-        <div className="btn-toolbar mb-2 mb-md-0">
-          <ExcelButton />
+        <div className="btn-toolbar mb-2 mb-md-0"s>
+        <ExcelButton orderData={props.orderData}/> 
           <Dropdown className="me-2">
             <Dropdown.Toggle id="dropdown-autoclose-true" variant="" className="btn-outline-secondary btn-sm gap-1 d-flex align-items-center">
               {selectedCategory}

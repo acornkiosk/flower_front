@@ -41,7 +41,7 @@ export default function DashBoard() {
   if (role.includes("4001")) {
     return (
       <>
-        <Header selectedDate={selectedDate} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+        <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
         <Chart />
         <br />
         <hr />
