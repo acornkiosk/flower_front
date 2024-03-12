@@ -36,41 +36,41 @@ export default function DashBoard() {
   useEffect(() => {
     refresh(dateCode, categoryCode)
   }, [dateCode, categoryCode])
-  
-  const role=useSelector(state=>state.role)
-  if(role.includes("4001")){
-  return (
-    <>
-      <Header selectedDate={selectedDate} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
-      <Chart />
-      <br />
-      <hr />
-      <div style={{ width: '100%', height: '50vh' }}>
-        <Row>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={0} type={"전체"} />
-          </Col>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={1001} type={"한송이"} />
-          </Col>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={1002} type={"꽃다발"} />
-          </Col>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={1003} type={"바구니"} />
-          </Col>
-        </Row>
+
+  const role = useSelector(state => state.role)
+  if (role.includes("4001")) {
+    return (
+      <>
+        <Header selectedDate={selectedDate} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+        <Chart />
+        <br />
         <hr />
-        <DashTable selectedDate={selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
-      </div>
-    </>
-  )
+        <div style={{ width: '100%', height: '50vh' }}>
+          <Row>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={0} type={"전체"} />
+            </Col>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={1001} type={"한송이"} />
+            </Col>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={1002} type={"꽃다발"} />
+            </Col>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={1003} type={"바구니"} />
+            </Col>
+          </Row>
+          <hr />
+          <DashTable selectedDate={selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+        </div>
+      </>
+    )
   }
   else {
-       
+
     return (
-        <Error/>
+      <Error />
     )
-}
+  }
 
 }

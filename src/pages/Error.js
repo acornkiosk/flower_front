@@ -28,4 +28,5 @@ export default function Error(){
           <img src="/images/error.png" style={{ width: '100%' ,height:"720px"}}  />
         </div>
     )
+
 }
