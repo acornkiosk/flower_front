@@ -1,14 +1,14 @@
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.css';
+import { decodeToken } from 'jsontokens';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css'
-import { legacy_createStore as createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { decodeToken } from 'jsontokens';
-import axios from 'axios';
+import { BrowserRouter } from 'react-router-dom';
+import { legacy_createStore as createStore } from 'redux';
+import App from './App';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
 
 //userName,isLogin 초기값을 설정해준다.
 let userName = null
@@ -36,8 +36,6 @@ if (localStorage.token) {
     isLogin = true
     rank = result.payload.rank
     role = result.payload.role
-    console.log(rank)
-    console.log("index.js 에서 role 값"+role)
     //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정 
     axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
   } else {
@@ -79,12 +77,8 @@ const connect = () => {
         connect();
       }, 3000)
     }
-    /** 반환처리를 통해 undefined 방지 */
-    return ws;
-  }else{
-    /** 반환처리를 통해 undefined 방지 */
-    return ws;
-  }
+  } 
+  return ws
 }
 const initialstate = {
   userName,
@@ -94,7 +88,6 @@ const initialstate = {
   rank,
   role,
   ws: null // 웹소켓 요청 객체를 담는 변수(초기에는 null로 설정)
-
 }
 const reducer = (state = initialstate, action) => {
   let newState
@@ -104,7 +97,6 @@ const reducer = (state = initialstate, action) => {
       commonTable: action.payload
     }
   } else if (action.type === "SET_LOGIN") {
-    console.log(action.payload)
     newState = {
       ...state,
       userName: action.payload.userName
@@ -112,7 +104,6 @@ const reducer = (state = initialstate, action) => {
       , rank: action.payload.rank
       , role: action.payload.role
       , ws: connect() // connect 함수를 호출하여 ws 객체를 설정
-
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()

@@ -26,7 +26,6 @@ export default function DashBoard() {
   const refresh = (dayOfMonth, category_id) => {
     axios.post("/api/order/list", { order_id: -1, dayOfMonth: dayOfMonth, category_id: category_id })
       .then(res => {
-        console.log(res.data.list)
         setorderData(res.data.list)
       })
       .catch(error => {
