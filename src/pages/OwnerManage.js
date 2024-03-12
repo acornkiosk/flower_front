@@ -9,7 +9,6 @@ import UpdateModal from "../components/login/UpdateModal";
 import Error from "./Error";
 
 export default function OwnerMange() {
-    const navigate = useNavigate();
     //사장님(owner) 리스트 관리
     const [ownerlist, setOwnerlist] = useState([]);
     const rank = useSelector(state => state.rank)
@@ -93,9 +92,9 @@ export default function OwnerMange() {
         )
     }
     else {
-       
+
         return (
-            <Error/>
+            <Error />
         )
     }
 }
