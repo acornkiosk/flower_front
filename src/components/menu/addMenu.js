@@ -1,15 +1,7 @@
-
-//src/components/Play.js
-
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
-
-
-
-
 
 function AddMenu() {
     const [category, setCategory] = useState([])
@@ -19,45 +11,32 @@ function AddMenu() {
         navigate("/menu")
     };
     const fileInputRef = useRef(null);
-
     useEffect(() => {
         getCategory()
     }, [])
-
     const getCategory = () => {
-        axios.post("/api/common/child", { "code_id": 1000 },
-            { headers: { "Content-Type": "application/json" } })
+        axios.post("/api/common/child", { "code_id": 1000 })
             .then(res => {
                 setCategory(res.data.list)
             })
     }
     const menuInput = (e) => {
         e.preventDefault();
-
         // 요청 url 
         const url = "/api/menu";
         // 요청 방식
         // 전송할 폼 데이터
         const formData = new FormData(e.target);
-
         axios.post(url, formData,
             { headers: { "Content-Type": "multipart/form-data" } })
             .then(res => {
                 goToMenuMain()
             })
-
-
     }
-
-
     const handleChange = (e) => {
-
         //선택한 파일 얻어내기
         const file = e.target.files[0]
-        if (!file) {
-            return; // 함수 종료
-        }
-
+        if (!file) return; // 함수 종료
         //선택한 파일로 부터 이미지 로딩하기
         const reader = new FileReader()
         reader.readAsDataURL(file)
@@ -74,21 +53,16 @@ function AddMenu() {
         borderRadius: "10px", // 여러단어 조합인 경우에는 카멜 케이스로 작성 가능
         cursor: "pointer"
     }
-
     const handleFileReset = () => {
         setPreviewImage(null)
         // 파일 입력(input) 요소를 초기화하려면 ref를 사용하여 해당 요소를 찾아서 초기화합니다.
         if (fileInputRef.current) {
             fileInputRef.current.value = ''; // 파일 입력 요소의 값(value)을 비웁니다.
         }
-    };
-
-
+    }
     return (
         <Container>
-
             <h1>메뉴 등록하기</h1>
-
             <Form onSubmit={(e) => menuInput(e)} className="text-bg-secondary p-3 rounded">
                 <div className="d-flex justify-content-between">
                     <div className="" style={{ width: '400px' }}>
@@ -101,31 +75,25 @@ function AddMenu() {
                                 )}
                             </Form.Select>
                         </Form.Group>
-
-
                         <Form.Group className="mb-3">
                             <Form.Label >메뉴 이름</Form.Label>
                             <Form.Control type="text" name="name" placeholder="메뉴이름" />
                         </Form.Group>
-
                         <Form.Group className="mb-3">
                             <Form.Label >가격</Form.Label>
                             <Form.Control type="number" name="price" placeholder="가격" />
                         </Form.Group>
                         <Form.Group className="mb-3"></Form.Group>
-
                         <Form.Group className="mb-3">
                             <Form.Label >요약설명</Form.Label>
                             <Form.Control name="summary" placeholder="요약설명" />
                         </Form.Group>
                         <Form.Group className="mb-3"></Form.Group>
                     </div>
-
                     <div className="d-flex justify-content-center mx-auto ">
                         <Form.Group className="mb-3">
                             <Form.Label >이미지 선택하기</Form.Label>
                             <div className="d-flex justify-content-center text-bg-light p-3">
-
                                 {!previewImage ?
                                     <svg onClick={() => { fileInputRef.current.click(); }} style={{ cursor: "pointer" }} width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="200" height="200" fill="#9C9B9B" />
@@ -143,21 +111,16 @@ function AddMenu() {
                             </div>
                         </Form.Group>
                     </div>
-
                 </div>
                 <div>
                     <Form.Group className="mb-3">
                         <Form.Label >상세설명</Form.Label>
                         <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" />
                     </Form.Group>
-
                     <Button type="submit" >등록</Button>
                 </div>
             </Form>
-
-
         </Container>
-
     )
 }
 

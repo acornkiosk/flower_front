@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Pagination, Row, Table } from "react-bootstrap";
+import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
+import { useSelector } from 'react-redux';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
 
@@ -16,9 +17,9 @@ function Kiosk() {
   const [addModalShow, setAddModalShow] = useState(false)
   //수정 모달 state
   const [updateModalShow, setUpdateModalShow] = useState(false)
-  // 수정시 data state
+  //수정시 data state
   const [data, setData] = useState({})
-  // 체크박스 state
+  //체크박스 state
   const [checked, setChecked] = useState({})
   //추가 form
   const [location, setLocation] = useState("")
@@ -28,6 +29,22 @@ function Kiosk() {
   const [allCheck, setAllCheck] = useState(false)
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
+  /** 웹소켓 참조값을 담을 필드 */
+  let ws;
+  ws = useSelector((state) => state.ws)
+  const connect = () => {
+    /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
+    if (ws == null) { console.log("키오스크 관리 : 웹소켓 객체 => 없음") }
+    else{ console.log("키오스크 관리 : 웹소켓 객체 정상")} 
+  }
+  const send = () => {
+    if(ws == null){
+      console.log("키오스크 관리 : 웹소켓 ws 참고값 없음")
+      /** 이걸 넣었더니 null 인데도 정상동작됨... 잘된 일이지만... 왜 잘되는 걸까?... */
+    }
+    var info = { type: "SET_KIOSK" }
+    ws.send(JSON.stringify(info))
+  }
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = []
@@ -49,9 +66,8 @@ function Kiosk() {
   //화면 로딩시
   useEffect(() => {
     refresh(1)
+    connect()
   }, [])
-
-
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
     const isChecked = e.target.checked
@@ -99,7 +115,7 @@ function Kiosk() {
   }
   //수정 요청 함수
   const updateKiosk = (action) => {
-    //키오스크 위치 수정
+    /** UpdateModal.js 를 통해 키오스크 위치만 수정할 때 */
     if (action === 'location') {
       axios.post('/api/kiosk/update', data)
         .then(res => {
@@ -117,6 +133,8 @@ function Kiosk() {
             refresh(1)
           })
       })
+      /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
+      send(ws)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -128,6 +146,8 @@ function Kiosk() {
             refresh(1)
           })
       })
+      /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
+      send(ws)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -164,7 +184,6 @@ function Kiosk() {
     //선택된 키오스크 초기화
     setSelectedKiosk([])
   }
-
   const handleSort = (columnName) => {
     const sortOrder = (columnName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
     setpageInfo({
@@ -180,7 +199,6 @@ function Kiosk() {
       })],
     });
   };
-
   return (
     <div>
       <Row className="justify-content-md-center">
@@ -205,7 +223,7 @@ function Kiosk() {
             <th>ID</th>
             <th>Location</th>
             <th>
-              Power <Icon.ArrowDownUp onClick={()=> handleSort('power')}/>
+              Power <Icon.ArrowDownUp onClick={() => handleSort('power')} />
             </th>
           </tr>
         </thead>
@@ -241,6 +259,5 @@ function Kiosk() {
     </div>
   )
 }
-
 
 export default Kiosk

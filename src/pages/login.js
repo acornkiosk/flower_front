@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
 import React, { useState } from 'react';
@@ -13,7 +14,6 @@ function Login() {
   const [login, setLogin] = useState({
     id: cookies.get('cid')
   })
-
   const navigate = useNavigate();
   //로그인실패시 alert 
   const [showAlert, setShowAlert] = useState(false)
@@ -29,10 +29,10 @@ function Login() {
         const data = {
           userName: result.payload.sub,
           isLogin: true,
-          rank: result.payload.rank
+          rank: result.payload.rank,
+          role: result.payload.role
         }
         dispatch({ type: "SET_LOGIN", payload: data })
-
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
         alert(result.payload.sub + "님 로그인 했습니다.");
@@ -44,7 +44,6 @@ function Login() {
         setShowAlert(true)
       });
   };
-
   //input 요소에 문자열을 입력했을때 호출되는 함수 
   const handleChange = (e) => {
     setLogin({
@@ -52,7 +51,6 @@ function Login() {
       [e.target.name]: e.target.value
     })
   }
-
   return (
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '80vh' }} >
       <div className="border border-secondary border-5 rounded-3 p-5">
@@ -91,3 +89,4 @@ function Login() {
 }
 
 export default Login;
+
