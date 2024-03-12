@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Pagination, Table } from 'react-bootstrap';
-import { PencilFill, SortUp } from 'react-bootstrap-icons';
+import { ArrowDown, ArrowDownUp, ArrowUp, PencilFill, SortUp } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
-import InsertModal from './addUserModal';
-import DeleteModal from './deleteModal';
-import UpdateModal from './updateUserModal';
-
+import UpdateModal from '../components/user/updateUserModal';
+import InsertModal from '../components/user/addUserModal';
+import DeleteModal from '../components/user/deleteModal';
 
 function User() {
   const [insertShow, setInsertShow] = useState(false);
@@ -14,7 +13,7 @@ function User() {
   const [deleteShow, setDeleteShow] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null); // 선택된 사용자의 id를 저장
   const commonTable = useSelector(state => state.commonTable)
-  const [sortByDate, setSortByDate] = useState(null)
+  const [sort, setSort] = useState("asc")
   const [pageInfo, setPageInfo] = useState({
     list: []
   })
@@ -56,23 +55,6 @@ function User() {
       + convertTwoLength(calendar.getDate()) + '일'
     return date
   }
-
-  // 직급과 입사일자를 오름차순, 내림차순으로 정렬해주는 함수
-  const sortArray = (dateName) => {
-    const sortOrder = (dateName === pageInfo.sortBy && pageInfo.sortOrder === 'asc') ? 'desc' : 'asc';
-    pageRefresh({
-      ...pageInfo,
-      sortBy: dateName,
-      sortOrder: sortOrder,
-      list: [...pageInfo.list.sort((a, b) => {
-        if (sortOrder === 'asc') {
-          return a[dateName].localeCompare(b[dateName]);
-        } else {
-          return b[dateName].localeCompare(a[dateName]);
-        }
-      })],
-    });
-  };
   // 월, 일을 두 자리수로 표현하기 위한 함수
   const convertTwoLength = (str) => {
     let tmp = String(str)
@@ -99,16 +81,28 @@ function User() {
       })
   }
   // 직원의 입사일자로 정렬할 수 있는 함수
-  const handleSortByDate = () => {
+  const handleSortByDate = (sort) => {
     // 입사일자 오름차순, 내림차순으로 정렬함
-    const newSortByDate = sortByDate === 'asc' ? 'desc' : (sortByDate === 'desc' ? null : 'asc');
-    setSortByDate(newSortByDate)
+    axios.post("/api/user/list", { pageNum: 1, sort: sort })
+      .then(res => {
+        //super와 owner는 없애서 setPageInfo에 넣어야함
+        const filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002);
+        setPageInfo({
+          ...res.data,
+          list: filterList
+        })
+      })
+      .catch(error => {
+        console.log(error)
+      })
 
+    if (sort == null) setSort("asc")
+    else if (sort === "asc") setSort("desc")
+    else if (sort === "desc") setSort(null)
   }
 
   useEffect(() => {
     pageRefresh(1)
-    setSortByDate(null)
   }, [])
 
   return (
@@ -126,8 +120,13 @@ function User() {
             <th>아이디</th>
             <th>직급</th>
             <th>접근 권한</th>
-            <th onClick={handleSortByDate}>입사일자 <span className='btn'><SortUp />
-              {/* { sortByDate == null ? : ( sortByDate === 'asc' ? 'desc' )} */}
+            <th>입사일자 <span className='btn' onClick={() => { handleSortByDate(sort) }}>
+              {sort == null ? 
+                <ArrowDown/>  : (
+                  sort == "asc" ? <ArrowDownUp/>
+                  : <ArrowUp/>
+                )
+            }
             </span></th>
             <th>관리</th>
           </tr>
