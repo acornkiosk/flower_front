@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import UpdateModal from '../components/user/updateUserModal';
 import InsertModal from '../components/user/addUserModal';
 import DeleteModal from '../components/user/deleteModal';
+import Error from './Error';
 
 function User() {
   const [insertShow, setInsertShow] = useState(false);
@@ -104,7 +105,8 @@ function User() {
   useEffect(() => {
     pageRefresh(1)
   }, [])
-
+  const role=useSelector(state=>state.role)
+  if(role.includes("4001")){
   return (
     <>
       <h1>직원 관리 페이지 입니다.</h1>
@@ -165,7 +167,13 @@ function User() {
       <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
       <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={() => { pageRefresh(1) }}></DeleteModal>
     </>
-  )
+  )}
+  else {
+       
+    return (
+        <Error/>
+    )
+}
 }
 
 export default User

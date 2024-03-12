@@ -2,9 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
+import Error from "./Error";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -32,16 +33,7 @@ function Kiosk() {
   /** 웹소켓 참조값을 담을 필드 */
   let ws;
   ws = useSelector((state) => state.ws)
-  const connect = () => {
-    /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
-    if (ws == null) { console.log("키오스크 관리 : 웹소켓 객체 => 없음") }
-    else{ console.log("키오스크 관리 : 웹소켓 객체 정상")} 
-  }
   const send = () => {
-    if(ws == null){
-      console.log("키오스크 관리 : 웹소켓 ws 참고값 없음")
-      /** 이걸 넣었더니 null 인데도 정상동작됨... 잘된 일이지만... 왜 잘되는 걸까?... */
-    }
     var info = { type: "SET_KIOSK" }
     ws.send(JSON.stringify(info))
   }
@@ -66,7 +58,6 @@ function Kiosk() {
   //화면 로딩시
   useEffect(() => {
     refresh(1)
-    connect()
   }, [])
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
@@ -199,6 +190,9 @@ function Kiosk() {
       })],
     });
   };
+
+  const role=useSelector(state=>state.role)
+  if(role.includes("4003")){
   return (
     <div>
       <Row className="justify-content-md-center">
@@ -257,7 +251,13 @@ function Kiosk() {
         }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
       </Pagination>
     </div>
-  )
+  )} else {
+       
+    return (
+        <Error/>
+    )
 }
+}
+
 
 export default Kiosk

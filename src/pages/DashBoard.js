@@ -5,6 +5,8 @@ import { Col, Row } from "react-bootstrap";
 import DashTable from "../components/dashBoard/DashTable";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import Error from "./Error";
 
 export default function DashBoard() {
   const [selectedDate, setSelectedDate] = useState("오늘")
@@ -34,6 +36,9 @@ export default function DashBoard() {
   useEffect(() => {
     refresh(dateCode, categoryCode)
   }, [dateCode, categoryCode])
+  
+  const role=useSelector(state=>state.role)
+  if(role.includes("4001")){
   return (
     <>
       <Header selectedDate={selectedDate} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
@@ -60,4 +65,12 @@ export default function DashBoard() {
       </div>
     </>
   )
+  }
+  else {
+       
+    return (
+        <Error/>
+    )
+}
+
 }

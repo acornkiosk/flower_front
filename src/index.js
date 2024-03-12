@@ -107,6 +107,11 @@ const reducer = (state = initialstate, action) => {
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()
+  } else if(action.type === "SET_WEBSOCKET") {
+    newState = {
+      ...state // 최초 초기화 이후 덮어쓰기
+      , ws: connect() // 로그인 이후로 웹브라우저에서 새로고침할 경우를 대비함
+    }
   } else {
     newState = state
   }
