@@ -67,7 +67,6 @@ export default function DashBoard() {
     )
   }
   else {
-
     return (
       <Error />
     )

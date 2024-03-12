@@ -3,15 +3,15 @@ import ExcelButton from "./ExcelButton";
 
 
 export default function Header(props) {
-  const { selectedDate, changeDate, selectedCategory, changeCategory,setDateCode,setCategoryCode } = props
+  const { selectedDate, changeDate, selectedCategory, changeCategory, setDateCode, setCategoryCode,orderData } = props
   //카테고리 가져오기
 
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h2>대쉬보드</h2>
-        <div className="btn-toolbar mb-2 mb-md-0"s>
-        <ExcelButton orderData={props.orderData}/> 
+        <div className="btn-toolbar mb-2 mb-md-0" s>
+          <ExcelButton orderData={orderData} />
           <Dropdown className="me-2">
             <Dropdown.Toggle id="dropdown-autoclose-true" variant="" className="btn-outline-secondary btn-sm gap-1 d-flex align-items-center">
               {selectedCategory}
