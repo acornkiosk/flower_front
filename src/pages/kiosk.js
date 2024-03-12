@@ -32,7 +32,6 @@ function Kiosk() {
   /** 웹소켓 참조값을 담을 필드 */
   let ws;
   ws = useSelector((state) => state.ws)
-
   const connect = () => {
     /** 로그인 이후 사용자가 웹브라우저 새로고침한 이후 */
     if (ws == null) { console.log("키오스크 관리 : 웹소켓 객체 => 없음") }

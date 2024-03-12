@@ -14,7 +14,7 @@ export default function Order() {
   const [data, setData] = useState([])
   /** 디테일 모달을 통해 정보를 처리했을 경우 */
   const [deleteModal, setDeleteModal] = useState({
-    target:0
+    target: 0
   })
   /** 웹소켓 참조값을 담을 필드 */
   let ws
@@ -27,16 +27,12 @@ export default function Order() {
        * index.js 에 생성 했음에도 새로고침 이후 state 가 사라짐
        * 또 객체를 호출하는 중, useRef 도 잘 되는 건지도 모르겠음
        */
-      ws = new WebSocket("ws://localhost:9000/flower/ws/order")
+      ws = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/order")
       console.log("주문관리 : ws 생성 후 connect 동작")
-      orderMessage(ws)
-      orderPage(ws)
     }
-    else {
-      console.log("주문관리 : connect 동작")
-      orderMessage(ws)
-      orderPage(ws)
-    }
+    else console.log("주문관리 : connect 동작")
+    orderMessage(ws)
+    orderPage(ws)
   }
   const orderMessage = (socket) => {
     /** 손님 키오스크로부터 정보가 왔는 지 확인한다. */
@@ -45,7 +41,7 @@ export default function Order() {
         console.log("주문관리 : 웹소켓 주문 들어옴")
         var result = JSON.parse(msg.data);
         if (result.type === "UPDATE_ORDERS") refresh()
-      } else { console.log(msg) }
+      } else console.log(msg)
     }
   }
   const orderPage = (socket) => {
@@ -56,6 +52,7 @@ export default function Order() {
   }
   /** 화면 호출시 */
   useEffect(() => {
+    refresh()
     connect()
   }, [])
 
@@ -86,11 +83,8 @@ export default function Order() {
       })
       .catch(error => {
         console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
-        console.log(error)
-  
       })
   }
-
   return (
     <div>
       <h1>주문 관리</h1>
@@ -99,14 +93,14 @@ export default function Order() {
           <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {Object.keys(orders).map(key =>
               <Col key={key}>
-                <OrderItem orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal}/>
+                <OrderItem orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} />
               </Col>
             )}
           </Row>
         </Container>
       </div>
       {/** 주의 : refresh={refresh()} => 무한요청 원인!! */}
-      <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal}/>
+      <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal} />
     </div>
   )
 }
