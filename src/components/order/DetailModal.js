@@ -1,7 +1,6 @@
 import axios from "axios"
 import React from "react"
 import { Button, CloseButton, Col, Modal, Row } from "react-bootstrap"
-import ConvertOptions from "./util"
 import style from "./style"
 
 export default function DetailModal(props) {
@@ -61,7 +60,7 @@ export default function DetailModal(props) {
             <Row className="mb-3 ms-3">
               <Col>
                 <Row className="text" style={{ fontSize: '1.5rem' }}>{item.menu_name} X {item.menu_count}</Row>
-                <Row className="text" style={{ fontSize: '1.2rem', color: 'darkred' }}>{ConvertOptions(item.options)}</Row>
+                <Row className="text" style={{ fontSize: '1.2rem', color: 'darkred' }}>{item.options}</Row>
               </Col>
               <Col className="text" style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>주문 시간 : {item.regdate}</Col>
             </Row>
