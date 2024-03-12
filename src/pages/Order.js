@@ -43,7 +43,9 @@ export default function Order() {
       if (msg != null) {
         var result = JSON.parse(msg.data);
         if (result.type === "UPDATE_ORDERS") refresh()
-      } else console.log(msg)
+      } else {
+        console.log("주문관리: 주문메시지가 안보임")
+      }
     }
   }
   const orderPage = (socket) => {
@@ -54,12 +56,9 @@ export default function Order() {
   /** 현 화면에서 새로고침시 대응 */
   useEffect(() => {
     refresh()
-  }, [ws])
-  /** 화면 접속시 호출 메서드 */
-  useEffect(() => {
-    refresh()
     connect()
-  }, [])
+  }, [ws])
+
 
   const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
