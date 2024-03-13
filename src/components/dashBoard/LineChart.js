@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export default class Example extends PureComponent {
   static demoUrl = 'https://codesandbox.io/s/simple-line-chart-kec3v';
-
   constructor(props) {
     super(props);
     this.state = {
@@ -11,32 +10,25 @@ export default class Example extends PureComponent {
       data: [],
     };
   }
-
   componentDidUpdate(prevProps) {
     if (this.props.orderData !== prevProps.orderData) {
       console.log(this.props.orderData);
     }
   }
-
   render() {
-    const { orderData } = this.props; // 주문 데이터 가져오기
-
-
-
+    const { orderData, dayOfMonth } = this.props; // 주문 데이터 가져오기
     // 현재 날짜를 기준으로 dayOfMonth에 따른 날짜 배열 생성
     let datesToShow = [];
     const currentDate = new Date();
-
-
-    switch (this.props.dayOfMonth) {
+    switch (dayOfMonth) {
       case 1:
         // 당일 기준 00시를 설정
         const today = new Date(currentDate);
-        today.setHours(0, 0, 0, 0); 
+        today.setHours(0, 0, 0, 0);
         for (let i = 0; i < 10; i++) {
-        const date = new Date(currentDate.getTime() - i * 60 * 60 * 1000);
-          if (date >= today){ // 00시 보다 큰 data만 출력 , 즉 오늘 하루만 확인하게 끔 한다
-              datesToShow.push(date);
+          const date = new Date(currentDate.getTime() - i * 60 * 60 * 1000);
+          if (date >= today) { // 00시 보다 큰 data만 출력 , 즉 오늘 하루만 확인하게 끔 한다
+            datesToShow.push(date);
           }
         }
         break;
@@ -57,20 +49,19 @@ export default class Example extends PureComponent {
       default:
         break;
     }
-
     // 주문 데이터와 매칭되는 날짜의 가격과 수량을 가져와 데이터 배열 생성
     const chartData = datesToShow.map(date => {
       // 해당 날짜에 대한 모든 주문 찾기
       const matchedOrders = orderData.filter(order => {
         const orderDate = new Date(order.regdate);
-        if(this.props.dayOfMonth===1){
+        if (dayOfMonth === 1) {
           return (
             orderDate.getDate() === date.getDate() &&
             orderDate.getMonth() + 1 === date.getMonth() + 1 &&
             orderDate.getFullYear() === date.getFullYear() &&
-            orderDate.getHours() === date.getHours() 
+            orderDate.getHours() === date.getHours()
           );
-        }else{
+        } else {
           return (
             orderDate.getDate() === date.getDate() &&
             orderDate.getMonth() + 1 === date.getMonth() + 1 &&
@@ -78,27 +69,20 @@ export default class Example extends PureComponent {
           );
         }
       });
-
       // 해당 날짜의 주문들의 가격과 수량을 곱한 값을 합산
       const totalPrice = matchedOrders.reduce((total, order) => total + (order.menu_price * order.menu_count), 0);
-    
-
-      if(this.props.dayOfMonth===1){
+      if (dayOfMonth === 1) {
         return {
           name: `${date.getHours()}시`,
           price: totalPrice,
-         
         };
-      }else{
+      } else {
         return {
           name: `${date.getMonth() + 1}월 ${date.getDate()}일`,
           price: totalPrice,
-       
         };
       }
-    
     });
-
     return (
       <ResponsiveContainer width="100%" height="50%">
         <h3>매출</h3>
@@ -114,7 +98,6 @@ export default class Example extends PureComponent {
           <Tooltip />
           <Legend />
           <Line type="monotone" dataKey="price" stroke="#82ca9d" />
-          
         </LineChart>
       </ResponsiveContainer>
     );
