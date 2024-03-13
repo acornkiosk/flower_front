@@ -72,7 +72,7 @@ export default class Example extends PureComponent {
         }
       });
       // 해당 날짜의 주문들의 가격과 수량을 곱한 값을 합산
-      const totalPrice = matchedOrders.reduce((total, order) => total + (order.menu_price * order.menu_count), 0);
+      const totalPrice = matchedOrders.reduce((total, order) => total + (order.total_price * order.menu_count), 0);
       if (dayOfMonth === 1) {
         return {
           name: `${date.getHours()}시`,

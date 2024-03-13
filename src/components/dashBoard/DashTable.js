@@ -52,7 +52,7 @@ export default function DashTable(props) {
                   <td>{item.menu_name}</td>
                   <td>{item.options_name}</td>
                   <td>{item.menu_count}</td>
-                  <td>{item.menu_price}</td>
+                  <td>{item.total_price}</td>
                   <td>{item.regdate}</td>
                 </tr>
               )
