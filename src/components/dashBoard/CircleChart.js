@@ -21,6 +21,7 @@ export default class CircleChart extends PureComponent {
     super(props);
     this.state = {
       data: [],
+      isLoading:true,
       dayOfMonth: props.dayOfMonth,
       categoryCode: props.categoryCode,
     };
@@ -35,18 +36,20 @@ export default class CircleChart extends PureComponent {
     }
   }
   fetchData(dayOfMonth, categoryCode) {
+    // 데이터를 로딩 중임을 표시
+    this.setState({ isLoading: true });
     axios.post("/api/order/list", { order_id: -1, dayOfMonth: dayOfMonth, category_id: categoryCode })
       .then(res => {
         const responseData = res.data.list;
         // 중복된 이름을 찾아 가격을 합산하여 새로운 데이터 생성
         const mergedData = this.mergeDuplicateNames(responseData);
-        this.setState({ data: mergedData });
+        this.setState({ data: mergedData, isLoading: false });
       })
       .catch(error => {
         const status = error.response.data.status;
         if (status === "BAD_REQUEST") {
           // 데이터가 없을 때 실행할 로직 
-          this.setState({ data: [] });
+          this.setState({ data: [], isLoading: false });
         }
       });
   }
@@ -72,7 +75,8 @@ export default class CircleChart extends PureComponent {
     const { data } = this.state;
     return (
       <ResponsiveContainer width="100%" height="80%">
-        {data.length > 0 && (
+        {this.state.isLoading ?  (<div>로딩이미지 넣어줭</div>):( 
+        data.length > 0 ? (
           <>
             <h3>{this.props.type} 매출</h3>
             <PieChart width={200} height={200}>
@@ -93,6 +97,7 @@ export default class CircleChart extends PureComponent {
               <Tooltip />
             </PieChart>
           </>
+        ):<p>{this.props.type} 매출 없음</p>
         )}
       </ResponsiveContainer>
     );

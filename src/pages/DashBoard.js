@@ -13,7 +13,8 @@ export default function DashBoard() {
   const [selectedCategory, setSelectedCategory] = useState("전체")
   const [categoryCode, setCategoryCode] = useState(0)
   const [dateCode, setDateCode] = useState(1)
-  const [orderData, setorderData] = useState([])
+  const [orderData, setOrderData] = useState([])
+  const [loading, setLoading] = useState(false); 
   //드롭다운을 누를때 텍스트 변경함수
   function changeDate(text) {
     setSelectedDate(text)
@@ -22,16 +23,20 @@ export default function DashBoard() {
     setSelectedCategory(text)
   }
   const refresh = (dayOfMonth, category_id) => {
+    setLoading(true)
     axios.post("/api/order/list", { order_id: -1, dayOfMonth: dayOfMonth, category_id: category_id })
       .then(res => {
-        setorderData(res.data.list)
+        setOrderData(res.data.list)
       })
       .catch(error => {
         const status = error.response.data.status
         if (status === "BAD_REQUEST") {
-          setorderData([])
+          setOrderData([])
         }
       })
+      .finally(() => {
+        setLoading(false); 
+      });
   }
   useEffect(() => {
     refresh(dateCode, categoryCode)
@@ -41,9 +46,12 @@ export default function DashBoard() {
     return (
       <>
         <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+        {loading ? ( 
+            <p>로딩중이미지 넣어줭</p>
+          ) : (
         <Chart orderData={orderData} dayOfMonth={dateCode} category_id={categoryCode} />
+        )}
         <br />
-
         <hr />
         <div style={{ width: '100%', height: '50vh' }}>
           <Row>
@@ -61,8 +69,12 @@ export default function DashBoard() {
             </Col>
           </Row>
           <hr />
+          {loading ? ( 
+            <p>로딩중이미지 넣어줭</p>
+          ) : (
           <DashTable selectedDate={selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
-        </div>
+          )}
+          </div>
       </>
     )
   }
