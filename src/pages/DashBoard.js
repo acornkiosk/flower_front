@@ -1,11 +1,11 @@
-import Chart from "../components/dashBoard/LineChart";
-import Header from "../components/dashBoard/Header";
-import CircleChart from "../components/dashBoard/CircleChart";
-import { Col, Row } from "react-bootstrap";
-import DashTable from "../components/dashBoard/DashTable";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import CircleChart from "../components/dashBoard/CircleChart";
+import DashTable from "../components/dashBoard/DashTable";
+import Header from "../components/dashBoard/Header";
+import Chart from "../components/dashBoard/LineChart";
 import Error from "./Error";
 
 export default function DashBoard() {
@@ -36,8 +36,6 @@ export default function DashBoard() {
   useEffect(() => {
     refresh(dateCode, categoryCode)
   }, [dateCode, categoryCode])
-
-
   const role = useSelector(state => state.role)
   if (role.includes("4001")) {
     return (
@@ -45,7 +43,6 @@ export default function DashBoard() {
         <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
         <Chart orderData={orderData} dayOfMonth={dateCode} category_id={categoryCode} />
         <br />
-
         <hr />
         <div style={{ width: '100%', height: '50vh' }}>
           <Row>
