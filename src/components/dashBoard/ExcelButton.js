@@ -5,7 +5,7 @@ export default function ExcelButton( { orderData } ) {
   const data = orderData ? orderData.map(item => ({
     name: item.menu_name,
     category: item.category_name,
-    options: item.options,
+    options: item.options_name,
     price: item.menu_price,
     regdate: item.regdate
   })) : [];
