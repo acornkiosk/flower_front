@@ -39,12 +39,11 @@ function App() {
   useEffect(() => {
     /** 1차 웹브라우저 새로고침 대응 */
     if (ws == null || ws === undefined) {
-      console.log("app.js: ws 객체 dispatch 중")
+      console.log("App.js: ws 객체 dispatch 중 "+ ws.readyState)
       const action = { type: "SET_WEBSOCKET" }
       dispatch(action)
     }else{
-      console.log("app.js 에 ws가 잘 건너왔다!")
-      console.log(ws)
+      console.log("웹소켓 컨넥트 (App.js): " + ws.readyState)  
       // connect(ws)
     }
   }, [ws])
