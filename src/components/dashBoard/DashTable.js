@@ -50,7 +50,7 @@ export default function DashTable(props) {
                   <td>{item.order_id}</td>
                   <td>{item.category_name}</td>
                   <td>{item.menu_name}</td>
-                  <td>{item.options}</td>
+                  <td>{item.options_name}</td>
                   <td>{item.menu_count}</td>
                   <td>{item.menu_price}</td>
                   <td>{item.regdate}</td>
