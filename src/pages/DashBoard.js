@@ -1,10 +1,12 @@
-import Chart from "../components/dashBoard/LineChart";
-import Header from "../components/dashBoard/Header";
-import CircleChart from "../components/dashBoard/CircleChart";
-import { Col, Row } from "react-bootstrap";
-import DashTable from "../components/dashBoard/DashTable";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import CircleChart from "../components/dashBoard/CircleChart";
+import DashTable from "../components/dashBoard/DashTable";
+import Header from "../components/dashBoard/Header";
+import Chart from "../components/dashBoard/LineChart";
+import Error from "./Error";
 
 export default function DashBoard() {
   const [selectedDate, setSelectedDate] = useState("오늘")
@@ -34,30 +36,40 @@ export default function DashBoard() {
   useEffect(() => {
     refresh(dateCode, categoryCode)
   }, [dateCode, categoryCode])
-  return (
-    <>
-      <Header selectedDate={selectedDate} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
-      <Chart />
-      <br />
-      <hr />
-      <div style={{ width: '100%', height: '50vh' }}>
-        <Row>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={0} type={"전체"} />
-          </Col>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={1001} type={"한송이"} />
-          </Col>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={1002} type={"꽃다발"} />
-          </Col>
-          <Col>
-            <CircleChart dayOfMonth={dateCode} categoryCode={1003} type={"바구니"} />
-          </Col>
-        </Row>
+  const role = useSelector(state => state.role)
+  if (role.includes("4001")) {
+    return (
+      <>
+        <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+        <Chart orderData={orderData} dayOfMonth={dateCode} category_id={categoryCode} />
+        <br />
+
         <hr />
-        <DashTable selectedDate={selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
-      </div>
-    </>
-  )
+        <div style={{ width: '100%', height: '50vh' }}>
+          <Row>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={0} type={"전체"} />
+            </Col>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={1001} type={"한송이"} />
+            </Col>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={1002} type={"꽃다발"} />
+            </Col>
+            <Col>
+              <CircleChart dayOfMonth={dateCode} categoryCode={1003} type={"바구니"} />
+            </Col>
+          </Row>
+          <hr />
+          <DashTable selectedDate={selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+        </div>
+      </>
+    )
+  }
+  else {
+    return (
+      <Error />
+    )
+  }
+
 }
