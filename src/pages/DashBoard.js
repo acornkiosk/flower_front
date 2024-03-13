@@ -43,6 +43,7 @@ export default function DashBoard() {
         <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
         <Chart orderData={orderData} dayOfMonth={dateCode} category_id={categoryCode} />
         <br />
+
         <hr />
         <div style={{ width: '100%', height: '50vh' }}>
           <Row>

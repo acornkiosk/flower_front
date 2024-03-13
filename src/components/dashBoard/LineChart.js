@@ -24,11 +24,13 @@ export default class Example extends PureComponent {
       case 1:
         // 당일 기준 00시를 설정
         const today = new Date(currentDate);
-        today.setHours(0, 0, 0, 0);
-        for (let i = 0; i < 10; i++) {
-          const date = new Date(currentDate.getTime() - i * 60 * 60 * 1000);
-          if (date >= today) { // 00시 보다 큰 data만 출력 , 즉 오늘 하루만 확인하게 끔 한다
-            datesToShow.push(date);
+
+        today.setHours(0, 0, 0, 0); 
+        for (let i = 0; i < 24; i++) {
+        const date = new Date(currentDate.getTime() - i * 60 * 60 * 1000);
+          if (date >= today){ // 00시 보다 큰 data만 출력 , 즉 00시 이후 부터 현재를 기준으로 1시간단위로 확인
+              datesToShow.push(date);
+
           }
         }
         break;
