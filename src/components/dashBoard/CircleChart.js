@@ -55,15 +55,15 @@ export default class CircleChart extends PureComponent {
     const mergedData = [];
     const nameMap = new Map();
     data.forEach((item) => {
-      const { menu_name, menu_price } = item;
+      const { menu_name, total_price } = item;
       if (nameMap.has(menu_name)) {
         // 이미 해당 이름이 있는 경우, 가격을 더해줍니다.
         const index = nameMap.get(menu_name);
-        mergedData[index].value += menu_price;
+        mergedData[index].value += total_price;
       } else {
         // 새로운 이름인 경우, 맵에 이름을 추가하고 데이터를 병합된 데이터 배열에 넣습니다.
         nameMap.set(menu_name, mergedData.length);
-        mergedData.push({ name: menu_name, value: menu_price });
+        mergedData.push({ name: menu_name, value: total_price });
       }
     });
     return mergedData;
@@ -75,7 +75,7 @@ export default class CircleChart extends PureComponent {
         {data.length > 0 && (
           <>
             <h3>{this.props.type} 매출</h3>
-            <PieChart width={400} height={400}>
+            <PieChart width={200} height={200}>
               <Pie
                 data={data}
                 cx="50%"
