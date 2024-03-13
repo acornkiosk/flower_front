@@ -55,7 +55,7 @@ function App() {
               <Route path='/kiosk' Component={Kiosk} />
               <Route path='/order' Component={Order} />
               <Route path='/user' Component={User} />
-              <Route path='/menu/*' Component={Menu} />
+              <Route path='/menu' Component={Menu} />
               <Route path='/login' Component={Login}/>
               <Route path='/owner' Component={OwnerMange} />
               <Route path='/dash' Component={DashBoard} />
