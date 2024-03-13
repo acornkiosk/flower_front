@@ -65,7 +65,7 @@ export default function OwnerMange() {
                             ownerlist.map((item) => <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.userName}</td>
-                                <td>{item.rank == 3002 && "super"}</td>
+                                <td>{item.rank == 3002 && "owner"}</td>
                                 <td>{item.role}</td>
                                 <td>{item.regdate}</td>
                                 <td>

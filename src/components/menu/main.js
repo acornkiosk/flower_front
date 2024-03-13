@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom';
 import CategoryBtn from './categoryBtn';
 import WarningModal from './WarningModal';
+import { useDispatch } from 'react-redux';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
@@ -63,9 +64,12 @@ function Main() {
   const handleCategoryChange = (item) => {
     setCategoryNum(item)
   };
+  const dispatch = useDispatch()
   /** 메뉴 수정 폼으로 가기 */
   const goToUpdateMenu = (MenuId) => {
-    navigate(`/menu/updateMenu/${MenuId}`)
+    navigate(`/menu/updateMenu`)
+    dispatch({type:"SELECT_MENU",payload:MenuId})
+
   }
   /** 메뉴등록 폼으로가기 */
   const goToAddMenu = () => {
