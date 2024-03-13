@@ -13,10 +13,6 @@ import User from './pages/User';
 import Kiosk from './pages/kiosk';
 import Login from './pages/login';
 import Menu from './pages/menu';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Toast from 'react-bootstrap/Toast';
 
 function App() {
   /** 주문정보 들어오면 바로 Order.js 로 신호 전달하기 */
