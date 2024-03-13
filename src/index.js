@@ -73,8 +73,9 @@ const connect = () => {
     }
     /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
     ws.onerror = (error) => { 
-      console.log("index.js : 웹소켓 에러 "+error)
-      console.log("웹소켓 컨넥트 : " + ws.readyState)  
+      console.log("웹소켓 컨넥트 : " + ws.readyState) 
+      console.log("index.js : 웹소켓 에러 원인(밑에)")
+      console.log(error) 
     }
     /** 커넥션 닫기 응답받는 코드 */
     ws.close = (res) => {
@@ -82,6 +83,18 @@ const connect = () => {
       console.log("사유코드: "+res.code)
       console.log("사유내용: "+res.reason)
       console.log("웹소켓 컨넥트 : " + ws.readyState)  
+      /** 
+       * 새로운 이슈 확인
+       * 
+       * 1. 로그아웃하더라도 웹브라우저 새로고침을 하지 않으면 웹소켓 세션 초기화 불가
+       * 의도치 않게 소켓이 끊기더라도 서버에서 알아채기 힘든 구조이며
+       * 서로 연결된 줄 알고 아무런 조치를 안하고 있음
+       * 
+       * 2. 어떠한 사유로 에러가 생기고 끊기긴 함
+       * 근데 log 를 늦게 달아서 아직 원인 못찾음
+       * 자연스럽게 끊을 때와 불가피하게 끊긴 경우에 따라
+       * 대응 로직을 구현해야함 
+       */
     }
   }
   /**
