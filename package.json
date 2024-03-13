@@ -55,6 +55,7 @@
   },
   "proxy": "http://localhost:9000/flower",
   "__proxy": "http://flower.onleave.co.kr:9000/flower",
+
   "devDependencies": {
     "cross-env": "^7.0.3"
   }

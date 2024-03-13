@@ -1,19 +1,21 @@
 import { CSVLink } from "react-csv"
 
-export default function ExcelButton() {
+export default function ExcelButton( { orderData } ) {
+
+  const data = orderData ? orderData.map(item => ({
+    name: item.menu_name,
+    category: item.category_name,
+    options: item.options,
+    price: item.menu_price,
+    regdate: item.regdate
+  })) : [];
+
   const headers = [
     { label: "제품명", key: "name" },
     { label: "카테고리", key: "category" },
     { label: "옵션", key: "options" },
     { label: "가격", key: "price" },
     { label: "판매 시간", key: "regdate" }
-  ]
-  const data = [
-    { name: "장미", category: "한송이", options: "투명 포장지, 곰인형", price: "15000", regdate: "2024년 03월 06일 23:53" },
-    { name: "장미", category: "한송이", options: "투명 포장지, 곰인형", price: "15000", regdate: "2024년 03월 06일 23:53" },
-    { name: "장미", category: "한송이", options: "투명 포장지, 곰인형", price: "15000", regdate: "2024년 03월 06일 23:53" },
-    { name: "장미", category: "한송이", options: "투명 포장지, 곰인형", price: "15000", regdate: "2024년 03월 06일 23:53" },
-    { name: "장미", category: "한송이", options: "투명 포장지, 곰인형", price: "15000", regdate: "2024년 03월 06일 23:53" }
   ]
   return (
     <>

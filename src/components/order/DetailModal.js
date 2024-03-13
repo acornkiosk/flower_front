@@ -1,7 +1,7 @@
 import axios from "axios"
 import React from "react"
 import { Button, CloseButton, Col, Modal, Row } from "react-bootstrap"
-import ConvertOptions from "./util"
+import style from "./style"
 
 export default function DetailModal(props) {
   let order_id
@@ -41,34 +41,35 @@ export default function DetailModal(props) {
       show={show}
       size="lg"
       centered
+      style={style.customModal}
     >
-      <Modal.Header className="d-flex">
-        <Modal.Title className="flex-fill" >
+      <Modal.Header className="d-flex" style={style.customModalHeader}>
+        <Modal.Title className="flex-fill">
           <Row className="justify-content-between">
             <Col>{order_id}번 주문 내역</Col>
-            <Col>키오스크 : {kiosk_id}번</Col>
+            <Col className="text-end ms-auto">키오스크 : {kiosk_id}번</Col>
             <Col className="text-end"><CloseButton onClick={() => {
-              setShowModal(false)
+              setShowModal(false);
             }}></CloseButton></Col>
           </Row>
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={style.customModalBody}>
         {data.map(item =>
           <React.Fragment key={item.order_id}>
             <Row className="mb-3 ms-3">
               <Col>
-                <Row>{item.menu_name} X {item.menu_count}</Row>
-                <Row>{ConvertOptions(item.options)}</Row>
+                <Row className="text" style={{ fontSize: '1.5rem' }}>{item.menu_name} X {item.menu_count}</Row>
+                <Row className="text" style={{ fontSize: '1.2rem', color: 'darkred' }}>{item.options}</Row>
               </Col>
-              <Col>주문 시간 : {item.regdate}</Col>
+              <Col className="text" style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>주문 시간 : {item.regdate}</Col>
             </Row>
           </React.Fragment>
         )}
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={onCompleted}>완료</Button>
-        <Button onClick={onDelete}>주문 취소</Button>
+      <Modal.Footer style={style.customModalFooter}>
+        <Button style={style.customModalFooterPrimaryBtn} onClick={onCompleted}>완료</Button>
+        <Button style={style.customModalFooterDangerBtn} onClick={onDelete}>주문 취소</Button>
       </Modal.Footer>
     </Modal>
   );

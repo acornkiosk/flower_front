@@ -33,19 +33,16 @@ const Sidebar = () => {
       , 4003: role.includes('4003')
       , 4004: role.includes('4004')
     })
+    console.log(roleState)
   }, [isLogin])
   const [activeMenu, setActiveMenu] = useState('');
   const toggleAccordion = (menuName) => {
     setActiveMenu(activeMenu === menuName ? '' : menuName);
   };
   const activeStyle = ({ isActive, isPending }) => {
-    if (isPending) {
-      return "pending";
-    } else if (isActive) {
-      return "activeClicked";
-    } else {
-      return "";
-    }
+    if (isPending) return "pending";
+    else if (isActive) return "activeClicked";
+    else return "";
   };
   const navigate = useNavigate();
   const home = () => {
@@ -144,5 +141,6 @@ const Sidebar = () => {
     </div>
   );
 };
+
 
 export default Sidebar;
