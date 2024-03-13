@@ -32,6 +32,14 @@ const style = {
     customModalFooterDangerBtn: {
       backgroundColor: '#dc3545',
       borderColor: '#dc3545'
+    },
+
+    // 주문 알림 메시지
+    orderMessageToast: {
+      /** 부모객체(div참고) 기준으로 좌표를 찍는다. */
+      position: 'absolute',
+      /** UI상으로 묘하게 가운데처럼 보이는 자리 */
+			left: '45%'
     }
   };
   
