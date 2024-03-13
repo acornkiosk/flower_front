@@ -31,6 +31,7 @@ function Kiosk() {
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
   const role = useSelector(state => state.role)
+  /** 웹소켓 메시지 전달함수 */
   let ws = useSelector((state) => state.ws)
   const send = () => {
     var info = { type: "SET_KIOSK" }

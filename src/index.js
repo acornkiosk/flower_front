@@ -67,14 +67,21 @@ const connect = () => {
     /** 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결 */
     ws = new WebSocket("ws://localhost:9000/flower/ws/order")
     /** 연결에 성공했을 경우 동작하는 메서드 */
-    ws.onopen = () => { console.log("index.js : 실시간 화면연동 시작(웹소켓)") }
+    ws.onopen = () => { 
+      console.log("index.js : 실시간 화면연동 시작(웹소켓)")
+      console.log("웹소켓 컨넥트 : " + ws.readyState)  
+    }
     /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
-    ws.onerror = (error) => { console.log("index.js : 웹소켓 에러 "+error) }
+    ws.onerror = (error) => { 
+      console.log("index.js : 웹소켓 에러 "+error)
+      console.log("웹소켓 컨넥트 : " + ws.readyState)  
+    }
     /** 커넥션 닫기 응답받는 코드 */
     ws.close = (res) => {
       console.log("웹소켓이 종료되었습니다.")
       console.log("사유코드: "+res.code)
       console.log("사유내용: "+res.reason)
+      console.log("웹소켓 컨넥트 : " + ws.readyState)  
     }
   }
   /**
@@ -84,7 +91,6 @@ const connect = () => {
   * 2 – “CLOSING”: 웹소켓 커넥션 종료 중
   * 3 – “CLOSED”: 웹소켓 커넥션이 종료됨
   */
-  console.log("웹소켓 상태 : " + ws.readyState) 
   return ws
 }
 const initialstate = {

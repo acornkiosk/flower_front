@@ -13,8 +13,16 @@ import User from './pages/User';
 import Kiosk from './pages/kiosk';
 import Login from './pages/login';
 import Menu from './pages/menu';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Toast from 'react-bootstrap/Toast';
 
 function App() {
+  /** 주문정보 들어오면 바로 Order.js 로 신호 전달하기 */
+  const [isOrdered, setIsOrdered] = useState(false)
+  /** 주문왔을 때 띄울 toast */
+  const [toast, setToast] = useState(false)
   const dispatch = useDispatch()
   useEffect(() => {
     axios.post("/api/common/child", { code_id: 0 })
@@ -31,16 +39,33 @@ function App() {
   let ws = useSelector((state) => state.ws)
   /** 화면 실행시 */
   useEffect(() => {
-    /** 1차 웹브라우저 새로고침 대응 */
+    /** 웹브라우저 새로고침 대응 */
     if (ws == null || ws === undefined) {
-      console.log("app.js: ws 객체 dispatch 중")
+      console.log("App.js: ws 객체 dispatch 중 ")
       const action = { type: "SET_WEBSOCKET" }
       dispatch(action)
     }else{
-      console.log("app.js 에 ws가 잘 건너왔다!")
-      console.log(ws)
+      /** 웹소켓 컨넥트 확인용 : ws.readyState */
+      console.log("웹소켓 컨넥트 (App.js): " + ws.readyState)  
+      connect(ws)
     }
   }, [ws])
+  /** 손님 키오스크로부터 오는 모든 메시지를 전달받음 */
+  const connect = (ws) => {
+    if(ws !== undefined){
+      ws.onmessage = (msg) => {
+        if (msg != null) {
+          var result = JSON.parse(msg.data);
+          if (result.type === "UPDATE_ORDERS_TOAST"){
+            console.log(result.type)
+          }else if (result.type === "UPDATE_ORDERS"){   
+            console.log(result.type)
+            setIsOrdered(true)
+          }
+        }
+      }
+    }
+  }
   return (
     <div className="d-flex">
       <div>
@@ -51,9 +76,9 @@ function App() {
         <div style={{ height: "100%" }}>
           <div style={{ height: "calc(100% - 64px)", padding: "20px 5%", overflowY: "scroll" }}>
             <Routes>
-              <Route path='/' Component={Home} />
+              <Route path='/' element={<Home isOrdered={isOrdered} setIsOrdered={setIsOrdered}/>} />
               <Route path='/kiosk' Component={Kiosk} />
-              <Route path='/order' Component={Order} />
+              <Route path='/order' element={<Order isOrdered={isOrdered} setIsOrdered={setIsOrdered}/>}/>
               <Route path='/user' Component={User} />
               <Route path='/menu/*' Component={Menu} />
               <Route path='/login' Component={Login}/>
@@ -68,3 +93,28 @@ function App() {
 }
 
 export default App;
+
+// function OrderToast() {
+
+//   return (
+//     <Row>
+//       <Col xs={6}>
+//         <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
+//           <Toast.Header>
+//             <img
+//               src="holder.js/20x20?text=%20"
+//               className="rounded me-2"
+//               alt=""
+//             />
+//             <strong className="me-auto">Bootstrap</strong>
+//             <small>11 mins ago</small>
+//           </Toast.Header>
+//           <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+//         </Toast>
+//       </Col>
+//       <Col xs={6}>
+//         <Button onClick={() => setShow(true)}>Show Toast</Button>
+//       </Col>
+//     </Row>
+//   );
+// }
