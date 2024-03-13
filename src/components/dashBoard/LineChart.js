@@ -6,13 +6,13 @@ export default class Example extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      orderData: props.orderData,
-      data: [],
+  
+      data: []
     };
   }
   componentDidUpdate(prevProps) {
     if (this.props.orderData !== prevProps.orderData) {
-      console.log(this.props.orderData);
+      console.log(this.state.orderData);
     }
   }
   render() {
