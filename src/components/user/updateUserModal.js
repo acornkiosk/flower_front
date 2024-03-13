@@ -90,6 +90,7 @@ export default function UpdateModal(props) {
         <Modal
             {...props}
             size="lg"
+            centered
             dialogClassName="modal-90w"
             aria-labelledby="example-custom-modal-styling-title"
         >
