@@ -69,15 +69,22 @@ const connect = () => {
     /** 연결에 성공했을 경우 동작하는 메서드 */
     ws.onopen = () => { console.log("index.js : 실시간 화면연동 시작(웹소켓)") }
     /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
-    ws.onerror = () => { console.log("index.js : 화면 연동이 원활하게 이루어지지 않고 있습니다. 재로그인 혹은 서버 확인이 필요합니다(웹소켓)") }
-    /** 연결이 끊겼을 때 동작하는 메서드 */
-    ws.onclose = () => {
-      console.log("웹소켓이 종료되어 3초 뒤에 다시 연결을 시도합니다.")
-      setTimeout(() => {
-        connect();
-      }, 3000)
+    ws.onerror = (error) => { console.log("index.js : 웹소켓 에러 "+error) }
+    /** 커넥션 닫기 응답받는 코드 */
+    ws.close = (res) => {
+      console.log("웹소켓이 종료되었습니다.")
+      console.log("사유코드: "+res.code)
+      console.log("사유내용: "+res.reason)
     }
   }
+  /**
+  * ws.readyState 숫자해석
+  * 0 – “CONNECTING”: 웹소켓 연결 중
+  * 1 – “OPEN”: 웹소켓 연결이 성립되고 통신 
+  * 2 – “CLOSING”: 웹소켓 커넥션 종료 중
+  * 3 – “CLOSED”: 웹소켓 커넥션이 종료됨
+  */
+  console.log("웹소켓 상태 : " + ws.readyState) 
   return ws
 }
 const initialstate = {
