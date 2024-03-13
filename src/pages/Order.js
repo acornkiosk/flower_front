@@ -12,7 +12,8 @@ import Error from "./Error"
 * 3. 주문완료 진행시 손님 키오스크에 알림표시, 번호표기 
 */
 
-export default function Order() {
+export default function Order({isOrdered, setIsOrdered}) {
+  
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
@@ -23,43 +24,12 @@ export default function Order() {
   const [deleteModal, setDeleteModal] = useState({
     target: 0
   })
-  const dispatch = useDispatch()
-  /** index.js 에서 생성한 웹소켓 함수를 이어서 사용하기 위함 */
-  let ws = useSelector((state) => state.ws)
-  const connect = () => {
-    /** 2차 웹브라우저 새로고침 대응 */
-    if (ws == null || ws === undefined) {
-      const action = { type: "SET_WEBSOCKET" }
-      dispatch(action)
-    } else {
-      orderMessage(ws)
-      orderPage(ws)
-    }
-  }
-  const orderMessage = (socket) => {
-    /** 손님 키오스크로부터 정보가 왔는 지 확인한다. */
-    socket.onmessage = (msg) => {
-      if (msg != null) {
-        var result = JSON.parse(msg.data);
-        if (result.type === "UPDATE_ORDERS") refresh()
-      } else {
-        console.log("주문관리: 주문메시지가 안보임")
-      }
-    }
-  }
-  const orderPage = (socket) => {
-    socket.onopen = () => {
-      refresh()
-    }
-  }
   /** 현 화면에서 새로고침시 대응 */
   useEffect(() => {
     refresh()
-    connect()
-  }, [ws])
+  }, [isOrdered])
 
-
-  const refresh = () => {
+  function refresh(){
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
     axios.post("/api/order/list", {})
       .then(res => {
@@ -77,6 +47,8 @@ export default function Order() {
           }
         })
         setOrders(updatedOrders)
+        /** 함수동작 후 주문알림 초기화 */
+        setIsOrdered(false)
       })
       .catch(error => {
         console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
