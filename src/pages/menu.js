@@ -12,7 +12,7 @@ export default function Menu() {
       <Routes path="/menu">
         <Route path="/" element={<Main />} />
         <Route path="/addMenu" element={<AddMenu />} />
-        <Route path="/updateMenu/:menuId" element={<UpdateMenu />} />
+        <Route path="/updateMenu" element={<UpdateMenu />} />
       </Routes>
     )
   }

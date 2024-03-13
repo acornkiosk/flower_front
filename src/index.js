@@ -99,7 +99,8 @@ const initialstate = {
   orders: [],
   isLogin,
   rank,
-  role,
+  role, 
+  selectedMenuId:0,
   ws: null // 웹소켓 요청 객체를 담는 변수(초기에는 null로 설정)
 }
 const reducer = (state = initialstate, action) => {
@@ -124,6 +125,11 @@ const reducer = (state = initialstate, action) => {
     newState = {
       ...state // 최초 초기화 이후 덮어쓰기
       , ws: connect() // 로그인 이후로 웹브라우저에서 새로고침할 경우를 대비함
+    }
+  }else if(action.type === "SELECT_MENU"){
+    newState = {
+      ...state,
+      selectedMenuId : action.payload
     }
   } else {
     newState = state

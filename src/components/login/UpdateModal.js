@@ -1,5 +1,6 @@
 import axios from "axios"
 import { Button, Col, Form, Modal, Row } from "react-bootstrap"
+import User from "../../pages/User"
 
 export default function UpdateModal(props) {
   const { item, setCurrentItem, refresh, setshow } = props
@@ -21,6 +22,7 @@ export default function UpdateModal(props) {
         console.log(error)
       })
   }
+  
   return (
     <Modal
       {...props}
@@ -35,10 +37,21 @@ export default function UpdateModal(props) {
       </Modal.Header>
       <Modal.Body>
         <Form.Group as={Row} className="mb-3">
-          <Form.Label column md="2"> 이름 </Form.Label>
-          <Col md="3"><Form.Control type='text' name='userName' onChange={handleChange} value={item.userName} /></Col>
-          <Form.Label column md="2"> 아이디 </Form.Label>
-          <Col md="3"><Form.Control type='text' name='id' value={item.id} readOnly /></Col>
+          <Form.Label column md="6"> 이름 : <strong> {item.userName} </strong></Form.Label>
+          <Form.Label column md="2"> 이름 변경:  </Form.Label>
+          <Col md="4"><Form.Control type='text' name='userName' onChange={handleChange}placeholder="이름 입력" /></Col>
+         </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+          <Form.Label column md="6"> 아이디 :<strong> {item.id} </strong></Form.Label>
+          <Form.Label column md="2"> 아이디 변경:  </Form.Label>
+          <Col md="4"><Form.Control type='text' name='newId'  onChange={handleChange} placeholder="아이디 입력"/></Col>
+       
+        </Form.Group>
+        <Form.Group as={Row} className="mb-6">
+          <Form.Label column md="6"> </Form.Label>
+          <Form.Label column md="2"> 비밀번호 변경:</Form.Label>
+          <Col md="4"><Form.Control type='text' name='password'  onChange={handleChange} placeholder="비밀번호 입력"/></Col>
+    
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>

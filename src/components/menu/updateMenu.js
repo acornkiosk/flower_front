@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 function UpdateMenu() {
@@ -19,7 +20,7 @@ function UpdateMenu() {
     const [previewImage, setPreviewImage] = useState(null)
     const [deleteImage, setDeleteImage] = useState(menuData.img_name)
     const fileInputRef = useRef(null);
-    const { menuId } = useParams();
+    const menuId = useSelector(state => state.selectedMenuId)
     const goToMenuMain = () => {
         navigate("/menu")
     };
