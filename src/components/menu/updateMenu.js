@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import WarningModal from "./WarningModal";
 
 function UpdateMenu() {
     const [category, setCategory] = useState([])
@@ -53,8 +54,16 @@ function UpdateMenu() {
         getMenuInfo(parseInt(menuId, 10))
         console.log(getViewImage)
     }, [])
-    const deleteMenu = () => {
-        axios.post("/api/menu/delete", { "id": menuData.id })
+
+    /** 삭제버튼 눌렀을 때 경고알림으로 사용할 변수 */
+    const [warning, setWarning] = useState({
+        menu_id: 0,
+        category_id: 0,
+        show: false
+    });
+
+    const deleteMenu = (id) => {
+        axios.post("/api/menu/delete", { "id": id })
             .then(res => {
                 goToMenuMain()
             })
@@ -211,10 +220,11 @@ function UpdateMenu() {
                     <div className="d-flex justify-content-center ">
                         <Button onClick={() => { navigate('/menu') }} style={{ marginRight: '15px' }}>취소</Button>
                         <Button variant="success" type="submit" style={{ marginRight: '15px' }} >수정</Button>
-                        <Button variant="btn btn-danger" onClick={deleteMenu}>삭제</Button>
+                        <Button variant="btn btn-danger" onClick={() => { setWarning({ menu_id: menuData.id,  show: true }) }}>삭제</Button>
                     </div>
                 </div>
             </Form>
+            <WarningModal show={warning.show} value_id={warning.menu_id} onHide={() => setWarning({ show: false })} deletemenu={deleteMenu}></WarningModal>
         </Container>
     )
 }
