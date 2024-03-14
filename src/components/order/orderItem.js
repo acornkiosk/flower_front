@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { Justify } from "react-bootstrap-icons";
+import ConvertOptions from "./Util";
 
 export default function OrderItem(props) {
   const { orders, list, id, setOrders, deleteModal, setShowModal, setData } = props
@@ -62,7 +63,7 @@ export default function OrderItem(props) {
                 <Col><Card.Text className="text-end">{item.menu_count}개</Card.Text></Col>
               </Row>
               <Row>
-                <Col><Card.Text>옵션 : {item.options}</Card.Text>  </Col>
+                <Col><Card.Text>옵션 : {ConvertOptions(item.options)}</Card.Text>  </Col>
               </Row>
             </div>
           )}
