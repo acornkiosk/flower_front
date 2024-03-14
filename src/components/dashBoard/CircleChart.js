@@ -11,7 +11,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   return (
     <>
       <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
+        {`${(percent * 100).toFixed(0)}% `}
       </text>
     </>
   );
@@ -92,7 +92,7 @@ export default class CircleChart extends PureComponent {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value, name, props) => [`${name}: ${value.toLocaleString()}원`, props]} />
             </PieChart>
           </>
         ):<p>{this.props.type} 매출 없음</p>}
