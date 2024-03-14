@@ -95,7 +95,23 @@ export default class CircleChart extends PureComponent {
               <Tooltip formatter={(value, name, props) => [`${name}: ${value.toLocaleString()}원`, props]} />
             </PieChart>
           </>
-        ):<p>{this.props.type} 매출 없음</p>}
+        ):
+        <>
+        <h3>{this.props.type} 매출 </h3>
+        <div className='d-flex justify-content-center align-items-center' style={{ width:"200px",height:"200px"}}>
+          <div className='d-flex justify-content-center align-items-center'
+          style={{ 
+            width:"160px",
+            height:"160px",
+            borderRadius:"100px",
+            backgroundColor:'#0088FE',
+            color:"white"
+            }}>
+            0%  
+          </div>
+        </div>
+        </>
+        }
       </ResponsiveContainer>
     );
   }
