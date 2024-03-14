@@ -9,11 +9,16 @@ export default function Menu() {
   const role = useSelector(state => state.role)
   if (role.includes("4002")) {
     return (
-      <Routes path="/menu">
-        <Route path="/" element={<Main />} />
-        <Route path="/addMenu" element={<AddMenu />} />
-        <Route path="/updateMenu" element={<UpdateMenu />} />
-      </Routes>
+      <>
+        <h1>메뉴관리</h1>
+        <hr />
+        <Routes path="/menu">
+          <Route path="/" element={<Main />} />
+          <Route path="/addMenu" element={<AddMenu />} />
+          <Route path="/updateMenu" element={<UpdateMenu />} />
+        </Routes>
+      </>
+
     )
   }
   else {
