@@ -10,8 +10,6 @@ export default function Menu() {
   if (role.includes("4002")) {
     return (
       <>
-        <h1>메뉴관리</h1>
-        <hr />
         <Routes path="/menu">
           <Route path="/" element={<Main />} />
           <Route path="/addMenu" element={<AddMenu />} />
