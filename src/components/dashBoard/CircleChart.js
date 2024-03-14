@@ -74,7 +74,6 @@ export default class CircleChart extends PureComponent {
     const { data } = this.state;
     return (
       <ResponsiveContainer width="100%" height="80%">
-        
         {data.length > 0 ? (
           <>
             <h3>{this.props.type} 매출</h3>
