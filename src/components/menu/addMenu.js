@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import 'animate.css';
 
 function AddMenu() {
     const [category, setCategory] = useState([])
@@ -61,36 +62,59 @@ function AddMenu() {
         }
     }
     return (
-        <Container>
-            <h1>메뉴 등록하기</h1>
-            <Form onSubmit={(e) => menuInput(e)} className="text-bg-secondary p-3 rounded">
-                <div className="d-flex justify-content-between">
+        
+        <div className="d-flex justify-content-center align-items-center " >
+            <div className="animate__animated animate__bounceInDown" style={{marginTop:"0",paddingTop:"0"}}>
+                <div className="d-flex justify-content-center">
+                <Image fluid src="/images/rope.svg"  style={{width:"30px",marginRight:"200px"}}/>
+                <h1>메뉴등록</h1>
+                <Image fluid src="/images/rope.svg"  style={{width:"30px",marginLeft:"200px"}}/>
+                </div>
+             
+            <Form onSubmit={(e) => menuInput(e)} className="text-bg-secondary p-3 rounded" 
+             style={{ 
+            backgroundImage: `url('/images/wood.jpg')`, 
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center',
+            width: '800px',
+             }}>
+            
+                <div className="d-flex justify-content-between" >
                     <div className="" style={{ width: '400px' }}>
-                        <Form.Group className="mb-3">
+                        <Form.Group className="mb-5">
                             <Form.Label >카테고리</Form.Label>
-                            <Form.Select name="category_id" >
+                            <Form.Select name="category_id"  style={{width:"160px"}}>
                                 <option >카테고리 선택</option>
                                 {category.map(item =>
                                     <option key={item.code_id} value={item.code_id}>{item.code_name}</option>
                                 )}
                             </Form.Select>
                         </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label >메뉴 이름</Form.Label>
-                            <Form.Control type="text" name="name" placeholder="메뉴이름" />
+
+                        <Form.Group className="mb-5 d-flex justify-content-between" >
+                            <div>
+                                <Form.Label >메뉴 이름</Form.Label>
+                                <Form.Control type="text" name="name" style={{width:"160px"}} placeholder="메뉴이름" />
+                            </div>
+                            <div>
+                                <Form.Label >가격</Form.Label>
+                                <InputGroup>
+                                <Form.Control type="text" name="price" style={{width:"160px"}} placeholder="가격" />
+                                <InputGroup.Text>원</InputGroup.Text>
+                                </InputGroup>
+                            </div>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label >가격</Form.Label>
-                            <Form.Control type="number" name="price" placeholder="가격" />
+                            
                         </Form.Group>
                         <Form.Group className="mb-3"></Form.Group>
-                        <Form.Group className="mb-3">
+                        <Form.Group className="mb-5">
                             <Form.Label >요약설명</Form.Label>
                             <Form.Control name="summary" placeholder="요약설명" />
                         </Form.Group>
                         <Form.Group className="mb-3"></Form.Group>
                     </div>
-                    <div className="d-flex justify-content-center mx-auto ">
+                    <div className="d-flex justify-content-center mx-auto " style={{paddingLeft:"16px"}}  >
                         <Form.Group className="mb-3">
                             <Form.Label >이미지 선택하기</Form.Label>
                             <div className="d-flex justify-content-center text-bg-light p-3">
@@ -113,14 +137,17 @@ function AddMenu() {
                     </div>
                 </div>
                 <div>
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3"  >
                         <Form.Label >상세설명</Form.Label>
                         <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" />
                     </Form.Group>
                     <Button type="submit" >등록</Button>
                 </div>
             </Form>
-        </Container>
+          
+            </div>
+        </div>
+        
     )
 }
 
