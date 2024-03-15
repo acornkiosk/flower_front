@@ -63,8 +63,8 @@ function AddMenu() {
     }
     return (
         
-        <div className="d-flex justify-content-center align-items-center " >
-            <div className="animate__animated animate__bounceInDown" style={{marginTop:"0",paddingTop:"0"}}>
+        <div className="d-flex justify-content-center align-items-center "  >
+            <div className="animate__animated animate__bounceInDown" >
                 <div className="d-flex justify-content-center">
                 <Image fluid src="/images/rope.svg"  style={{width:"30px",marginRight:"200px"}}/>
                 <h1>메뉴등록</h1>
@@ -79,9 +79,9 @@ function AddMenu() {
             width: '800px',
              }}>
             
-                <div className="d-flex justify-content-between" >
+                <div className="d-flex justify-content-between" style={{margin:"0"}}>
                     <div className="" style={{ width: '400px' }}>
-                        <Form.Group className="mb-5">
+                        <Form.Group className="mb-4">
                             <Form.Label >카테고리</Form.Label>
                             <Form.Select name="category_id"  style={{width:"160px"}}>
                                 <option >카테고리 선택</option>
@@ -91,7 +91,7 @@ function AddMenu() {
                             </Form.Select>
                         </Form.Group>
 
-                        <Form.Group className="mb-5 d-flex justify-content-between" >
+                        <Form.Group className="mb-4 d-flex justify-content-between" >
                             <div>
                                 <Form.Label >메뉴 이름</Form.Label>
                                 <Form.Control type="text" name="name" style={{width:"160px"}} placeholder="메뉴이름" />
@@ -104,15 +104,13 @@ function AddMenu() {
                                 </InputGroup>
                             </div>
                         </Form.Group>
-                        <Form.Group className="mb-3">
-                            
-                        </Form.Group>
-                        <Form.Group className="mb-3"></Form.Group>
-                        <Form.Group className="mb-5">
+                     
+                       
+                        <Form.Group className="mb-4">
                             <Form.Label >요약설명</Form.Label>
                             <Form.Control name="summary" placeholder="요약설명" />
                         </Form.Group>
-                        <Form.Group className="mb-3"></Form.Group>
+                     
                     </div>
                     <div className="d-flex justify-content-center mx-auto " style={{paddingLeft:"16px"}}  >
                         <Form.Group className="mb-3">
