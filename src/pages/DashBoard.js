@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Image, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import CircleChart from "../components/dashBoard/CircleChart";
 import DashTable from "../components/dashBoard/DashTable";
 import Header from "../components/dashBoard/Header";
 import Chart from "../components/dashBoard/LineChart";
 import Error from "./Error";
+
 
 export default function DashBoard() {
   const [selectedDate, setSelectedDate] = useState("오늘")
@@ -35,7 +36,10 @@ export default function DashBoard() {
         }
       })
       .finally(() => {
-        setLoading(false); 
+        // 로딩 상태를 2초 후에 false로 변경
+        setTimeout(() => {
+          setLoading(false);
+        },2000);
       });
   }
   useEffect(() => {
@@ -47,13 +51,19 @@ export default function DashBoard() {
       <>
         <Header selectedDate={selectedDate} orderData={orderData} changeDate={changeDate} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
         {loading ? ( 
-            <p>로딩중이미지 넣어줭</p>
+         
+               <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh", marginTop:"73.5px"}}>
+                <Image fluid src="/images/loading.gif"  style={{width:"500px"}}/>
+               </div>
+         
           ) : (
+            <>
         <Chart orderData={orderData} dayOfMonth={dateCode} category_id={categoryCode} />
-        )}
+       
         <br />
         <hr />
         <div style={{ width: '100%', height: '50vh' }}>
+      
           <Row>
             <Col>
               <CircleChart dayOfMonth={dateCode} categoryCode={0} type={"전체"} />
@@ -69,12 +79,11 @@ export default function DashBoard() {
             </Col>
           </Row>
           <hr />
-          {loading ? ( 
-            <p>로딩중이미지 넣어줭</p>
-          ) : (
+        
           <DashTable selectedDate={selectedDate} changeDate={changeDate} orderData={orderData} setDateCode={setDateCode} setCategoryCode={setCategoryCode} selectedCategory={selectedCategory} changeCategory={changeCategory} />
-          )}
+         
           </div>
+          </>)}
       </>
     )
   }

@@ -97,7 +97,7 @@ export default class Example extends PureComponent {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
+          <Tooltip formatter={(value, name, props) => [`${name}: ${value.toLocaleString()}원`, props]} />
           <Legend />
           <Line type="monotone" dataKey="price" stroke="#82ca9d" />
         </LineChart>

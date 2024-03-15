@@ -11,7 +11,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   return (
     <>
       <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
+        {`${(percent * 100).toFixed(0)}% `}
       </text>
     </>
   );
@@ -21,7 +21,6 @@ export default class CircleChart extends PureComponent {
     super(props);
     this.state = {
       data: [],
-      isLoading:true,
       dayOfMonth: props.dayOfMonth,
       categoryCode: props.categoryCode,
     };
@@ -43,13 +42,13 @@ export default class CircleChart extends PureComponent {
         const responseData = res.data.list;
         // 중복된 이름을 찾아 가격을 합산하여 새로운 데이터 생성
         const mergedData = this.mergeDuplicateNames(responseData);
-        this.setState({ data: mergedData, isLoading: false });
+        this.setState({ data: mergedData });
       })
       .catch(error => {
         const status = error.response.data.status;
         if (status === "BAD_REQUEST") {
           // 데이터가 없을 때 실행할 로직 
-          this.setState({ data: [], isLoading: false });
+          this.setState({ data: [] });
         }
       });
   }
@@ -75,8 +74,7 @@ export default class CircleChart extends PureComponent {
     const { data } = this.state;
     return (
       <ResponsiveContainer width="100%" height="80%">
-        {this.state.isLoading ?  (<div>로딩이미지 넣어줭</div>):( 
-        data.length > 0 ? (
+        {data.length > 0 ? (
           <>
             <h3>{this.props.type} 매출</h3>
             <PieChart width={200} height={200}>
@@ -94,11 +92,26 @@ export default class CircleChart extends PureComponent {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value, name, props) => [`${name}: ${value.toLocaleString()}원`, props]} />
             </PieChart>
           </>
-        ):<p>{this.props.type} 매출 없음</p>
-        )}
+        ):
+        <>
+        <h3>{this.props.type} 매출 </h3>
+        <div className='d-flex justify-content-center align-items-center' style={{ width:"200px",height:"200px"}}>
+          <div className='d-flex justify-content-center align-items-center'
+          style={{ 
+            width:"160px",
+            height:"160px",
+            borderRadius:"100px",
+            backgroundColor:'#0088FE',
+            color:"white"
+            }}>
+            0%  
+          </div>
+        </div>
+        </>
+        }
       </ResponsiveContainer>
     );
   }
