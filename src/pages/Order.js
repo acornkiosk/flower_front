@@ -13,8 +13,7 @@ import EmptyText from "../components/error/EmptyText"
 * 3. 주문완료 진행시 손님 키오스크에 알림표시, 번호표기 
 */
 
-export default function Order({isOrdered, setIsOrdered}) {
-  
+export default function Order() {
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
@@ -25,8 +24,6 @@ export default function Order({isOrdered, setIsOrdered}) {
   const [deleteModal, setDeleteModal] = useState({
     target: 0
   })
-<<<<<<< Updated upstream
-=======
   const dispatch = useDispatch()
   // 빈 화면 state
   const [isEmpty, setEmpty] = useState(false)
@@ -56,13 +53,17 @@ export default function Order({isOrdered, setIsOrdered}) {
       refresh()
     }
   }
->>>>>>> Stashed changes
   /** 현 화면에서 새로고침시 대응 */
   useEffect(() => {
     refresh()
-  }, [isOrdered])
+  }, [ws])
+  /** 화면 접속시 호출 메서드 */
+  useEffect(() => {
+    refresh()
+    connect()
+  }, [])
 
-  function refresh(){
+  const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
     axios.post("/api/order/list", {})
       .then(res => {
@@ -81,8 +82,6 @@ export default function Order({isOrdered, setIsOrdered}) {
           }
         })
         setOrders(updatedOrders)
-        /** 함수동작 후 주문알림 초기화 */
-        setIsOrdered(false)
       })
       .catch(error => {
         setEmpty(true)
@@ -106,7 +105,7 @@ export default function Order({isOrdered, setIsOrdered}) {
           </Container>
         </div>
         {/** 주의 : refresh={refresh()} => 무한요청 원인!! */}
-        { isEmpty && <EmptyText message={'주문이 없습니다'}/> }
+        { isEmpty && <EmptyText message={'주문이 없습니다.'}/> }
         <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal} />
       </div>
     )
