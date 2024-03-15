@@ -14,6 +14,7 @@ function Kiosk() {
     sortBy: null,
     sortOrder: 'asc'
   })
+  const [kioskLocation, setKioskLocation] = useState("");
   //추가모달 state
   const [addModalShow, setAddModalShow] = useState(false)
   //수정 모달 state
@@ -154,13 +155,23 @@ function Kiosk() {
     })
   }
   //input 값 변경시 location 업데이트
-  const handleChange = (event) => {
-    setLocation(event.target.value)
+  const handleChange = (e) => {
+    setLocation(e.target.value)
     setData({
       ...data,
-      location: event.target.value
+      location: e.target.value
     })
   }
+  const handleChange2 = (e) => {
+    setKioskLocation(e.target.value);
+  }; 
+  const combinedHandleChange = (e) => {
+    handleChange(e);
+    handleChange2(e);
+  };
+  
+  const isLocationValid = kioskLocation.trim().length >= 1 && kioskLocation.trim().length <= 20;
+
   //삭제 버튼 기능
   const deleteKiosk = () => {
     selectedKiosk.forEach(tmp => {
@@ -204,8 +215,8 @@ function Kiosk() {
             <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
           </Col>
         </Row>
-        <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} />
-        <UpdateModal updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} />
+        <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} combinedHandleChange={combinedHandleChange} isLocationValid={isLocationValid} location={location}/>
+        <UpdateModal addModalShow={addModalShow} updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} isLocationValid={isLocationValid} combinedHandleChange={combinedHandleChange}/>
         <Table striped bordered hover>
           <thead>
             <tr>
