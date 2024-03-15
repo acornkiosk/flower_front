@@ -13,7 +13,7 @@ import Error from "./Error"
 */
 
 export default function Order({isOrdered, setIsOrdered}) {
-  
+  const [orderCount, setOrderCount] = useState(0)
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
@@ -49,6 +49,8 @@ export default function Order({isOrdered, setIsOrdered}) {
         setOrders(updatedOrders)
         /** 함수동작 후 주문알림 초기화 */
         setIsOrdered(false)
+        /** 주문현황 개수 기입 */
+        let count = Object.keys(orders).length
       })
       .catch(error => {
         console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
