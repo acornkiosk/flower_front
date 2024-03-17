@@ -6,6 +6,7 @@ import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import WebSocketUtil from '../util/WebSocketUtil';
 
 function Login() {
   const cookies = new Cookies();
@@ -36,6 +37,8 @@ function Login() {
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
         alert(result.payload.sub + "님 로그인 했습니다.");
+         /** 웹소켓 연결시점 */
+         WebSocketUtil({power:true})
         //home으로 보내기
         navigate("/")
       })

@@ -31,12 +31,7 @@ function Kiosk() {
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
   const role = useSelector(state => state.role)
-  /** 웹소켓 메시지 전달함수 */
-  let ws = useSelector((state) => state.ws)
-  const send = () => {
-    var info = { type: "SET_KIOSK" }
-    ws.send(JSON.stringify(info))
-  }
+
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = []
@@ -125,7 +120,7 @@ function Kiosk() {
           })
       })
       /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
-      send(ws)
+      // send(updatedKiosk)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -138,7 +133,7 @@ function Kiosk() {
           })
       })
       /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
-      send(ws)
+      // send(updatedKiosk)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)

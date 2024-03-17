@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Header } from './NavBar.Style';
+import WebSocketUtil from '../../util/WebSocketUtil';
 
 const Navbar = () => {
   const userName = useSelector(state => state.userName)
@@ -26,6 +27,8 @@ const Navbar = () => {
       role: []
     }
     dispatch({ type: "SET_LOGIN", payload: data })
+    /** 웹소켓 종료하기 */
+    WebSocketUtil({power:false})
     navigate("/")
   }
 

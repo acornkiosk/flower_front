@@ -34,38 +34,6 @@ function App() {
       })
       .catch(error => console.log(error))
   }, [])
-  /** 웹소켓 참조값을 담을 필드 */
-  let ws = useSelector((state) => state.ws)
-  /** 화면 실행시 */
-  useEffect(() => {
-    /** 웹브라우저 새로고침 대응 */
-    if (ws === null || ws === undefined) {
-      console.log("App.js: ws 객체 dispatch 중 ")
-      const action = { type: "SET_WEBSOCKET" }
-      dispatch(action)
-    }else{
-      /** 웹소켓 컨넥트 확인용 : ws.readyState */
-      console.log("웹소켓 컨넥트 (App.js): " + ws.readyState)  
-      connect(ws)
-    }
-  }, [ws])
-  /** 손님 키오스크로부터 오는 모든 메시지를 전달받음 */
-  const connect = (ws) => {
-    if(ws !== undefined){
-      ws.onmessage = (msg) => {
-        if (msg != null) {
-          var result = JSON.parse(msg.data);
-          if (result.type === "UPDATE_ORDERS_TOAST"){
-            console.log(result.type)
-            setIsToast(true)
-          }else if (result.type === "UPDATE_ORDERS"){   
-            console.log(result.type)
-            setIsOrdered(true)
-          }
-        }
-      }
-    }
-  }
   return (
     <div className="d-flex">
       <div>
