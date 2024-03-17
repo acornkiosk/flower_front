@@ -143,6 +143,12 @@ function UpdateMenu() {
         const newValue = e.target.checked;
         setIsSold(newValue);
     };
+
+    const isFormValid = () => {
+        const { name, price, summary, description } = menuData;
+        return name && price && summary && description;
+    };
+
     const previewStyle = {
         "width": "200px",
         "height": "200px",
@@ -245,7 +251,7 @@ function UpdateMenu() {
                         </Form.Group>
                         <div className="d-flex justify-content-center ">
                             <Button onClick={() => { navigate('/menu') }} style={{ marginRight: '15px' }}>취소</Button>
-                            <Button variant="success" type="submit" style={{ marginRight: '15px' }} >수정</Button>
+                            <Button variant="success" type="submit" style={{ marginRight: '15px' }} disabled={!isFormValid()}>수정</Button>
                             <Button variant="btn btn-danger" onClick={() => { setWarning({ menu_id: menuData.id,  show: true }) }}>삭제</Button>
                         </div>
                     </div>
