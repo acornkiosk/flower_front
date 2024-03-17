@@ -17,11 +17,11 @@ export default function UpdateModal(props) {
           </InputGroup>
           <InputGroup className="mb-3">
             <InputGroup.Text>키오스크 위치</InputGroup.Text>
-            <Form.Control type="text" value={data.location} onChange={(e)=>{
-                setCurrentLocation(e.target.value); // 현재 위치 상태 업데이트
-                combinedHandleChange(e);
-              }} 
-              /> 
+            <Form.Control type="text" value={data.location} onChange={(e) => {
+              setCurrentLocation(e.target.value); // 현재 위치 상태 업데이트
+              combinedHandleChange(e);
+            }}
+            />
           </InputGroup>
         </Modal.Body>
         <Modal.Footer>
@@ -30,7 +30,7 @@ export default function UpdateModal(props) {
               <Button variant="secondary" onClick={() => { setUpdateModalShow(false) }}>닫기</Button>
             </Col>
             <Col md="auto">
-              <Button variant="primary" type="button" onClick={() => updateKiosk('location') } disabled={!isLocationValid || !currentLocation}>
+              <Button variant="primary" type="button" onClick={() => updateKiosk('location')} disabled={!isLocationValid || !currentLocation}>
                 변경하기
               </Button>
             </Col>

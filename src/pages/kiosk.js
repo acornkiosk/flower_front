@@ -164,12 +164,12 @@ function Kiosk() {
   }
   const handleChange2 = (e) => {
     setKioskLocation(e.target.value);
-  }; 
+  };
   const combinedHandleChange = (e) => {
     handleChange(e);
     handleChange2(e);
   };
-  
+
   const isLocationValid = kioskLocation.trim().length >= 1 && kioskLocation.trim().length <= 20;
 
   //삭제 버튼 기능
@@ -215,8 +215,8 @@ function Kiosk() {
             <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
           </Col>
         </Row>
-        <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} combinedHandleChange={combinedHandleChange} isLocationValid={isLocationValid} location={location}/>
-        <UpdateModal addModalShow={addModalShow} updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} isLocationValid={isLocationValid} combinedHandleChange={combinedHandleChange}/>
+        <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} combinedHandleChange={combinedHandleChange} isLocationValid={isLocationValid} location={location} />
+        <UpdateModal addModalShow={addModalShow} updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} isLocationValid={isLocationValid} combinedHandleChange={combinedHandleChange} />
         <Table striped bordered hover>
           <thead>
             <tr>
