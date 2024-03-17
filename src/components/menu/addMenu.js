@@ -2,12 +2,17 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import 'animate.css';
 
 function AddMenu() {
     const [category, setCategory] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState("");
     const navigate = useNavigate()
     const [previewImage, setPreviewImage] = useState(null)
+    const [menuName, setMenuName] = useState("");
+    const [price, setPrice] = useState("");
+    const [summary, setSummary] = useState("");
+    const [description, setDescription] = useState("");
+
     const goToMenuMain = () => {
         navigate("/menu")
     };
@@ -61,6 +66,21 @@ function AddMenu() {
             fileInputRef.current.value = ''; // 파일 입력 요소의 값(value)을 비웁니다.
         }
     }
+
+    // 입력값 유효성 검사 함수 추가
+    const isFormValid = () => {
+        return menuName.trim() !== "" && !isNaN(parseFloat(price)) && summary.trim() !== "" && description.trim() !== "" && selectedCategory !== "" && selectedCategory !== "카테고리 선택"
+    };
+
+    // 가격 입력 필드에 숫자만 입력 가능하도록 처리하는 함수
+    const handlePriceChange = (e) => {
+        const value = e.target.value;
+        // 숫자 또는 빈 문자열인 경우에만 가격 상태 업데이트
+        if (/^\d*\.?\d*$/.test(value) || value === "") {
+            setPrice(value);
+        }
+    };
+
     return (
 
         <div className="d-flex justify-content-center align-items-center "  >
@@ -83,7 +103,7 @@ function AddMenu() {
                         <div className="" style={{ width: '400px' }}>
                             <Form.Group className="mb-4">
                                 <Form.Label >카테고리</Form.Label>
-                                <Form.Select name="category_id" style={{ width: "160px" }}>
+                                <Form.Select name="category_id" style={{ width: "160px" }} onChange={(e) => setSelectedCategory(e.target.value)}>
                                     <option >카테고리 선택</option>
                                     {category.map(item =>
                                         <option key={item.code_id} value={item.code_id}>{item.code_name}</option>
@@ -94,12 +114,12 @@ function AddMenu() {
                             <Form.Group className="mb-4 d-flex justify-content-between" >
                                 <div>
                                     <Form.Label >메뉴 이름</Form.Label>
-                                    <Form.Control type="text" name="name" style={{ width: "160px" }} placeholder="메뉴이름" />
+                                    <Form.Control type="text" name="name" style={{ width: "160px" }} placeholder="메뉴이름" value={menuName} onChange={(e) => setMenuName(e.target.value)}/>
                                 </div>
                                 <div>
                                     <Form.Label >가격</Form.Label>
                                     <InputGroup>
-                                        <Form.Control type="text" name="price" style={{ width: "160px" }} placeholder="가격" />
+                                        <Form.Control type="text" name="price" style={{ width: "160px" }} placeholder="가격" value={price} onChange={handlePriceChange} />
                                         <InputGroup.Text>원</InputGroup.Text>
                                     </InputGroup>
                                 </div>
@@ -108,7 +128,7 @@ function AddMenu() {
 
                             <Form.Group className="mb-4">
                                 <Form.Label >요약설명</Form.Label>
-                                <Form.Control name="summary" placeholder="요약설명" />
+                                <Form.Control name="summary" placeholder="요약설명" value={summary} onChange={(e) => setSummary(e.target.value)}/>
                             </Form.Group>
 
                         </div>
@@ -137,9 +157,9 @@ function AddMenu() {
                     <div>
                         <Form.Group className="mb-3"  >
                             <Form.Label >상세설명</Form.Label>
-                            <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" />
+                            <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" value={description} onChange={(e) => setDescription(e.target.value)}/>
                         </Form.Group>
-                        <Button type="submit" >등록</Button>
+                        <Button type="submit" disabled={!isFormValid()}>등록</Button>
                     </div>
                 </Form>
 
