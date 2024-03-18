@@ -49,10 +49,10 @@ const Navbar = () => {
       <CDBNavbar dark expand="md" scrolling >
         <div className="ml-auto">
           {
-            isLogin && <i className="mx-4"><strong>{rankText} {userName} </strong>님 로그인중 <Button variant="secondary" className='ms-3' onClick={handleLogout}>로그아웃</Button></i>
+            isLogin && <i className="mx-4"><strong>{rankText} {userName} </strong>님 로그인중 <Button variant="outline-light" className='ms-3' onClick={handleLogout}>로그아웃</Button></i>
           }
           {
-            !isLogin && <Button variant="secondary" className="mx-4" onClick={() => {
+            !isLogin && <Button variant="outline-light" className="mx-4" onClick={() => {
               navigate("/login")
             }}> 로그인 </Button>
           }
