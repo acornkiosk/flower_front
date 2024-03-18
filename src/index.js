@@ -66,7 +66,7 @@ const initialstate = {
   isLogin,
   rank,
   role,
-  selectedMenuId: 0,
+  selectedMenuId: sessionStorage.getItem("MenuId"),
   ws: createRef(),
   isToast: false
 }
