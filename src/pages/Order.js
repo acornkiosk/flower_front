@@ -83,15 +83,13 @@ export default function Order({isOrdered, setIsOrdered}) {
       <div>
         <h1>주문 관리</h1>
         <div className="album py-5">
-          <Container>
-            <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <Row className="row-cols-sm-2 row-cols-md-3 d-flex justify-content-start g-3">
               {Object.keys(orders).map(key =>
                 <Col key={key}>
                   <OrderItem orders={orders[key]} setEmpty={setEmpty} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} />
                 </Col>
               )}
             </Row>
-          </Container>
         </div>
         {/** 주의 : refresh={refresh()} => 무한요청 원인!! */}
         {isEmpty && <EmptyText message={'주문이 없습니다.'} />}
