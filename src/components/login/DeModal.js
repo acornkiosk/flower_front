@@ -30,8 +30,8 @@ export default function DeModal(props) {
         <h4>보고 계신 정보를 정말 삭제하시겠습니까?</h4>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={ownerDelete}>삭제</Button>
-        <Button variant="warning" onClick={()=>{
+        <Button variant="outline-danger"  onClick={ownerDelete}>삭제</Button>
+        <Button variant="outline-success" onClick={()=>{
             setshow(false)
         }}>취소</Button>
       </Modal.Footer>

@@ -54,10 +54,10 @@ export default function UpdateModal(props) {
         <Form.Control type='hidden' name='id' value={item.id}/>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => {
+        <Button variant="outline-success" onClick={() => {
           handleSave()
         }}>수정</Button>
-        <Button onClick={() => {
+        <Button variant="outline-warning" onClick={() => {
           setshow(false)
         }}>취소</Button>
       </Modal.Footer>

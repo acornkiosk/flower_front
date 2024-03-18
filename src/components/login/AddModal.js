@@ -58,8 +58,8 @@ export default function AddModal(props) {
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={ownerInsert}>등록</Button>
-        <Button onClick={() => { setshow(false) }} >Close</Button>
+        <Button variant="outline-success" onClick={ownerInsert}>등록</Button>
+        <Button variant="outline-danger" onClick={() => { setshow(false) }} >Close</Button>
       </Modal.Footer>
     </Modal>
   );

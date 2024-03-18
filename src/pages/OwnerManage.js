@@ -36,8 +36,8 @@ export default function OwnerMange() {
    
     if (rank === 3001) {
         return (
-            <div>
-                <h1>super 전용 (관리자 모드)</h1>
+            <div >
+                <h1 style={{  textAlign: 'center' }}>super 전용 (관리자 모드)</h1>
                 <h4>사장님(OWENR) 목록</h4>
                 <Button variant="success" onClick={() => {
                     setShowAddModal(true)
