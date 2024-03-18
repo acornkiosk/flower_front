@@ -12,7 +12,6 @@ function UpdateMenu() {
         category_id: '',
         price: '',
         summary: '',
-      
         description: ''
     });
     const navigate = useNavigate()

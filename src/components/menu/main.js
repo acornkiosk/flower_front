@@ -83,7 +83,10 @@ function Main() {
   /** 메뉴 수정 폼으로 가기 */
   const goToUpdateMenu = (MenuId) => {
     navigate(`/menu/updateMenu`)
-    dispatch({ type: "SELECT_MENU", payload: MenuId })
+    sessionStorage.setItem("MenuId", MenuId)
+    let storage_menuId=sessionStorage.getItem("MenuId")
+    
+    dispatch({ type: "SELECT_MENU", payload: storage_menuId })
 
   }
   /** 메뉴등록 폼으로가기 */
