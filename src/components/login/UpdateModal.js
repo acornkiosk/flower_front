@@ -50,7 +50,7 @@ export default function UpdateModal(props) {
         <Form.Group as={Row} className="mb-6">
           <Form.Label column md="6"> </Form.Label>
           <Form.Label column md="2"> 비밀번호 변경:</Form.Label>
-          <Col md="4"><Form.Control type='text' name='password'  onChange={handleChange} placeholder="비밀번호 입력"/></Col>
+          <Col md="4"><Form.Control type='text' name='newPassword'  onChange={handleChange} placeholder="비밀번호 입력"/></Col>
     
         </Form.Group>
       </Modal.Body>
