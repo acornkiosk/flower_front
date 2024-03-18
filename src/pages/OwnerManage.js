@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import AddModal from "../components/login/AddModal";
 import UpdateModal from "../components/login/UpdateModal";
 import Error from "./Error";
+import DeModal from "../components/login/DeModal";
+
 
 export default function OwnerMange() {
     //사장님(owner) 리스트 관리
@@ -28,18 +30,10 @@ export default function OwnerMange() {
     }, [])
     const [showAddModal, setShowAddModal] = useState(false)
     const [showUpModal, setShowUpModal] = useState(false)
+    const [deleteModal,setDeleteModal]=useState(false)
     const [currentItem, setCurrentItem] = useState({})
-    //사장님 삭제
-    const ownerDelete = (item) => {
-        axios.post("/api/user/delete", item)
-            .then(res => {
-                alert(res.data.dto.userName + "님을 삭제 했습니다.")
-                refresh()
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
+    const [ownerId,setOwnerId]=useState()
+   
     if (rank === 3001) {
         return (
             <div>
@@ -78,14 +72,14 @@ export default function OwnerMange() {
                                     </Button>
                                 </td>
                                 <td><Button variant="danger" onClick={() => {
-                                    if (window.confirm("삭제할거냐?")) {
-                                        ownerDelete(item)
-                                    }
+                                        setOwnerId(item.id)
+                                        setDeleteModal(true)
                                 }}>삭제</Button></td>
                             </tr>)
                         }
                     </tbody>
                 </Table>
+                <DeModal show={deleteModal} id={ownerId} refresh={refresh} setshow={setDeleteModal} />
                 <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
                 <UpdateModal show={showUpModal} setshow={setShowUpModal} item={currentItem} setCurrentItem={setCurrentItem} refresh={refresh} />
             </div>
