@@ -1,7 +1,7 @@
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 import { decodeToken } from 'jsontokens';
-import React from 'react';
+import React, { createRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -59,62 +59,16 @@ const checkTokenTimeout = () => {
   }, remain)
 }
 checkTokenTimeout()
-/** 웹소켓 참조값을 담을 필드 */
-let ws
-/** 웹소켓 연결관리 함수 */
-const connect = () => {
-  if (ws === null || ws === undefined) {
-    /** 웹소켓 프로토콜을 사용하여 서버 'WebSocketConfig' 연결 */
-    ws = new WebSocket("ws://localhost:9000/flower/ws/order")
-    /** 연결에 성공했을 경우 동작하는 메서드 */
-    ws.onopen = () => { 
-      console.log("index.js : 실시간 화면연동 시작(웹소켓)")
-      console.log("웹소켓 컨넥트 : " + ws.readyState)  
-    }
-    /** 연결과정에서 에러가 생겼을 때 동작하는 메서드 */
-    ws.onerror = (error) => { 
-      console.log("웹소켓 컨넥트 : " + ws.readyState) 
-      console.log("index.js : 웹소켓 에러 원인(밑에)")
-      console.log(error) 
-    }
-    /** 커넥션 닫기 응답받는 코드 */
-    ws.close = (res) => {
-      console.log("웹소켓이 종료되었습니다.")
-      console.log("사유코드: "+res.code)
-      console.log("사유내용: "+res.reason)
-      console.log("웹소켓 컨넥트 : " + ws.readyState)  
-      /** 
-       * 새로운 이슈 확인
-       * 
-       * 1. 로그아웃하더라도 웹브라우저 새로고침을 하지 않으면 웹소켓 세션 초기화 불가
-       * 의도치 않게 소켓이 끊기더라도 서버에서 알아채기 힘든 구조이며
-       * 서로 연결된 줄 알고 아무런 조치를 안하고 있음
-       * 
-       * 2. 어떠한 사유로 에러가 생기고 끊기긴 함
-       * 근데 log 를 늦게 달아서 아직 원인 못찾음
-       * 자연스럽게 끊을 때와 불가피하게 끊긴 경우에 따라
-       * 대응 로직을 구현해야함 
-       */
-    }
-  }
-  /**
-  * ws.readyState 숫자해석
-  * 0 – “CONNECTING”: 웹소켓 연결 중
-  * 1 – “OPEN”: 웹소켓 연결이 성립되고 통신 
-  * 2 – “CLOSING”: 웹소켓 커넥션 종료 중
-  * 3 – “CLOSED”: 웹소켓 커넥션이 종료됨
-  */
-  return ws
-}
 const initialstate = {
   userName,
   commonTable: [],
   orders: [],
   isLogin,
   rank,
-  role, 
-  selectedMenuId:0,
-  ws: null // 웹소켓 요청 객체를 담는 변수(초기에는 null로 설정)
+  role,
+  selectedMenuId: 0,
+  ws: createRef(),
+  isToast: false
 }
 const reducer = (state = initialstate, action) => {
   let newState
@@ -130,19 +84,19 @@ const reducer = (state = initialstate, action) => {
       , isLogin: action.payload.isLogin
       , rank: action.payload.rank
       , role: action.payload.role
-      , ws: connect() // connect 함수를 호출하여 ws 객체를 설정
+      , ws: action.payload.websocket // connect 함수를 호출하여 ws 객체를 설정
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()
-  } else if (action.type === "SET_WEBSOCKET") {
-    newState = {
-      ...state // 최초 초기화 이후 덮어쓰기
-      , ws: connect() // 로그인 이후로 웹브라우저에서 새로고침할 경우를 대비함
-    }
-  }else if(action.type === "SELECT_MENU"){
+  } else if (action.type === "SELECT_MENU") {
     newState = {
       ...state,
-      selectedMenuId : action.payload
+      selectedMenuId: action.payload
+    }
+  } else if (action.type === "SET_TOAST") {
+    newState = {
+      ...state,
+      isToast: action.payload
     }
   } else {
     newState = state

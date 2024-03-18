@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import 'animate.css';
 
 function AddMenu() {
     const [category, setCategory] = useState([])
@@ -69,14 +70,19 @@ function AddMenu() {
 
     // 입력값 유효성 검사 함수 추가
     const isFormValid = () => {
-        return menuName.trim() !== "" && !isNaN(parseFloat(price)) && summary.trim() !== "" && description.trim() !== "" && selectedCategory !== "" && selectedCategory !== "카테고리 선택"
+        const isMenuNameValid = menuName.trim().length >= 1 && menuName.trim().length <= 15;
+        const isPriceValid = !isNaN(parseFloat(price));
+        const isSummaryValid = summary.trim().length >= 1 && summary.trim().length <= 30;
+        const isDescriptionValid = description.trim().length >= 1 && description.trim().length <= 300;
+        const isCategoryValid = selectedCategory !== "" && selectedCategory !== "카테고리 선택";
+        return isMenuNameValid && isPriceValid && isSummaryValid && isDescriptionValid && isCategoryValid;
     };
 
     // 가격 입력 필드에 숫자만 입력 가능하도록 처리하는 함수
     const handlePriceChange = (e) => {
         const value = e.target.value;
         // 숫자 또는 빈 문자열인 경우에만 가격 상태 업데이트
-        if (/^\d*\.?\d*$/.test(value) || value === "") {
+        if (/^[0-9.]+$/.test(value)) {
             setPrice(value);
         }
     };
@@ -119,7 +125,7 @@ function AddMenu() {
                                 <div>
                                     <Form.Label >가격</Form.Label>
                                     <InputGroup>
-                                        <Form.Control type="text" name="price" style={{ width: "160px" }} placeholder="가격" value={price} onChange={handlePriceChange} />
+                                        <Form.Control type="number" min="0" step="100" name="price" style={{ width: "160px" }} placeholder="가격" value={price} onChange={handlePriceChange} />
                                         <InputGroup.Text>원</InputGroup.Text>
                                     </InputGroup>
                                 </div>
