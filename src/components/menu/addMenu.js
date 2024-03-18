@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { create } from '../../util/websocket';
+import { useDispatch, useSelector  } from 'react-redux';
 
 function AddMenu() {
     const [category, setCategory] = useState([])
@@ -12,13 +14,27 @@ function AddMenu() {
     const [price, setPrice] = useState("");
     const [summary, setSummary] = useState("");
     const [description, setDescription] = useState("");
-
+    /** 웹소켓 객체 가져오기 */
+    let ws = useSelector(state => state.ws)
+    const dispatch = useDispatch()
     const goToMenuMain = () => {
         navigate("/menu")
     };
     const fileInputRef = useRef(null);
     useEffect(() => {
         getCategory()
+        if (ws.current == null) {
+            create(ws)
+          } else {
+            ws.current.onmessage = (msg) => {
+              if (msg != null) {
+                let result = JSON.parse(msg.data)
+                if (result.type === "SET_TOAST") {
+                  dispatch({ type: "SET_TOAST", payload: { isToast: true } })
+                }
+              }
+            }
+          }
     }, [])
     const getCategory = () => {
         axios.post("/api/common/child", { "code_id": 1000 })
@@ -114,7 +130,7 @@ function AddMenu() {
                             <Form.Group className="mb-4 d-flex justify-content-between" >
                                 <div>
                                     <Form.Label >메뉴 이름</Form.Label>
-                                    <Form.Control type="text" name="name" style={{ width: "160px" }} placeholder="메뉴이름" value={menuName} onChange={(e) => setMenuName(e.target.value)}/>
+                                    <Form.Control type="text" name="name" style={{ width: "160px" }} placeholder="메뉴이름" value={menuName} onChange={(e) => setMenuName(e.target.value)} />
                                 </div>
                                 <div>
                                     <Form.Label >가격</Form.Label>
@@ -128,7 +144,7 @@ function AddMenu() {
 
                             <Form.Group className="mb-4">
                                 <Form.Label >요약설명</Form.Label>
-                                <Form.Control name="summary" placeholder="요약설명" value={summary} onChange={(e) => setSummary(e.target.value)}/>
+                                <Form.Control name="summary" placeholder="요약설명" value={summary} onChange={(e) => setSummary(e.target.value)} />
                             </Form.Group>
 
                         </div>
@@ -157,7 +173,7 @@ function AddMenu() {
                     <div>
                         <Form.Group className="mb-3"  >
                             <Form.Label >상세설명</Form.Label>
-                            <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" value={description} onChange={(e) => setDescription(e.target.value)}/>
+                            <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" value={description} onChange={(e) => setDescription(e.target.value)} />
                         </Form.Group>
                         <Button type="submit" disabled={!isFormValid()}>등록</Button>
                     </div>

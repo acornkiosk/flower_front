@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import OrderToast from './components/toast/OrderToast';
 import Navbar from './components/toolbar/NavBar';
 import Sidebar from './components/toolbar/SideBar';
 import DashBoard from './pages/DashBoard';
@@ -13,14 +14,11 @@ import User from './pages/User';
 import Kiosk from './pages/kiosk';
 import Login from './pages/login';
 import Menu from './pages/menu';
-import style from "./components/order/style"
-import Toast from 'react-bootstrap/Toast';
 
 function App() {
   /** 주문정보 들어오면 바로 Order.js 로 신호 전달하기 */
   const [isOrdered, setIsOrdered] = useState(false)
-  /** 주문왔을 때 띄울 toast */
-  const [isToast, setIsToast] = useState(false)
+  const isToast = useSelector(state => state.isToast)
   const dispatch = useDispatch()
   useEffect(() => {
     axios.post("/api/common/child", { code_id: 0 })
@@ -54,31 +52,10 @@ function App() {
             </Routes>
           </div>
         </div>
-        {isToast && <OrderToast show={isToast} setIsToast={setIsToast}/>}
+        {isToast && <OrderToast />}
       </div>
     </div>
   );
 }
 
 export default App;
-
-/** 실험중 */
-function OrderToast(props) {
-
-  const { setIsToast } = props
-
-  return (
-    <Toast 
-    show={props.show} 
-    style={style.orderMessageToast} 
-    onClose={() => setIsToast(false)} 
-    delay={3000} autohide
-    variant="success">
-      <Toast.Header>
-        <strong className="me-auto">매출상승!</strong>
-        <small>일하자</small>
-      </Toast.Header>
-      <Toast.Body>새로운 주문이 들어왔습니다</Toast.Body>
-    </Toast>
-  );
-}

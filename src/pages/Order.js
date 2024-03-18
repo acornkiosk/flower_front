@@ -1,17 +1,12 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Col, Container, Row } from "react-bootstrap"
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import EmptyText from "../components/error/EmptyText"
 import DetailModal from "../components/order/DetailModal"
 import OrderItem from "../components/order/orderItem"
+import { create } from "../util/websocket"
 import Error from "./Error"
-import EmptyText from "../components/error/EmptyText"
-
-/** 웹소켓 계획
-* 1. 들어온 주문 개수만큼 sidebar.js 개수 표시
-* 2. 다른 페이지에 있더라도 새로운 주문이 들어올 때마다 알림표시 
-* 3. 주문완료 진행시 손님 키오스크에 알림표시, 번호표기 
-*/
 
 export default function Order({isOrdered, setIsOrdered}) {
   const [orderCount, setOrderCount] = useState(0)
@@ -25,45 +20,30 @@ export default function Order({isOrdered, setIsOrdered}) {
   const [deleteModal, setDeleteModal] = useState({
     target: 0
   })
+  let ws = useSelector(state => state.ws)
   const dispatch = useDispatch()
   // 빈 화면 state
   const [isEmpty, setEmpty] = useState(false)
-  /** index.js 에서 생성한 웹소켓 함수를 이어서 사용하기 위함 */
-  let ws = useSelector((state) => state.ws)
-  const connect = () => {
-    /** 2차 웹브라우저 새로고침 대응 */
-    if (ws == null || ws === undefined) {
-      const action = { type: "SET_WEBSOCKET" }
-      dispatch(action)
-    } else {
-      orderMessage(ws)
-      orderPage(ws)
-    }
-  }
-  const orderMessage = (socket) => {
-    /** 손님 키오스크로부터 정보가 왔는 지 확인한다. */
-    socket.onmessage = (msg) => {
-      if (msg != null) {
-        var result = JSON.parse(msg.data);
-        if (result.type === "UPDATE_ORDERS") refresh()
-      } else console.log(msg)
-    }
-  }
-  const orderPage = (socket) => {
-    socket.onopen = () => {
-      refresh()
-    }
-  }
-  /** 현 화면에서 새로고침시 대응 */
-  useEffect(() => {
-    refresh()
-  }, [ws])
   /** 화면 접속시 호출 메서드 */
   useEffect(() => {
     refresh()
-    connect()
+    if (ws.current == null) {
+      create(ws)
+    } else {
+      ws.current.onmessage = (msg) => {
+        if (msg != null) {
+          let result = JSON.parse(msg.data)
+          if (result.type === "SET_TOAST") {
+            dispatch({ type: "SET_TOAST", payload: { isToast: true } })
+          }
+          
+          if (result.type === "UPDATE_ORDERS") {
+            refresh()
+          }
+        }
+      }
+    }
   }, [])
-
   const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
     axios.post("/api/order/list", {})
@@ -111,7 +91,7 @@ export default function Order({isOrdered, setIsOrdered}) {
           </Container>
         </div>
         {/** 주의 : refresh={refresh()} => 무한요청 원인!! */}
-        { isEmpty && <EmptyText message={'주문이 없습니다.'}/> }
+        {isEmpty && <EmptyText message={'주문이 없습니다.'} />}
         <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal} />
       </div>
     )

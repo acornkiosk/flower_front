@@ -2,10 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
 import Error from "./Error";
+import { create, send } from "../util/websocket";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -32,6 +33,8 @@ function Kiosk() {
   //페이징 UI를 만들때 사용할 배열
   const [pageArray, setPageArray] = useState([])
   const role = useSelector(state => state.role)
+  let ws = useSelector(state => state.ws)
+  const dispatch = useDispatch()
 
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
@@ -54,6 +57,19 @@ function Kiosk() {
   //화면 로딩시
   useEffect(() => {
     refresh(1)
+    if(ws.current == null) {
+      create(ws)
+    }else {
+      ws.current.onmessage = (msg) =>{
+        if(msg != null) {
+          let result = JSON.parse(msg.data)
+          console.log(msg.data)
+          if(result.type === "SET_TOAST") {
+            dispatch({type : "SET_TOAST", payload:{isToast:true}})
+          }
+        }
+      }
+    }
   }, [])
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
@@ -121,7 +137,7 @@ function Kiosk() {
           })
       })
       /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
-      // send(updatedKiosk)
+      send(ws)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -134,7 +150,7 @@ function Kiosk() {
           })
       })
       /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
-      // send(updatedKiosk)
+      send(ws)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)

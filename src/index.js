@@ -1,7 +1,7 @@
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 import { decodeToken } from 'jsontokens';
-import React from 'react';
+import React, { createRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -59,16 +59,16 @@ const checkTokenTimeout = () => {
   }, remain)
 }
 checkTokenTimeout()
-
 const initialstate = {
   userName,
   commonTable: [],
   orders: [],
   isLogin,
   rank,
-  role, 
-  selectedMenuId:0,
-  ws: null // 웹소켓 요청 객체를 담는 변수(초기에는 null로 설정)
+  role,
+  selectedMenuId: 0,
+  ws: createRef(),
+  isToast: false
 }
 const reducer = (state = initialstate, action) => {
   let newState
@@ -84,13 +84,19 @@ const reducer = (state = initialstate, action) => {
       , isLogin: action.payload.isLogin
       , rank: action.payload.rank
       , role: action.payload.role
+      , ws: action.payload.websocket // ws 객체를 설정
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()
-  } else if(action.type === "SELECT_MENU"){
+  } else if (action.type === "SELECT_MENU") {
     newState = {
       ...state,
-      selectedMenuId : action.payload
+      selectedMenuId: action.payload
+    }
+  } else if (action.type === "SET_TOAST") {
+    newState = {
+      ...state,
+      isToast: action.payload
     }
   } else {
     newState = state

@@ -1,12 +1,12 @@
 
 import axios from 'axios';
 import { decodeToken } from 'jsontokens';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import WebSocketUtil from '../util/WebSocketUtil';
+import { create } from '../util/websocket';
 
 function Login() {
   const cookies = new Cookies();
@@ -18,11 +18,14 @@ function Login() {
   const navigate = useNavigate();
   //로그인실패시 alert 
   const [showAlert, setShowAlert] = useState(false)
+  //웹소켓을 담을 변수 초기화
+  let ws = useRef(null)
   // 로그인 버튼을 클릭할 때 실행되는 함수입니다.
   const handleLogin = () => {
     // Axios를 사용하여 Spring Boot와 통신합니다.
     axios.post("/api/auth", login)
       .then(res => {
+        create(ws)
         //로컬 스토리지에 토큰 저장하기
         localStorage.token = res.data
         //저장된 토큰 디코딩 후 result에 저장하기
@@ -31,14 +34,15 @@ function Login() {
           userName: result.payload.sub,
           isLogin: true,
           rank: result.payload.rank,
-          role: result.payload.role
+          role: result.payload.role,
+          websocket: ws
         }
         dispatch({ type: "SET_LOGIN", payload: data })
         //axios 의 header 에 인증정보를 기본으로 가지고 갈수 있도록 설정
         axios.defaults.headers.common["Authorization"] = "Bearer+" + localStorage.token
         alert(result.payload.sub + "님 로그인 했습니다.");
-         /** 웹소켓 연결시점 */
-         WebSocketUtil({power:true})
+        //  /** 웹소켓 연결시점 */
+        //  WebSocketUtil({power:true})
         //home으로 보내기
         navigate("/")
       })

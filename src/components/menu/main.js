@@ -6,7 +6,8 @@ import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom';
 import CategoryBtn from './categoryBtn';
 import WarningModal from './WarningModal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector  } from 'react-redux';
+import { create } from '../../util/websocket';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
@@ -25,6 +26,8 @@ function Main() {
   const [pageArray, setPageArray] = useState([])
   const [categoryNum, setCategoryNum] = useState(0)
   const [sortByPrice, setSortByPrice] = useState(null);
+  /** 웹소켓 객체 가져오기 */
+  let ws = useSelector(state => state.ws)
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = [];
@@ -59,6 +62,18 @@ function Main() {
     let category_id = categoryNum.code_id
     if (category_id == null) category_id = 0
     refresh(pageNum, categoryNum.code_id, sortByPrice)
+    if (ws.current == null) {
+      create(ws)
+    } else {
+      ws.current.onmessage = (msg) => {
+        if (msg != null) {
+          let result = JSON.parse(msg.data)
+          if (result.type === "SET_TOAST") {
+            dispatch({ type: "SET_TOAST", payload: { isToast: true } })
+          }
+        }
+      }
+    }
   }, [categoryNum, sortByPrice]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
   /** 카테고리 드롭다운 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
   const handleCategoryChange = (item) => {
