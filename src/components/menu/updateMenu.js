@@ -12,7 +12,6 @@ function UpdateMenu() {
         category_id: '',
         price: '',
         summary: '',
-      
         description: ''
     });
     const navigate = useNavigate()
@@ -203,7 +202,7 @@ function UpdateMenu() {
                                 <div>
                                     <Form.Label >가격</Form.Label>
                                     <InputGroup>
-                                        <Form.Control type="number" name="price" style={{width:"160px"}} onChange={handleChange} value={menuData.price} placeholder="가격" />
+                                        <Form.Control type="text" name="price" style={{width:"160px"}} onChange={handleChange} value={menuData.price} placeholder="가격" />
                                         <InputGroup.Text>원</InputGroup.Text>
                                     </InputGroup>
                                 </div>

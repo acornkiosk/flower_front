@@ -8,7 +8,8 @@ import OrderItem from "../components/order/orderItem"
 import { create } from "../util/websocket"
 import Error from "./Error"
 
-export default function Order() {
+export default function Order({isOrdered, setIsOrdered}) {
+  const [orderCount, setOrderCount] = useState(0)
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
@@ -43,6 +44,9 @@ export default function Order() {
       }
     }
   }, [])
+  
+ 
+
   const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
     axios.post("/api/order/list", {})
@@ -62,6 +66,11 @@ export default function Order() {
           }
         })
         setOrders(updatedOrders)
+        /** 함수동작 후 주문알림 초기화 */
+        setIsOrdered(false)
+        /** 주문현황 개수 기입 */
+      
+
       })
       .catch(error => {
         setEmpty(true)
@@ -77,7 +86,7 @@ export default function Order() {
             <Row className="row-cols-sm-2 row-cols-md-3 d-flex justify-content-start g-3">
               {Object.keys(orders).map(key =>
                 <Col key={key}>
-                  <OrderItem orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} />
+                  <OrderItem orders={orders[key]} setEmpty={setEmpty} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} />
                 </Col>
               )}
             </Row>

@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../../App.css';
+import { Badge } from 'react-bootstrap';
 
 const Sidebar = () => {
   //index.js redux 값 가져오는것
@@ -28,7 +29,7 @@ const Sidebar = () => {
   useEffect(() => {
     setRoleState({
       ...roleState,
-      4001: role.includes('4001')
+        4001: role.includes('4001')
       , 4002: role.includes('4002')
       , 4003: role.includes('4003')
       , 4004: role.includes('4004')
@@ -99,7 +100,7 @@ const Sidebar = () => {
             roleState[4004] &&
             <CDBSidebarMenu>
               <NavLink onClick={() => toggleAccordion('order')} to="/order" className={activeStyle}>
-                <CDBSidebarMenuItem icon="money-check">주문 관리</CDBSidebarMenuItem>
+                <CDBSidebarMenuItem icon="money-check">주문 관리 <Badge bg="primary">숫자</Badge></CDBSidebarMenuItem>
               </NavLink>
             </CDBSidebarMenu>
           }

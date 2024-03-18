@@ -31,6 +31,7 @@ export default function OrderItem(props) {
             const newList = { ...list }
             delete newList[id]
             setOrders(newList)
+            props.setEmpty(true)
           }
         })
         .catch(error => console.log(error))
