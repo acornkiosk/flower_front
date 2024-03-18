@@ -37,22 +37,21 @@ export default function UpdateModal(props) {
       </Modal.Header>
       <Modal.Body>
         <Form.Group as={Row} className="mb-3">
-          <Form.Label column md="6"> 이름 : <strong> {item.userName} </strong></Form.Label>
           <Form.Label column md="2"> 이름 변경:  </Form.Label>
           <Col md="4"><Form.Control type='text' name='userName' onChange={handleChange}placeholder="이름 입력" /></Col>
          </Form.Group>
+
           <Form.Group as={Row} className="mb-3">
-          <Form.Label column md="6"> 아이디 :<strong> {item.id} </strong></Form.Label>
+       
           <Form.Label column md="2"> 아이디 변경:  </Form.Label>
           <Col md="4"><Form.Control type='text' name='newId'  onChange={handleChange} placeholder="아이디 입력"/></Col>
-       
         </Form.Group>
-        <Form.Group as={Row} className="mb-6">
-          <Form.Label column md="6"> </Form.Label>
+   
+         <Form.Group as={Row} className="mb-6">
           <Form.Label column md="2"> 비밀번호 변경:</Form.Label>
           <Col md="4"><Form.Control type='text' name='newPassword'  onChange={handleChange} placeholder="비밀번호 입력"/></Col>
-    
         </Form.Group>
+        <Form.Control type='hidden' name='id' value={item.id}/>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={() => {
