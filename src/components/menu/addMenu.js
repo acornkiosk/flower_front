@@ -98,7 +98,7 @@ function AddMenu() {
     const handlePriceChange = (e) => {
         const value = e.target.value;
         // 숫자 또는 빈 문자열인 경우에만 가격 상태 업데이트
-        if (/^[0-9.]+$/.test(value)) {
+        if (/^[1-9][0-9.]*$/.test(value)) {
             setPrice(value);
         }
     };
