@@ -11,7 +11,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   return (
     <>
       <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
+        {`${(percent * 100).toFixed(0)}% `}
       </text>
     </>
   );
@@ -35,6 +35,8 @@ export default class CircleChart extends PureComponent {
     }
   }
   fetchData(dayOfMonth, categoryCode) {
+    // 데이터를 로딩 중임을 표시
+    this.setState({ isLoading: true });
     axios.post("/api/order/list", { order_id: -1, dayOfMonth: dayOfMonth, category_id: categoryCode })
       .then(res => {
         const responseData = res.data.list;
@@ -72,7 +74,7 @@ export default class CircleChart extends PureComponent {
     const { data } = this.state;
     return (
       <ResponsiveContainer width="100%" height="80%">
-        {data.length > 0 && (
+        {data.length > 0 ? (
           <>
             <h3>{this.props.type} 매출</h3>
             <PieChart width={200} height={200}>
@@ -90,10 +92,26 @@ export default class CircleChart extends PureComponent {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value, name, props) => [`${name}: ${value.toLocaleString()}원`, props]} />
             </PieChart>
           </>
-        )}
+        ):
+        <>
+        <h3>{this.props.type} 매출 </h3>
+        <div className='d-flex justify-content-center align-items-center' style={{ width:"200px",height:"200px"}}>
+          <div className='d-flex justify-content-center align-items-center'
+          style={{ 
+            width:"160px",
+            height:"160px",
+            borderRadius:"100px",
+            backgroundColor:'#0088FE',
+            color:"white"
+            }}>
+            0%  
+          </div>
+        </div>
+        </>
+        }
       </ResponsiveContainer>
     );
   }

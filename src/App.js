@@ -13,7 +13,6 @@ import User from './pages/User';
 import Kiosk from './pages/kiosk';
 import Login from './pages/login';
 import Menu from './pages/menu';
-/** 밑에는 Toast 용 */
 import style from "./components/order/style"
 import Toast from 'react-bootstrap/Toast';
 

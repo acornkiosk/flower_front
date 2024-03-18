@@ -68,7 +68,7 @@ function Main() {
   /** 메뉴 수정 폼으로 가기 */
   const goToUpdateMenu = (MenuId) => {
     navigate(`/menu/updateMenu`)
-    dispatch({type:"SELECT_MENU",payload:MenuId})
+    dispatch({ type: "SELECT_MENU", payload: MenuId })
 
   }
   /** 메뉴등록 폼으로가기 */
@@ -87,6 +87,8 @@ function Main() {
   /** 화면 구현 */
   return (
     <div>
+      <h1>메뉴관리</h1>
+      <hr />
       <div className="d-flex justify-content-between">
         <Button variant="warning" onClick={goToAddMenu}>등록하기</Button>
         <CategoryBtn className="m" onSelectCategory={handleCategoryChange}></CategoryBtn>

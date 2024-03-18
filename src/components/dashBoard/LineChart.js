@@ -6,13 +6,13 @@ export default class Example extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      orderData: props.orderData,
-      data: [],
+  
+      data: []
     };
   }
   componentDidUpdate(prevProps) {
     if (this.props.orderData !== prevProps.orderData) {
-      console.log(this.props.orderData);
+      console.log(this.state.orderData);
     }
   }
   render() {
@@ -97,7 +97,7 @@ export default class Example extends PureComponent {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
+          <Tooltip formatter={(value, name, props) => [`${name}: ${value.toLocaleString()}원`, props]} />
           <Legend />
           <Line type="monotone" dataKey="price" stroke="#82ca9d" />
         </LineChart>

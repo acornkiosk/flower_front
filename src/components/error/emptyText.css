@@ -1,0 +1,14 @@
+.empty-message {
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    color: orange;
+    padding: 0px;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 5vh;
+  }
