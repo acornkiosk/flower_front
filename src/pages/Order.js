@@ -43,6 +43,9 @@ export default function Order() {
       }
     }
   }, [])
+  
+ 
+
   const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
     axios.post("/api/order/list", {})
@@ -78,7 +81,7 @@ export default function Order() {
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
               {Object.keys(orders).map(key =>
                 <Col key={key}>
-                  <OrderItem orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} />
+                  <OrderItem orders={orders[key]} setEmpty={setEmpty} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} />
                 </Col>
               )}
             </Row>
