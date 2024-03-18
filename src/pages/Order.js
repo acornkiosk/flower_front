@@ -8,7 +8,8 @@ import OrderItem from "../components/order/orderItem"
 import { create } from "../util/websocket"
 import Error from "./Error"
 
-export default function Order() {
+export default function Order({isOrdered, setIsOrdered}) {
+  const [orderCount, setOrderCount] = useState(0)
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
@@ -65,6 +66,11 @@ export default function Order() {
           }
         })
         setOrders(updatedOrders)
+        /** 함수동작 후 주문알림 초기화 */
+        setIsOrdered(false)
+        /** 주문현황 개수 기입 */
+      
+
       })
       .catch(error => {
         setEmpty(true)
