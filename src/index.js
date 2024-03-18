@@ -14,7 +14,7 @@ import reportWebVitals from './reportWebVitals';
 let userName = null
 let isLogin = false
 let rank = null
-let role = []
+let role = [{"4001":false}]
 
 axios.defaults.baseURL = process.env.PUBLIC_URL
 
