@@ -36,14 +36,6 @@ export default function WebSocketUtil(event) {
         ws.onerror = (error) => {
             console.log(error)
             console.log(socketState(ws.readyState))
-            /** 원인불명 에러 */
-            if (ws.readyState === 0 || ws.readyState === 3 || ws.readyState === 4) {
-                ws.close(1001, "원인불명 에러 발생, 세션 삭제 후 재접속")
-                ws.onopen = () => {
-                    console.log("재접속!!!")
-                    console.log(socketState(ws.readyState))
-                }
-            }
         }
         /** 키오스크 전원 off */
     } else {
