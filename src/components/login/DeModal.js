@@ -17,7 +17,6 @@ export default function DeModal(props) {
   return (
     <Modal
       {...props}
-      size="sm"
       centered
       style={{ marginTop: '20px' }}
     >
@@ -27,7 +26,7 @@ export default function DeModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>보고 계신 정보를 정말 삭제하시겠습니까?</h4>
+        <h4> <strong>{id}</strong> 사장님을 삭제하시겠습니까?</h4>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-danger"  onClick={ownerDelete}>삭제</Button>
