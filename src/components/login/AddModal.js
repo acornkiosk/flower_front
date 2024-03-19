@@ -16,14 +16,15 @@ export default function AddModal(props) {
   const [pass,setPass]=useState({
     passId:false,
     passUserName:false,
-    passPassword:false
+    passPassword:false,
+    duplicateId:false
   })
 
   // id,password,userName 값 모두 true 일경우
   const [passAll,setPassAll]=useState(false)
   
   useEffect(()=>{
-    const  isPass=pass.passId && pass.passUserName && pass.passPassword
+    const  isPass=pass.passId && pass.passUserName && pass.passPassword && pass.duplicateId
     setPassAll(isPass)
   }, [pass]);
 
@@ -47,7 +48,8 @@ export default function AddModal(props) {
     setPass({
      passId:false,
      passUserName:false,
-     passPassword:false
+     passPassword:false,
+     duplicateId:false
     })
     setOwnerdata({
      userName: "",
@@ -109,7 +111,21 @@ export default function AddModal(props) {
     })
     
   };
-
+  
+  const checkId = () => {
+    const id = ownerdata.id;
+    axios.post("/api/user/checkid", id)
+        .then(res => {
+            console.log(res.data);
+            setPass({
+              ...pass,
+              duplicateId:res.data
+            })
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
 
   return (
     <Modal
@@ -130,7 +146,8 @@ export default function AddModal(props) {
         </Form.Group>
         <Form.Group as={Row} className="mb-4">
           <Form.Label column md="2"> 아이디 : </Form.Label>
-          <Col md="10"><Form.Control type='text' name='id' onChange={ownerChange} placeholder="ID 입력해주세요" /></Col>
+          <Col md="8"><Form.Control type='text' name='id' onChange={ownerChange} placeholder="ID 입력해주세요" readOnly={pass.duplicateId}/></Col>
+          <Col><Button onClick={()=>{checkId()}}>중복확인</Button></Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-4">
           <Form.Label column md="2"> 비밀번호 : </Form.Label>
