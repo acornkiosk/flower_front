@@ -31,9 +31,10 @@ export default function OrderItem(props) {
             const newList = { ...list }
             delete newList[id]
             setOrders(newList)
-            /** 주문현황 개수 감소 */
+            /** SideBar.js 주문현황 개수 감소 */
             if(orderCount > 0){setOrderCount(orderCount -1)}
             else{setOrderCount(orderCount)}
+            props.setEmpty(true)
           }
         })
         .catch(error => console.log(error))

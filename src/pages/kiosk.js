@@ -7,6 +7,7 @@ import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
 import Error from "./Error";
 import { create, send } from "../util/websocket";
+import EmptyText from "../components/error/EmptyText";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -15,6 +16,8 @@ function Kiosk() {
     sortBy: null,
     sortOrder: 'asc'
   })
+  // 빈 화면 state
+  const [isEmpty, setEmpty] = useState(false)
   const [kioskLocation, setKioskLocation] = useState("");
   //추가모달 state
   const [addModalShow, setAddModalShow] = useState(false)
@@ -48,11 +51,14 @@ function Kiosk() {
     //table에 출력할 키오스크 정보를 받아옴
     axios.post("/api/kiosk/page", num, { "headers": { "Content-Type": "application/json" } })
       .then(res => {
+        setEmpty(false)
         setpageInfo(res.data)
         const result = createArray(res.data.startPageNum, res.data.endPageNum)
         setPageArray(result)
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        setEmpty(true)
+        console.log(error)})
   }
   //화면 로딩시
   useEffect(() => {
@@ -190,9 +196,17 @@ function Kiosk() {
     selectedKiosk.forEach(tmp => {
       axios.post("/api/kiosk/delete", tmp)
         .then(res => {
-          refresh(1)
+          // 삭제한 항목을 제외하고 페이지 정보 업데이트
+          const updatedList = pageInfo.list.filter(item => item.id !== tmp.id);
+        setpageInfo({
+          ...pageInfo,
+          list: updatedList
+        });
+        // 모든 항목이 삭제되었는지 확인하여 isEmpty 상태 업데이트
+        setEmpty(updatedList.length === 0);
         })
         .catch(error => {
+          setEmpty(true)
           console.log(error)
         })
     })
@@ -258,6 +272,8 @@ function Kiosk() {
             )}
           </tbody>
         </Table>
+        {isEmpty && <EmptyText message={'키오스크가 없습니다.'} />}
+        {!isEmpty && (
         <Pagination>
           <Pagination.Item onClick={() => {
             refresh(pageInfo.startPageNum - 1)
@@ -272,6 +288,7 @@ function Kiosk() {
             refresh(pageInfo.endPageNum + 1)
           }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
         </Pagination>
+        )}
       </div>
     )
   } else {

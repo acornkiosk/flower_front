@@ -7,8 +7,11 @@ import InsertModal from '../components/user/addUserModal';
 import DeleteModal from '../components/user/deleteModal';
 import UpdateModal from '../components/user/updateUserModal';
 import Error from './Error';
+import EmptyText from '../components/error/EmptyText';
 
 function User() {
+  // 빈 화면 state
+  const [isEmpty, setEmpty] = useState(false)
   const [insertShow, setInsertShow] = useState(false);
   const [updateShow, setUpdateShow] = useState(false);
   const [deleteShow, setDeleteShow] = useState(false);
@@ -68,6 +71,7 @@ function User() {
   const pageRefresh = (pageNum) => {
     axios.post("/api/user/list", { pageNum: pageNum })
       .then(res => {
+        setEmpty(false)
         let filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002)
         const newResult = {
           ...res.data,
@@ -78,6 +82,7 @@ function User() {
         setPageArray(result)
       })
       .catch(error => {
+        setEmpty(true)
         console.log(error)
       })
   }
@@ -86,6 +91,7 @@ function User() {
     // 입사일자 오름차순, 내림차순으로 정렬함
     axios.post("/api/user/list", { pageNum: 1, sort: sort })
       .then(res => {
+        setEmpty(false)
         //super와 owner는 없애서 setPageInfo에 넣어야함
         const filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002);
         setPageInfo({
@@ -94,6 +100,7 @@ function User() {
         })
       })
       .catch(error => {
+        setEmpty(true)
         console.log(error)
       })
     if (sort == null) setSort("asc")
@@ -148,6 +155,7 @@ function User() {
             )}
           </tbody>
         </Table>
+          {pageInfo.list.length === 0 ? <EmptyText message={'직원이 없습니다.'}/>:
         <Pagination className="mt-3">
           <Pagination.Item onClick={() => {
             pageRefresh(pageInfo.startPageNum - 1)
@@ -160,9 +168,9 @@ function User() {
           <Pagination.Item onClick={() => {
             pageRefresh(pageInfo.endPageNum + 1)
           }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
-        </Pagination>
+        </Pagination>}
         <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={() => { pageRefresh(1) }}></UpdateModal>
-        <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
+        <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} pageInfoList={pageInfo.list} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
         <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={() => { pageRefresh(1) }}></DeleteModal>
       </>
     )

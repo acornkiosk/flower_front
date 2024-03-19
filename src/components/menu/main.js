@@ -8,6 +8,7 @@ import CategoryBtn from './categoryBtn';
 import WarningModal from './WarningModal';
 import { useDispatch, useSelector  } from 'react-redux';
 import { create } from '../../util/websocket';
+import EmptyText from '../error/EmptyText';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
@@ -26,6 +27,7 @@ function Main() {
   const [pageArray, setPageArray] = useState([])
   const [categoryNum, setCategoryNum] = useState(0)
   const [sortByPrice, setSortByPrice] = useState(null);
+  const [isEmpty, setEmpty] = useState(false)
   /** 웹소켓 객체 가져오기 */
   let ws = useSelector(state => state.ws)
   //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
@@ -45,12 +47,14 @@ function Main() {
   const refresh = (pageNum, category_id, sortByPrice) => {
     axios.post("/api/menu/list", { pageNum: pageNum, category_id: category_id, sort: sortByPrice })
       .then(res => {
+        setEmpty(false)
         setFilteredMenuList(res.data)
         //페이징 UI출력
         const result = createArray(res.data.startPageNum, res.data.endPageNum)
         setPageArray(result)
       })
       .catch(error => {
+        setEmpty(true)
         console.log(error)
       })
   }
@@ -83,7 +87,10 @@ function Main() {
   /** 메뉴 수정 폼으로 가기 */
   const goToUpdateMenu = (MenuId) => {
     navigate(`/menu/updateMenu`)
-    dispatch({ type: "SELECT_MENU", payload: MenuId })
+    sessionStorage.setItem("MenuId", MenuId)
+    let storage_menuId=sessionStorage.getItem("MenuId")
+    
+    dispatch({ type: "SELECT_MENU", payload: storage_menuId })
 
   }
   /** 메뉴등록 폼으로가기 */
@@ -95,7 +102,12 @@ function Main() {
     axios.post("/api/menu/delete", { id: id })
       .then(res => {
         setWarning(false)
-        refresh(1, categoryNum.code_id)
+          // 삭제가 성공하면 상태를 업데이트하고 UI를 새로 고칩니다.
+        setFilteredMenuList(prevState => ({
+          ...prevState,
+          list: prevState.list.filter(item => item.id !== id) // 삭제된 메뉴를 제외한 새로운 목록으로 업데이트
+        }));
+        refresh(1, categoryNum.code_id,sortByPrice)
       })
       .catch(error => console.log(error))
   }
@@ -140,19 +152,21 @@ function Main() {
           ))}
         </tbody>
       </Table>
-      <Pagination className="mt-3">
-        <Pagination.Item onClick={() => {
-          refresh(filteredMenuList.startPageNum - 1, categoryNum.code_id, sortByPrice)
-        }} disabled={filteredMenuList.startPageNum === 1}>&laquo;</Pagination.Item>
-        {
-          pageArray.map(item => (<Pagination.Item onClick={() => {
-            refresh(item, categoryNum.code_id, sortByPrice)
-          }} key={item} active={filteredMenuList.pageNum === item}>{item}</Pagination.Item>))
-        }
-        <Pagination.Item onClick={() => {
-          refresh(filteredMenuList.endPageNum + 1, categoryNum.code_id, sortByPrice)
-        }} disabled={filteredMenuList.endPageNum >= filteredMenuList.totalPageCount}>&raquo;</Pagination.Item>
-      </Pagination>
+      {isEmpty ? <EmptyText message={'메뉴가 없습니다.'} /> :
+        <Pagination className="mt-3">
+          <Pagination.Item onClick={() => {
+            refresh(filteredMenuList.startPageNum - 1, categoryNum.code_id, sortByPrice)
+          }} disabled={filteredMenuList.startPageNum === 1}>&laquo;</Pagination.Item>
+          {
+            pageArray.map(item => (<Pagination.Item onClick={() => {
+              refresh(item, categoryNum.code_id, sortByPrice)
+            }} key={item} active={filteredMenuList.pageNum === item}>{item}</Pagination.Item>))
+          }
+          <Pagination.Item onClick={() => {
+            refresh(filteredMenuList.endPageNum + 1, categoryNum.code_id, sortByPrice)
+          }} disabled={filteredMenuList.endPageNum >= filteredMenuList.totalPageCount}>&raquo;</Pagination.Item>
+        </Pagination>
+      }
 
       <WarningModal show={warning.show} value_id={warning.menu_id} onHide={() => setWarning({ show: false })} deletemenu={deleteMenu}></WarningModal>
     </div>
