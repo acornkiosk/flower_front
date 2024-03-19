@@ -29,6 +29,7 @@ export default function AddModal(props) {
   // id,password,userName 값 모두 true 일경우
   const [passAll,setPassAll]=useState(false)
   
+  //passAll 에 state 값을 pass(id,userName,password )값이 변동될때마다 상태 변경
   useEffect(()=>{
     const  isPass=pass.passId && pass.passUserName && pass.passPassword && pass.duplicateId
     setPassAll(isPass)
@@ -136,18 +137,20 @@ export default function AddModal(props) {
   };
   
   const checkId = () => {
+    if(window.confirm("아이디를 사용하시겠습니까?")){
     const id = ownerdata.id;
-    axios.post("/api/user/checkid", id)
-        .then(res => {
-            console.log(res.data);
-            setPass({
-              ...pass,
-              duplicateId:res.data
-            })
-        })
-        .catch(error => {
-            console.log(error);
-        });
+      axios.post("/api/user/checkid", id)
+      .then(res => {
+          console.log(res.data);
+          setPass({
+            ...pass,
+            duplicateId:res.data
+          })
+      })
+      .catch(error => {
+          console.log(error);
+      });
+    }
 };
 
   return (
@@ -183,7 +186,7 @@ export default function AddModal(props) {
           </Form.Control.Feedback>
           <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
           </Col>
-          <Col><Button onClick={()=>{checkId()}}>중복확인</Button></Col>
+         {pass.passId && <Col><Button onClick={checkId} disabled={pass.duplicateId}>중복확인</Button></Col>}
         </Form.Group>
         <Form.Group as={Row} className="mb-4">
           <Form.Label column md="2"> 비밀번호 : </Form.Label>
