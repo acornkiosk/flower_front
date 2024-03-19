@@ -19,6 +19,12 @@ export default function AddModal(props) {
     passPassword:false,
     duplicateId:false
   })
+  //input type dirty 검사
+  const [dirty,setDirty]=useState({
+    isId:false,
+    isUserName:false,
+    isPassword:false
+  })
 
   // id,password,userName 값 모두 true 일경우
   const [passAll,setPassAll]=useState(false)
@@ -57,6 +63,11 @@ export default function AddModal(props) {
      password: "",
      rank: 3002
     })
+    setDirty({
+      isId:false,
+      isUserName:false,
+      isPassword:false
+    })
   }
   //사장 (owner) input값 
   const ownerChange = (e) => {
@@ -65,6 +76,10 @@ export default function AddModal(props) {
     const passwordReg= /^.{4,16}$/;
     
     if(e.target.name === "userName"){
+      setDirty({
+        ...dirty,
+        isUserName:true
+      })
       if(userNameReg.test(e.target.value)){
         setPass({
           ...pass,
@@ -79,6 +94,10 @@ export default function AddModal(props) {
           
       
     }else if(e.target.name === "id"){
+      setDirty({
+        ...dirty,
+        isId:true
+      })
       if(idReg.test(e.target.value)){
         setPass({
           ...pass,
@@ -92,6 +111,10 @@ export default function AddModal(props) {
       }
 
     }else if(e.target.name === "password"){
+      setDirty({
+        ...dirty,
+        isPassword:true
+      })
       if(passwordReg.test(e.target.value)){
         setPass({
           ...pass,
@@ -142,16 +165,32 @@ export default function AddModal(props) {
       <Modal.Body>
         <Form.Group as={Row} className="mb-4">
           <Form.Label column md="2"> 이름 : </Form.Label>
-          <Col md="10"><Form.Control type='text' name="userName" onChange={ownerChange} placeholder="userName" /></Col>
+          <Col md="10"><Form.Control type='text' name="userName" onChange={ownerChange} placeholder="userName" isInvalid={dirty.isUserName && !pass.passUserName} isValid={pass.passUserName} />
+          <Form.Control.Feedback type="invalid">
+          이름: 한글를 사용해 주세요. (특수기호, 공백 사용 불가)
+            </Form.Control.Feedback>
+          <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
+          </Col>
+          
         </Form.Group>
         <Form.Group as={Row} className="mb-4">
           <Form.Label column md="2"> 아이디 : </Form.Label>
-          <Col md="8"><Form.Control type='text' name='id' onChange={ownerChange} placeholder="ID 입력해주세요" readOnly={pass.duplicateId}/></Col>
+          <Col md="8"><Form.Control type='text' name='id' onChange={ownerChange} placeholder="ID 입력해주세요" readOnly={pass.duplicateId} isInvalid={dirty.isId &&!pass.passId || pass.passId && !pass.duplicateId}  isValid={pass.passId && pass.duplicateId}/>
+          <Form.Control.Feedback type="invalid">
+            {
+              !pass.passId && !pass.duplicateId ? "아이디를 입력해주세요": pass.passId && !pass.duplicateId ? "중복 체크해주세요": ''
+            }
+          </Form.Control.Feedback>
+          <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
+          </Col>
           <Col><Button onClick={()=>{checkId()}}>중복확인</Button></Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-4">
           <Form.Label column md="2"> 비밀번호 : </Form.Label>
-          <Col md="10"><Form.Control type='password' name='password' onChange={ownerChange} placeholder="Password" /></Col>
+          <Col md="10"><Form.Control type='password' name='password' onChange={ownerChange} placeholder="Password" isInvalid={ dirty.isPassword && !pass.passPassword} isValid={pass.passPassword}/>
+          <Form.Control.Feedback type="invalid">비밀번호: 4~16자를 사용해 주세요.</Form.Control.Feedback>
+          <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
+          </Col>
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
