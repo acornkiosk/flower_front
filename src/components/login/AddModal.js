@@ -1,36 +1,116 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 export default function AddModal(props) {
   //여기서 모달을 숨기고 싶으면 props.setshow(false) 가 실행되면 된다
   const { setshow, refresh } = props
-  // 사장(owner) 추가
-  const ownerInsert = () => {
-    axios.post("/api/user/add", ownerdata)
-      .then(res => {
-        alert(res.data.dto.id + "님(owenr) 등록 되었습니다.")
-        setshow(false)
-        refresh()
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-  //사장 (owner) input값 
-  const ownerChange = (e) => {
-    setOwnerdata({
-      ...ownerdata,
-      [e.target.name]: e.target.value
-    });
-  };
-  //사장님(owner) 추가 
+    //사장님(owner) 추가 
   const [ownerdata, setOwnerdata] = useState({
     userName: "",
     id: "",
     password: "",
     rank: 3002 // 초기값으로 설정해야 할 경우 여기에 넣으세요
   });
+// 정규식 표현에 대한 true.false state값
+  const [pass,setPass]=useState({
+    passId:false,
+    passUserName:false,
+    passPassword:false
+  })
+
+  // id,password,userName 값 모두 true 일경우
+  const [passAll,setPassAll]=useState(false)
+  
+  useEffect(()=>{
+    const  isPass=pass.passId && pass.passUserName && pass.passPassword
+    setPassAll(isPass)
+  }, [pass]);
+
+  // 사장(owner) 추가
+  const ownerInsert = () => {
+    axios.post("/api/user/add", ownerdata)
+      .then(res => {
+        alert(res.data.dto.userName + "님(owenr) 등록 되었습니다.")
+        setshow(false)
+        refresh()
+        reset()
+      })
+      .catch(error => {
+        console.log(error);
+        alert("오류입니다.")
+      });
+  };
+  //state 값을 초기화 하는 부분
+  const reset=()=>{
+    setPassAll(false)
+    setPass({
+     passId:false,
+     passUserName:false,
+     passPassword:false
+    })
+    setOwnerdata({
+     userName: "",
+     id: "",
+     password: "",
+     rank: 3002
+    })
+  }
+  //사장 (owner) input값 
+  const ownerChange = (e) => {
+    const idReg= /^[a-zA-Z][a-zA-Z0-9]{2,15}$/;
+    const userNameReg=/^[가-힣]{2,16}$/;
+    const passwordReg= /^.{4,16}$/;
+    
+    if(e.target.name === "userName"){
+      if(userNameReg.test(e.target.value)){
+        setPass({
+          ...pass,
+          passUserName:true
+        })
+      }else{
+        setPass({
+          ...pass,
+          passUserName:false
+        })
+      }
+          
+      
+    }else if(e.target.name === "id"){
+      if(idReg.test(e.target.value)){
+        setPass({
+          ...pass,
+          passId:true
+        })
+      }else{
+        setPass({
+          ...pass,
+          passId:false
+        })
+      }
+
+    }else if(e.target.name === "password"){
+      if(passwordReg.test(e.target.value)){
+        setPass({
+          ...pass,
+          passPassword:true
+        })
+      }else{
+        setPass({
+          ...pass,
+          passPassword:false
+        })
+      }
+    }
+
+    setOwnerdata({
+      ...ownerdata,
+      [e.target.name]:e.target.value
+    })
+    
+  };
+
+
   return (
     <Modal
       {...props}
@@ -58,8 +138,11 @@ export default function AddModal(props) {
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-success" onClick={ownerInsert} disabled={false}>등록</Button>
-        <Button variant="outline-danger" onClick={() => { setshow(false) }} >Close</Button>
+        <Button variant="outline-success" onClick={ownerInsert} disabled={!passAll}>등록</Button>
+        <Button variant="outline-danger" onClick={() => {
+           setshow(false)
+            reset()
+           }} >Close</Button>
       </Modal.Footer>
     </Modal>
   );
