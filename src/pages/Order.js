@@ -8,8 +8,9 @@ import OrderItem from "../components/order/orderItem"
 import { create } from "../util/websocket"
 import Error from "./Error"
 
-export default function Order({isOrdered, setIsOrdered}) {
-  const [orderCount, setOrderCount] = useState(0)
+export default function Order(props) {
+  /** 주문개수 SideBar.js 로 보내기 */
+  const { orderCount, setOrderCount } = props
   //들어온 주문을 저장
   const [orders, setOrders] = useState({})
   //상세 모달 state
@@ -33,19 +34,21 @@ export default function Order({isOrdered, setIsOrdered}) {
       ws.current.onmessage = (msg) => {
         if (msg != null) {
           let result = JSON.parse(msg.data)
+          /** 각 페이지마다 Toast 메시지 전달하기 */
           if (result.type === "SET_TOAST") {
             dispatch({ type: "SET_TOAST", payload: { isToast: true } })
           }
-          
+          /** 주문관리 모달 최신화 */
           if (result.type === "UPDATE_ORDERS") {
             refresh()
+            /** 주문현황 개수 기입 */
+            console.log(orders)
+            dispatch({ type: "SET_TOAST", payload: { orderCount: orderCount } })
           }
         }
       }
     }
   }, [])
-  
- 
 
   const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
@@ -64,13 +67,10 @@ export default function Order({isOrdered, setIsOrdered}) {
             /** 새로운 정보는 추가하기 */
             updatedOrders[orderId] = [order]
           }
+          /** 반복문 코드를 활용하여 주문개수 실시간 파악하기 */
+          setOrderCount(orderCount+1)
         })
         setOrders(updatedOrders)
-        /** 함수동작 후 주문알림 초기화 */
-        setIsOrdered(false)
-        /** 주문현황 개수 기입 */
-      
-
       })
       .catch(error => {
         setEmpty(true)
@@ -86,7 +86,7 @@ export default function Order({isOrdered, setIsOrdered}) {
             <Row className="row-cols-sm-2 row-cols-md-3 d-flex justify-content-start g-3">
               {Object.keys(orders).map(key =>
                 <Col key={key}>
-                  <OrderItem orders={orders[key]} setEmpty={setEmpty} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} />
+                  <OrderItem  setEmpty={setEmpty} orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} orderCount={orderCount} setOrderCount={setOrderCount} />
                 </Col>
               )}
             </Row>

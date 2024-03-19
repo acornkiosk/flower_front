@@ -1,18 +1,26 @@
 export function create(ws) {
-  ws.current = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/order")
+  ws.current = new WebSocket("ws://localhost:9000/flower/ws/owner")
   ws.current.onopen = () => {
     console.log("connected")
   }
   ws.current.onerror = (e) => {
     console.log(e)
+    console.log(socketState(ws.readyState))
   }
   ws.current.onclose = (e) => {
     let reason = getCloseEventCodeReason(e.code)
     console.log(e.code, reason)
+    console.log(socketState(ws.readyState))
+    if(e.code === 1006){
+      setTimeout(()=>{
+        ws.current.onopen()
+        console.log("다시 연결시도")
+      },1000)
+    }
   }
   console.log(socketState(ws.readyState))
 }
-
+/** 로그인과 로그아웃 기능이 별개로 구분된 사장님 페이지에선 가능한 로직 */
 export function close(ws, msg) {
   if (ws.current) {
     ws.current.close(1000, msg)

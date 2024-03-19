@@ -13,11 +13,13 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import '../../App.css';
 import { Badge } from 'react-bootstrap';
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   //index.js redux 값 가져오는것
   const isLogin = useSelector(state => state.isLogin)
   const role = useSelector(state => state.role)
   const rank = useSelector(state => state.rank)
+  /** 주문개수 */
+  const { orderCount } = props
   //권한 관리 state => {"4001" : false, "4002" : false, "4003": false, "4004" : false}
   const [roleState, setRoleState] = useState({
     4001: false,
@@ -35,7 +37,8 @@ const Sidebar = () => {
       , 4004: role.includes('4004')
     })
     console.log(roleState)
-  }, [isLogin])
+    console.log(orderCount)
+  }, [isLogin, orderCount])
   const [activeMenu, setActiveMenu] = useState('');
   const toggleAccordion = (menuName) => {
     setActiveMenu(activeMenu === menuName ? '' : menuName);
@@ -100,7 +103,7 @@ const Sidebar = () => {
             roleState[4004] &&
             <CDBSidebarMenu>
               <NavLink onClick={() => toggleAccordion('order')} to="/order" className={activeStyle}>
-                <CDBSidebarMenuItem icon="money-check">주문 관리 <Badge bg="primary">숫자</Badge></CDBSidebarMenuItem>
+                <CDBSidebarMenuItem icon="money-check">주문 관리 <Badge bg="primary">{orderCount}</Badge></CDBSidebarMenuItem>
               </NavLink>
             </CDBSidebarMenu>
           }

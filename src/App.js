@@ -16,8 +16,9 @@ import Login from './pages/login';
 import Menu from './pages/menu';
 
 function App() {
-  /** 주문정보 들어오면 바로 Order.js 로 신호 전달하기 */
-  const [isOrdered, setIsOrdered] = useState(false)
+  /** 실시간 주문개수 파악 SideBar.js 로 보내기
+   * useSelector로 안한 이유 : undefined */
+  const [orderCount, setOrderCount] = useState(0)
   const isToast = useSelector(state => state.isToast)
   const dispatch = useDispatch()
   useEffect(() => {
@@ -34,16 +35,16 @@ function App() {
   return (
     <div className="d-flex">
       <div>
-        <Sidebar />
+        <Sidebar orderCount={orderCount}/>
       </div>
       <div style={{ flex: "1 1 auto", display: "flex", flexFlow: "column", height: "100vh", overflowY: "hidden" }}>
         <Navbar />
         <div style={{ height: "100%" }}>
           <div style={{ height: "calc(100% - 64px)", padding: "20px 5%", overflowY: "scroll" }}>
             <Routes>
-              <Route path='/' element={<Home isOrdered={isOrdered} setIsOrdered={setIsOrdered}/>} />
+              <Route path='/' element={<Home orderCount={orderCount} setOrderCount={setOrderCount}/>} />
               <Route path='/kiosk' Component={Kiosk} />
-              <Route path='/order' element={<Order isOrdered={isOrdered} setIsOrdered={setIsOrdered}/>}/>
+              <Route path='/order' element={<Order orderCount={orderCount} setOrderCount={setOrderCount}/>}/>
               <Route path='/user' Component={User} />
               <Route path='/menu/*' Component={Menu} />
               <Route path='/login' Component={Login}/>
