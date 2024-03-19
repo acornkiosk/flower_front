@@ -182,6 +182,8 @@ function AddMenu() {
                             <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" value={description} onChange={(e) => setDescription(e.target.value)} />
                         </Form.Group>
                         <Button type="submit" disabled={!isFormValid()}>등록</Button>
+
+                        
                     </div>
                 </Form>
 
