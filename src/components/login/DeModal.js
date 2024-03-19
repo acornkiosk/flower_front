@@ -3,6 +3,8 @@ import { Button, Modal } from "react-bootstrap";
 
 export default function DeModal(props) {
     const {id, refresh, setshow} = props
+
+    const test=id + "사장님을 삭제합니다."
     const ownerDelete = () => {
         axios.post("/api/user/delete", {id})
             .then(res => {
@@ -27,6 +29,8 @@ export default function DeModal(props) {
       </Modal.Header>
       <Modal.Body>
         <h4> <strong>{id}</strong> 사장님을 삭제하시겠습니까?</h4>
+        <p> 다음 문구를 입력해주세요  {test}</p>
+        <input type="text" ></input>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-danger"  onClick={ownerDelete}>삭제</Button>

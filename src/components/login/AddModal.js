@@ -198,10 +198,10 @@ export default function AddModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-success" onClick={ownerInsert} disabled={!passAll}>등록</Button>
-        <Button variant="outline-danger" onClick={() => {
+        <Button variant="outline-warning" onClick={() => {
            setshow(false)
             reset()
-           }} >Close</Button>
+           }} >취소</Button>
       </Modal.Footer>
     </Modal>
   );

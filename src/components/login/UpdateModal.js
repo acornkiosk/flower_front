@@ -150,7 +150,7 @@ const reset=()=>{
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          사장님 정보 수정
+          사장님(owner) 정보 수정
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
