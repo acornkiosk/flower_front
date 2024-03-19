@@ -16,6 +16,7 @@ const Navbar = () => {
   const ws = useSelector(state => state.ws)
   //로그아웃 핸들러
   const handleLogout = () => {
+    /** 웹소켓 닫기 */
     close(ws, "로그아웃")
     //localStorage 에 저장된 토큰 삭제
     delete localStorage.token
@@ -29,6 +30,8 @@ const Navbar = () => {
       websocket: createRef()
     }
     dispatch({ type: "SET_LOGIN", payload: data })
+    // /** 웹소켓 종료하기 */
+    // WebSocketUtil({power:false})
     navigate("/")
   }
 

@@ -12,7 +12,6 @@ function UpdateMenu() {
         category_id: '',
         price: '',
         summary: '',
-      
         description: ''
     });
     const navigate = useNavigate()
@@ -54,6 +53,13 @@ function UpdateMenu() {
         getMenuInfo(parseInt(menuId, 10))
         console.log(getViewImage)
     }, [])
+
+    useEffect(() => {
+        setMenuName(menuData.name);
+        setPrice(menuData.price);
+        setSummary(menuData.summary);
+        setDescription(menuData.description);
+    }, [menuData]);
 
     /** 삭제버튼 눌렀을 때 경고알림으로 사용할 변수 */
     const [warning, setWarning] = useState({
@@ -114,6 +120,7 @@ function UpdateMenu() {
         console.log(value)
         setMenuData({ ...menuData, [name]: value });
     };
+    
     const handleImageChange = (e) => {
         //선택한 파일 얻어내기 or 불러온 파일
         const file = e.target.files[0]
@@ -144,9 +151,25 @@ function UpdateMenu() {
         setIsSold(newValue);
     };
 
+    const [menuName, setMenuName] = useState("");
+    const [price, setPrice] = useState("");
+    const [summary, setSummary] = useState("");
+    const [description, setDescription] = useState("");
+    
     const isFormValid = () => {
-        const { name, price, summary, description } = menuData;
-        return name && price && summary && description;
+        const isMenuNameValid = menuName.trim().length >= 1 && menuName.trim().length <= 15;
+        const isPriceValid = !isNaN(parseFloat(price));
+        const isSummaryValid = summary.trim().length >= 1 && summary.trim().length <= 30;
+        const isDescriptionValid = description.trim().length >= 1 && description.trim().length <= 300;
+        return isMenuNameValid && isPriceValid && isSummaryValid && isDescriptionValid;
+    };
+
+    const handlePriceChange = (e) => {
+        const value = e.target.value;
+        // 숫자 또는 빈 문자열인 경우에만 가격 상태 업데이트
+        if (/^[1-9][0-9.]*$/.test(value)) {
+            setPrice(value);
+        }
     };
 
     const previewStyle = {
@@ -203,7 +226,7 @@ function UpdateMenu() {
                                 <div>
                                     <Form.Label >가격</Form.Label>
                                     <InputGroup>
-                                        <Form.Control type="text" name="price" style={{width:"160px"}} onChange={handleChange} value={menuData.price} placeholder="가격" />
+                                        <Form.Control type="number" min="0" step="100" name="price" style={{width:"160px"}} onChange={handleChange} value={menuData.price} placeholder="가격" />
                                         <InputGroup.Text>원</InputGroup.Text>
                                     </InputGroup>
                                 </div>

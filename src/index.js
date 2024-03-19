@@ -66,7 +66,7 @@ const initialstate = {
   isLogin,
   rank,
   role,
-  selectedMenuId: 0,
+  selectedMenuId: sessionStorage.getItem("MenuId"),
   ws: createRef(),
   isToast: false
 }
@@ -84,7 +84,7 @@ const reducer = (state = initialstate, action) => {
       , isLogin: action.payload.isLogin
       , rank: action.payload.rank
       , role: action.payload.role
-      , ws: action.payload.websocket // connect 함수를 호출하여 ws 객체를 설정
+      , ws: action.payload.websocket // ws 객체를 설정
     }
     if (timeoutId) clearTimeout(timeoutId)
     checkTokenTimeout()
