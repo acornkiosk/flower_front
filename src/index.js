@@ -62,7 +62,6 @@ checkTokenTimeout()
 const initialstate = {
   userName,
   commonTable: [],
-  orders: [],
   isLogin,
   rank,
   role,

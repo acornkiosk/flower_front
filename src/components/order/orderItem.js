@@ -4,7 +4,7 @@ import { Justify } from "react-bootstrap-icons";
 import ConvertOptions from "./Util";
 
 export default function OrderItem(props) {
-  const { orders, list, id, setOrders, deleteModal, setShowModal, setData } = props
+  const { orders, list, id, setOrders, deleteModal, setShowModal, setData, orderCount, setOrderCount } = props
   const orderId = orders[0].order_id
   const kioskId = orders[0].kiosk_id
   const regDate = calRegDate(orders[0].regdate)
@@ -31,6 +31,9 @@ export default function OrderItem(props) {
             const newList = { ...list }
             delete newList[id]
             setOrders(newList)
+            /** 주문현황 개수 감소 */
+            if(orderCount > 0){setOrderCount(orderCount -1)}
+            else{setOrderCount(orderCount)}
           }
         })
         .catch(error => console.log(error))

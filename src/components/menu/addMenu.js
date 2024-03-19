@@ -4,7 +4,6 @@ import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { create } from '../../util/websocket';
 import { useDispatch, useSelector  } from 'react-redux';
-import 'animate.css';
 
 function AddMenu() {
     const [category, setCategory] = useState([])

@@ -129,6 +129,7 @@ function Kiosk() {
           console.log(error)
         })
     } else if (action === 'on') {
+      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'on' } })
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
@@ -136,12 +137,13 @@ function Kiosk() {
             refresh(1)
           })
       })
-      /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
+      /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
       send(ws)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
     } else {
+      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'off' } })
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
@@ -149,7 +151,7 @@ function Kiosk() {
             refresh(1)
           })
       })
-      /** 웹소켓을 통해 손님 키오스크에 신호 보내주기 */
+      /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
       send(ws)
       setChecked({})
       setSelectedKiosk([])
