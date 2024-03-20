@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 
-export default function DeModal(props) {
+export default function DelModal(props) {
     const {id, refresh, setshow} = props
     const [valueSame,setValueSame]=useState(false);
     const [inputValue,setInputValue]=useState("");

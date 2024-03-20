@@ -3,11 +3,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import AddModal from "../components/login/AddModal";
 import UpdateModal from "../components/login/UpdateModal";
 import Error from "./Error";
-import DeModal from "../components/login/DeModal";
+import DelModal from "../components/login/DelModal";
+
 
 
 export default function OwnerMange() {
@@ -79,7 +79,7 @@ export default function OwnerMange() {
                         }
                     </tbody>
                 </Table>
-                <DeModal show={deleteModal} id={ownerId} refresh={refresh} setshow={setDeleteModal} />
+                <DelModal show={deleteModal} id={ownerId} refresh={refresh} setshow={setDeleteModal} />
                 <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
                 <UpdateModal show={showUpModal} setshow={setShowUpModal} item={currentItem} setCurrentItem={setCurrentItem} refresh={refresh} />
             </div>
