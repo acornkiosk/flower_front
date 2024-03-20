@@ -170,7 +170,7 @@ function User() {
           }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
         </Pagination>}
         <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={() => { pageRefresh(1) }}></UpdateModal>
-        <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
+        <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} pageInfoList={pageInfo.list} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
         <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={() => { pageRefresh(1) }}></DeleteModal>
       </>
     )
