@@ -1,5 +1,5 @@
 export function create(ws) {
-  ws.current = new WebSocket("ws://localhost:9000/flower/ws/owner")
+  ws.current = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/owner")
   ws.current.onopen = () => {
     console.log("connected")
   }

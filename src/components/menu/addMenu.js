@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
+import { Button, Form, Image, InputGroup } from "react-bootstrap";
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { create } from '../../util/websocket';
-import { useDispatch, useSelector  } from 'react-redux';
+import 'animate.css';
 
 function AddMenu() {
     const [category, setCategory] = useState([])
@@ -25,16 +26,16 @@ function AddMenu() {
         getCategory()
         if (ws.current == null) {
             create(ws)
-          } else {
+        } else {
             ws.current.onmessage = (msg) => {
-              if (msg != null) {
-                let result = JSON.parse(msg.data)
-                if (result.type === "SET_TOAST") {
-                  dispatch({ type: "SET_TOAST", payload: { isToast: true } })
+                if (msg != null) {
+                    let result = JSON.parse(msg.data)
+                    if (result.type === "SET_TOAST") {
+                        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
+                    }
                 }
-              }
             }
-          }
+        }
     }, [])
     const getCategory = () => {
         axios.post("/api/common/child", { "code_id": 1000 })
@@ -182,7 +183,7 @@ function AddMenu() {
                         </Form.Group>
                         <Button type="submit" disabled={!isFormValid()}>등록</Button>
 
-                        
+
                     </div>
                 </Form>
 
