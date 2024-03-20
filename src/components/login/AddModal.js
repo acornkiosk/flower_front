@@ -137,7 +137,6 @@ export default function AddModal(props) {
   };
   //아이디 중복 체크
   const checkId = () => {
-    if(window.confirm("아이디를 사용하시겠습니까?")){
     const id = ownerdata.id;
       axios.post("/api/user/checkid", id)
       .then(res => {
@@ -150,7 +149,6 @@ export default function AddModal(props) {
       .catch(error => {
           console.log(error);
       });
-    }
 };
 
   return (

@@ -124,7 +124,6 @@ const reset=()=>{
   }
     //아이디 중복 체크
   const checkId = () => {
-    if(window.confirm("아이디를 사용하시겠습니까?")){
     const id = item.newId
     console.log(id)
       axios.post("/api/user/checkid", id)
@@ -138,7 +137,6 @@ const reset=()=>{
       .catch(error => {
           console.log(error);
       });
-    }
 };
 
   return (
