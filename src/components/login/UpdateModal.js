@@ -18,7 +18,8 @@ export default function UpdateModal(props) {
     const [dirty,setDirty]=useState({
       isId:false,
       isUserName:false,
-      isPassword:false
+      isPassword:false,
+      isDuplicateId:false
     })
 
   // id,password,userName 값 모두 true 일경우
@@ -35,7 +36,8 @@ const reset=()=>{
   setDirty({
     isId:false,
     isUserName:false,
-    isPassword:false
+    isPassword:false,
+    isDuplicateId:false
   })
 
 }
@@ -124,6 +126,10 @@ const reset=()=>{
   }
     //아이디 중복 체크
   const checkId = () => {
+    setDirty({
+      ...dirty,
+      isDuplicateId:true
+    })
     const id = item.newId
     console.log(id)
       axios.post("/api/user/checkid", id)
@@ -164,7 +170,7 @@ const reset=()=>{
           <Col md="4"><Form.Control type='text' name='newId'  onChange={handleChange} placeholder={item.id}  readOnly={pass.duplicateId} isInvalid={dirty.isId &&!pass.passNewId || pass.passNewId && !pass.duplicateId}  isValid={pass.passNewId && pass.duplicateId}/>
           <Form.Control.Feedback type="invalid">
             {
-              !pass.passNewId && !pass.duplicateId ? "아이디를 입력해주세요": pass.passNewId && !pass.duplicateId ? "중복 체크해주세요": ''
+              !pass.passNewId && !pass.duplicateId ? "아이디를 입력해주세요": pass.passNewId && !dirty.isDuplicateId  ? "중복 체크해주세요": pass.passNewId && dirty.isDuplicateId ? "이미 존재하는 아이디입니다." : ""
             }
           </Form.Control.Feedback>
           <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
