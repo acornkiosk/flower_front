@@ -272,8 +272,8 @@ function Kiosk() {
             )}
           </tbody>
         </Table>
-        {isEmpty && <EmptyText message={'키오스크가 없습니다.'} />}
-        {!isEmpty && (
+        {isEmpty ? <EmptyText message={'키오스크가 없습니다.'} /> :
+      
         <Pagination>
           <Pagination.Item onClick={() => {
             refresh(pageInfo.startPageNum - 1)
@@ -288,7 +288,7 @@ function Kiosk() {
             refresh(pageInfo.endPageNum + 1)
           }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
         </Pagination>
-        )}
+        }
       </div>
     )
   } else {
