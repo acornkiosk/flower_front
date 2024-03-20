@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button, Modal, Pagination } from 'react-bootstrap';
+import { Button, Pagination } from 'react-bootstrap';
 import { PencilFill, XLg } from 'react-bootstrap-icons';
 import Table from 'react-bootstrap/Table';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CategoryBtn from './categoryBtn';
-import WarningModal from './WarningModal';
-import { useDispatch, useSelector  } from 'react-redux';
 import { create } from '../../util/websocket';
 import EmptyText from '../error/EmptyText';
+import WarningModal from './WarningModal';
+import CategoryBtn from './categoryBtn';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
@@ -88,10 +88,8 @@ function Main() {
   const goToUpdateMenu = (MenuId) => {
     navigate(`/menu/updateMenu`)
     sessionStorage.setItem("MenuId", MenuId)
-    let storage_menuId=sessionStorage.getItem("MenuId")
-    
+    let storage_menuId = sessionStorage.getItem("MenuId")
     dispatch({ type: "SELECT_MENU", payload: storage_menuId })
-
   }
   /** 메뉴등록 폼으로가기 */
   const goToAddMenu = () => {
@@ -102,12 +100,12 @@ function Main() {
     axios.post("/api/menu/delete", { id: id })
       .then(res => {
         setWarning(false)
-          // 삭제가 성공하면 상태를 업데이트하고 UI를 새로 고칩니다.
+        // 삭제가 성공하면 상태를 업데이트하고 UI를 새로 고칩니다.
         setFilteredMenuList(prevState => ({
           ...prevState,
           list: prevState.list.filter(item => item.id !== id) // 삭제된 메뉴를 제외한 새로운 목록으로 업데이트
         }));
-        refresh(1, categoryNum.code_id,sortByPrice)
+        refresh(1, categoryNum.code_id, sortByPrice)
       })
       .catch(error => console.log(error))
   }
@@ -167,7 +165,6 @@ function Main() {
           }} disabled={filteredMenuList.endPageNum >= filteredMenuList.totalPageCount}>&raquo;</Pagination.Item>
         </Pagination>
       }
-
       <WarningModal show={warning.show} value_id={warning.menu_id} onHide={() => setWarning({ show: false })} deletemenu={deleteMenu}></WarningModal>
     </div>
   );

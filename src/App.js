@@ -35,19 +35,19 @@ function App() {
   return (
     <div className="d-flex">
       <div>
-        <Sidebar orderCount={orderCount}/>
+        <Sidebar orderCount={orderCount} />
       </div>
       <div style={{ flex: "1 1 auto", display: "flex", flexFlow: "column", height: "100vh", overflowY: "hidden" }}>
         <Navbar />
         <div style={{ height: "100%" }}>
           <div style={{ height: "calc(100% - 64px)", padding: "20px 5%", overflowY: "scroll" }}>
             <Routes>
-              <Route path='/' element={<Home orderCount={orderCount} setOrderCount={setOrderCount}/>} />
+              <Route path='/' element={<Home orderCount={orderCount} setOrderCount={setOrderCount} />} />
               <Route path='/kiosk' Component={Kiosk} />
-              <Route path='/order' element={<Order orderCount={orderCount} setOrderCount={setOrderCount}/>}/>
+              <Route path='/order' element={<Order orderCount={orderCount} setOrderCount={setOrderCount} />} />
               <Route path='/user' Component={User} />
               <Route path='/menu/*' Component={Menu} />
-              <Route path='/login' Component={Login}/>
+              <Route path='/login' Component={Login} />
               <Route path='/owner' Component={OwnerMange} />
               <Route path='/dash' Component={DashBoard} />
             </Routes>

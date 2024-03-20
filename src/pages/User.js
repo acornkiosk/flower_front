@@ -11,7 +11,6 @@ import EmptyText from '../components/error/EmptyText';
 
 function User() {
   // 빈 화면 state
-  const [isEmpty, setEmpty] = useState(false)
   const [insertShow, setInsertShow] = useState(false);
   const [updateShow, setUpdateShow] = useState(false);
   const [deleteShow, setDeleteShow] = useState(false);
@@ -21,6 +20,7 @@ function User() {
   const [pageInfo, setPageInfo] = useState({
     list: []
   })
+  const role = useSelector(state => state.role)
   // 페이징 UI 를 만들 때 사용할 배열
   const [pageArray, setPageArray] = useState([])
   // 페이징 UI 를 만들 때 사용할 배열을 리턴해주는 함수
@@ -71,7 +71,6 @@ function User() {
   const pageRefresh = (pageNum) => {
     axios.post("/api/user/list", { pageNum: pageNum })
       .then(res => {
-        setEmpty(false)
         let filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002)
         const newResult = {
           ...res.data,
@@ -82,7 +81,6 @@ function User() {
         setPageArray(result)
       })
       .catch(error => {
-        setEmpty(true)
         console.log(error)
       })
   }
@@ -91,7 +89,6 @@ function User() {
     // 입사일자 오름차순, 내림차순으로 정렬함
     axios.post("/api/user/list", { pageNum: 1, sort: sort })
       .then(res => {
-        setEmpty(false)
         //super와 owner는 없애서 setPageInfo에 넣어야함
         const filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002);
         setPageInfo({
@@ -100,7 +97,6 @@ function User() {
         })
       })
       .catch(error => {
-        setEmpty(true)
         console.log(error)
       })
     if (sort == null) setSort("asc")
@@ -110,7 +106,6 @@ function User() {
   useEffect(() => {
     pageRefresh(1)
   }, [])
-  const role = useSelector(state => state.role)
   if (role.includes("4001")) {
     return (
       <>
@@ -130,7 +125,7 @@ function User() {
               <th>입사일자 <span className='btn' onClick={() => { handleSortByDate(sort) }}>
                 {sort == null ?
                   <ArrowDown /> : (
-                    sort == "asc" ? <ArrowDownUp />
+                    sort === "asc" ? <ArrowDownUp />
                       : <ArrowUp />
                   )
                 }
