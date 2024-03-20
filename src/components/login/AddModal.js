@@ -144,12 +144,12 @@ export default function AddModal(props) {
       isDuplicateId:true
     })
     const id = ownerdata.id;
-      axios.post("/api/user/checkid", id)
+      axios.post("/api/user/checkid", {id})
       .then(res => {
-          console.log(res.data);
+          console.log(res.data.hasID);
           setPass({
             ...pass,
-            duplicateId:res.data
+            duplicateId:res.data.hasID
           })
       })
       .catch(error => {

@@ -49,7 +49,6 @@ export default function OwnerMange() {
             else if(a[i]=="4004"){
                 b[i]=" 주문 관리"
             }
-            console.log(b)
         }
         return b;
     }
@@ -68,7 +67,7 @@ export default function OwnerMange() {
                             <td>아이디</td>
                             <td>사장님 이름</td>
                             <td>직급</td>
-                            <td>권한</td>
+                            <td>접근 권한</td>
                             <td>가입 날짜</td>
                             <td>수정</td>
                             <td>삭제</td>

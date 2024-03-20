@@ -42,9 +42,9 @@ const reset=()=>{
 
 }
   //passAll 에 state 값을 pass(id,userName,password )값이 변동될때마다 상태 변경
-  useEffect(()=>{
-    const  isPass=pass.passNewId && pass.passUserName && pass.passNewPassword && pass.duplicateId
-    setPassAll(isPass)
+  useEffect(() => {
+    const isPassAll = pass.passNewId && pass.duplicateId && pass.passUserName && pass.passNewPassword ;
+    setPassAll(isPassAll);
   }, [pass]);
 
   //모달창에 입력값 바뀌면 state 값 바꾸기
@@ -122,6 +122,7 @@ const reset=()=>{
       })
       .catch(error => {
         console.log(error)
+        alert("업데이트 실패했습니다.")
       })
   }
     //아이디 중복 체크
@@ -131,10 +132,8 @@ const reset=()=>{
       isDuplicateId:true
     })
     const id = item.newId
-    console.log(id)
-      axios.post("/api/user/checkid", id)
+      axios.post("/api/user/checkid", {id})
       .then(res => {
-          console.log(res.data);
           setPass({
             ...pass,
             duplicateId:res.data
