@@ -1,17 +1,23 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import AddModal from "../components/login/AddModal";
+import DeModal from "../components/login/DeModal";
 import UpdateModal from "../components/login/UpdateModal";
 import Error from "./Error";
+
 
 export default function OwnerMange() {
     //사장님(owner) 리스트 관리
     const [ownerlist, setOwnerlist] = useState([]);
     const rank = useSelector(state => state.rank)
+    const [showAddModal, setShowAddModal] = useState(false)
+    const [showUpModal, setShowUpModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
+    const [currentItem, setCurrentItem] = useState({})
+    const [ownerId, setOwnerId] = useState()
     //화면 refresh 하기
     const refresh = () => {
         axios.post("/api/user/list", { rank: 3002, pageNum: 0 })
@@ -26,24 +32,10 @@ export default function OwnerMange() {
     useEffect(() => {
         refresh()
     }, [])
-    const [showAddModal, setShowAddModal] = useState(false)
-    const [showUpModal, setShowUpModal] = useState(false)
-    const [currentItem, setCurrentItem] = useState({})
-    //사장님 삭제
-    const ownerDelete = (item) => {
-        axios.post("/api/user/delete", item)
-            .then(res => {
-                alert(res.data.dto.userName + "님을 삭제 했습니다.")
-                refresh()
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
     if (rank === 3001) {
         return (
-            <div>
-                <h1>super 전용 (관리자 모드)</h1>
+            <div >
+                <h1 style={{ textAlign: 'center' }}>super 전용 (관리자 모드)</h1>
                 <h4>사장님(OWENR) 목록</h4>
                 <Button variant="success" onClick={() => {
                     setShowAddModal(true)
@@ -78,21 +70,20 @@ export default function OwnerMange() {
                                     </Button>
                                 </td>
                                 <td><Button variant="danger" onClick={() => {
-                                    if (window.confirm("삭제할거냐?")) {
-                                        ownerDelete(item)
-                                    }
+                                    setOwnerId(item.id)
+                                    setDeleteModal(true)
                                 }}>삭제</Button></td>
                             </tr>)
                         }
                     </tbody>
                 </Table>
+                <DeModal show={deleteModal} id={ownerId} refresh={refresh} setshow={setDeleteModal} />
                 <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
                 <UpdateModal show={showUpModal} setshow={setShowUpModal} item={currentItem} setCurrentItem={setCurrentItem} refresh={refresh} />
             </div>
         )
     }
     else {
-
         return (
             <Error />
         )

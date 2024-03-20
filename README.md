@@ -2,8 +2,9 @@
 
 **팀 프로젝트의 프론트 엔드 Repository 입니다.**
 
-[백엔드 Repositroy](https://github.com/acornkiosk/Flower_back) <br/>
-[키오스크 메인 Repository](https://github.com/acornkiosk/flower_kiosk)
+[백엔드 Repositroy](https://github.com/acornkiosk/flower-back) <br/>
+[키오스크 메인 Repository](https://github.com/acornkiosk/flower_kiosk)<br/>
+[키오스크 안드로이드 Repository](https://github.com/acornkiosk/flower_android)
 
 ## 프로젝트 특징
 

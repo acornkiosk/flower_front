@@ -32,8 +32,8 @@ export default function OrderItem(props) {
             delete newList[id]
             setOrders(newList)
             /** SideBar.js 주문현황 개수 감소 */
-            if(orderCount > 0){setOrderCount(orderCount -1)}
-            else{setOrderCount(orderCount)}
+            if (orderCount > 0) { setOrderCount(orderCount - 1) }
+            else { setOrderCount(orderCount) }
             props.setEmpty(true)
           }
         })

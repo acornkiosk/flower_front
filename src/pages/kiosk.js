@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
+import EmptyText from "../components/error/EmptyText";
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
-import Error from "./Error";
 import { create, send } from "../util/websocket";
-import EmptyText from "../components/error/EmptyText";
+import Error from "./Error";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -58,20 +58,21 @@ function Kiosk() {
       })
       .catch(error => {
         setEmpty(true)
-        console.log(error)})
+        console.log(error)
+      })
   }
   //화면 로딩시
   useEffect(() => {
     refresh(1)
-    if(ws.current == null) {
+    if (ws.current == null) {
       create(ws)
-    }else {
-      ws.current.onmessage = (msg) =>{
-        if(msg != null) {
+    } else {
+      ws.current.onmessage = (msg) => {
+        if (msg != null) {
           let result = JSON.parse(msg.data)
           console.log(msg.data)
-          if(result.type === "SET_TOAST") {
-            dispatch({type : "SET_TOAST", payload:{isToast:true}})
+          if (result.type === "SET_TOAST") {
+            dispatch({ type: "SET_TOAST", payload: { isToast: true } })
           }
         }
       }
@@ -188,9 +189,7 @@ function Kiosk() {
     handleChange(e);
     handleChange2(e);
   };
-
   const isLocationValid = kioskLocation.trim().length >= 1 && kioskLocation.trim().length <= 20;
-
   //삭제 버튼 기능
   const deleteKiosk = () => {
     selectedKiosk.forEach(tmp => {
@@ -198,12 +197,12 @@ function Kiosk() {
         .then(res => {
           // 삭제한 항목을 제외하고 페이지 정보 업데이트
           const updatedList = pageInfo.list.filter(item => item.id !== tmp.id);
-        setpageInfo({
-          ...pageInfo,
-          list: updatedList
-        });
-        // 모든 항목이 삭제되었는지 확인하여 isEmpty 상태 업데이트
-        setEmpty(updatedList.length === 0);
+          setpageInfo({
+            ...pageInfo,
+            list: updatedList
+          });
+          // 모든 항목이 삭제되었는지 확인하여 isEmpty 상태 업데이트
+          setEmpty(updatedList.length === 0);
         })
         .catch(error => {
           setEmpty(true)
@@ -272,6 +271,7 @@ function Kiosk() {
             )}
           </tbody>
         </Table>
+
         {isEmpty ? <EmptyText message={'키오스크가 없습니다.'} /> :
       
         <Pagination>
@@ -289,6 +289,7 @@ function Kiosk() {
           }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
         </Pagination>
         }
+
       </div>
     )
   } else {
