@@ -7,12 +7,9 @@ export default function DeModal(props) {
     const [valueSame,setValueSame]=useState(false);
     const [inputValue,setInputValue]=useState("");
     const test=id + " 사장님을 삭제합니다."
-    
     const handleChange=(e)=>{
       setInputValue(e.target.value)
     }
-
-
     //owner 삭제 axious
     const ownerDelete = () => {
       if(test === inputValue){
@@ -30,7 +27,6 @@ export default function DeModal(props) {
         setValueSame(true)
         alert("문구가 틀립니다,")
       }
-       
     }
   return (
     <Modal
