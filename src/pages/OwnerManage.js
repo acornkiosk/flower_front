@@ -33,7 +33,27 @@ export default function OwnerMange() {
     const [deleteModal,setDeleteModal]=useState(false)
     const [currentItem, setCurrentItem] = useState({})
     const [ownerId,setOwnerId]=useState()
-   
+
+    const strRole=(role)=>{
+        let a=role.split(",");
+        let b=[];
+        for(let i=0; i<a.length; i++){
+            if(a[i]=="4001"){
+                b[i]=" 직원 관리 및 대쉬보드"
+            }else if(a[i]=="4002"){
+                b[i]=" 메뉴 관리"
+            }
+            else if(a[i]=="4003"){
+                b[i]=" 키오스크 관리"
+            }
+            else if(a[i]=="4004"){
+                b[i]=" 주문 관리"
+            }
+            console.log(b)
+        }
+        return b;
+    }
+
     if (rank === 3001) {
         return (
             <div >
@@ -45,11 +65,11 @@ export default function OwnerMange() {
                 <Table>
                     <thead>
                         <tr>
-                            <td>ID</td>
-                            <td>USERNAME</td>
-                            <td>RANK</td>
-                            <td>ROLE</td>
-                            <td>REGDATE</td>
+                            <td>아이디</td>
+                            <td>사장님 이름</td>
+                            <td>직급</td>
+                            <td>권한</td>
+                            <td>가입 날짜</td>
                             <td>수정</td>
                             <td>삭제</td>
                         </tr>
@@ -60,7 +80,9 @@ export default function OwnerMange() {
                                 <td>{item.id}</td>
                                 <td>{item.userName}</td>
                                 <td>{item.rank == 3002 && "owner"}</td>
-                                <td>{item.role}</td>
+                                <td>
+                                {strRole(item.role)}
+                                </td>
                                 <td>{item.regdate}</td>
                                 <td>
                                     <Button variant="warning" onClick={() => {
