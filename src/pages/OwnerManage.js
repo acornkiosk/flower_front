@@ -4,15 +4,9 @@ import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import AddModal from "../components/login/AddModal";
-import DeModal from "../components/login/DeModal";
 import UpdateModal from "../components/login/UpdateModal";
 import Error from "./Error";
-<<<<<<< HEAD
 import DelModal from "../components/login/DelModal";
-
-=======
->>>>>>> origin
-
 
 export default function OwnerMange() {
     //사장님(owner) 리스트 관리
@@ -37,12 +31,6 @@ export default function OwnerMange() {
     useEffect(() => {
         refresh()
     }, [])
-<<<<<<< HEAD
-    const [showAddModal, setShowAddModal] = useState(false)
-    const [showUpModal, setShowUpModal] = useState(false)
-    const [deleteModal,setDeleteModal]=useState(false)
-    const [currentItem, setCurrentItem] = useState({})
-    const [ownerId,setOwnerId]=useState()
 
     const strRole=(role)=>{
         let a=role.split(",");
@@ -63,8 +51,6 @@ export default function OwnerMange() {
         return b;
     }
 
-=======
->>>>>>> origin
     if (rank === 3001) {
         return (
             <div >
