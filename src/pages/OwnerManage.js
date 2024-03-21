@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import AddModal from "../components/login/AddModal";
 import UpdateModal from "../components/login/UpdateModal";
@@ -38,15 +38,15 @@ export default function OwnerMange() {
         let a=role.split(",");
         let b=[];
         for(let i=0; i<a.length; i++){
-            if(a[i]=="4001"){
+            if(a[i]==="4001"){
                 b[i]=" 직원 관리 및 대쉬보드"
-            }else if(a[i]=="4002"){
+            }else if(a[i]==="4002"){
                 b[i]=" 메뉴 관리"
             }
-            else if(a[i]=="4003"){
+            else if(a[i]==="4003"){
                 b[i]=" 키오스크 관리"
             }
-            else if(a[i]=="4004"){
+            else if(a[i]==="4004"){
                 b[i]=" 주문 관리"
             }
         }
@@ -78,7 +78,7 @@ export default function OwnerMange() {
                             ownerlist.map((item) => <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.userName}</td>
-                                <td>{item.rank == 3002 && "owner"}</td>
+                                <td>{item.rank === 3002 && "owner"}</td>
                                 <td>
                                 {strRole(item.role)}
                                 </td>
