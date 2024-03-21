@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import AddModal from "../components/login/AddModal";
-import DeModal from "../components/login/DeModal";
 import UpdateModal from "../components/login/UpdateModal";
 import Error from "./Error";
-
+import DelModal from "../components/login/DelModal";
 
 export default function OwnerMange() {
     //사장님(owner) 리스트 관리
@@ -32,6 +31,26 @@ export default function OwnerMange() {
     useEffect(() => {
         refresh()
     }, [])
+
+    const strRole=(role)=>{
+        let a=role.split(",");
+        let b=[];
+        for(let i=0; i<a.length; i++){
+            if(a[i]==="4001"){
+                b[i]=" 직원 관리 및 대쉬보드"
+            }else if(a[i]==="4002"){
+                b[i]=" 메뉴 관리"
+            }
+            else if(a[i]==="4003"){
+                b[i]=" 키오스크 관리"
+            }
+            else if(a[i]==="4004"){
+                b[i]=" 주문 관리"
+            }
+        }
+        return b;
+    }
+
     if (rank === 3001) {
         return (
             <div >
@@ -43,11 +62,11 @@ export default function OwnerMange() {
                 <Table>
                     <thead>
                         <tr>
-                            <td>ID</td>
-                            <td>USERNAME</td>
-                            <td>RANK</td>
-                            <td>ROLE</td>
-                            <td>REGDATE</td>
+                            <td>아이디</td>
+                            <td>사장님 이름</td>
+                            <td>직급</td>
+                            <td>접근 권한</td>
+                            <td>가입 날짜</td>
                             <td>수정</td>
                             <td>삭제</td>
                         </tr>
@@ -57,8 +76,10 @@ export default function OwnerMange() {
                             ownerlist.map((item) => <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.userName}</td>
-                                <td>{item.rank == 3002 && "owner"}</td>
-                                <td>{item.role}</td>
+                                <td>{item.rank === 3002 && "owner"}</td>
+                                <td>
+                                {strRole(item.role)}
+                                </td>
                                 <td>{item.regdate}</td>
                                 <td>
                                     <Button variant="warning" onClick={() => {
@@ -77,7 +98,7 @@ export default function OwnerMange() {
                         }
                     </tbody>
                 </Table>
-                <DeModal show={deleteModal} id={ownerId} refresh={refresh} setshow={setDeleteModal} />
+                <DelModal show={deleteModal} id={ownerId} refresh={refresh} setshow={setDeleteModal} />
                 <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
                 <UpdateModal show={showUpModal} setshow={setShowUpModal} item={currentItem} setCurrentItem={setCurrentItem} refresh={refresh} />
             </div>
