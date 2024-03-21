@@ -39,13 +39,51 @@ const reset=()=>{
     isPassword:false,
     isDuplicateId:false
   })
-
+  setValidationState({
+    isUserNameValid: true,
+    isPasswordValid: true,
+    isIdValid: true
+  })
 }
-  //passAll 에 state 값을 pass(id,userName,password )값이 변동될때마다 상태 변경
-  useEffect(() => {
-    const isPassAll = pass.passNewId && pass.duplicateId && pass.passUserName && pass.passNewPassword ;
-    setPassAll(isPassAll);
-  }, [pass]);
+const [validationState, setValidationState] = useState({
+  isUserNameValid: true,
+  isPasswordValid: true,
+  isIdValid: true
+});
+useEffect(() => {
+  if (dirty.isUserName) {
+    const test = pass.passUserName && (!dirty.isPassword || pass.passNewPassword);
+    console.log("이름:" + test);
+    setValidationState(prevState => ({
+      ...prevState,
+      isUserNameValid: test
+    }));
+  }
+  
+  if (dirty.isPassword) {
+    const test2 = pass.passNewPassword && (!dirty.isUserName || pass.passUserName);
+    console.log("패스워드:" + test2);
+    setValidationState(prevState => ({
+      ...prevState,
+      isPasswordValid: test2
+    }));
+  }
+
+  if (dirty.isId) {
+    const test3 = (pass.passNewId && pass.duplicateId) && (!dirty.isUserName || pass.passUserName) && (!dirty.isPassword || pass.passNewPassword);
+    console.log("아이디" + test3);
+    setValidationState(prevState => ({
+      ...prevState,
+      isIdValid: test3
+    }));
+  }
+}, [pass, dirty]);
+
+useEffect(() => {
+  const isPassAll = validationState.isUserNameValid && validationState.isPasswordValid && validationState.isIdValid;
+  setPassAll(isPassAll);
+}, [validationState]);
+
 
   //모달창에 입력값 바뀌면 state 값 바꾸기
   const handleChange = (e) => {
