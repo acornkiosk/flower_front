@@ -36,8 +36,6 @@ const Sidebar = (props) => {
       , 4003: role.includes('4003')
       , 4004: role.includes('4004')
     })
-    console.log(roleState)
-    console.log(orderCount)
   }, [isLogin, orderCount])
   const [activeMenu, setActiveMenu] = useState('');
   const toggleAccordion = (menuName) => {

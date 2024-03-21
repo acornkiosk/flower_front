@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import * as Icon from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
+import EmptyText from "../components/error/EmptyText";
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
 import Error from "./Error";
 import { send, setToast } from "../util/websocket";
-import EmptyText from "../components/error/EmptyText";
 
 function Kiosk() {
   //페이지 정보를 저장하는 state
@@ -58,7 +58,8 @@ function Kiosk() {
       })
       .catch(error => {
         setEmpty(true)
-        console.log(error)})
+        console.log(error)
+      })
   }
   //화면 로딩시
   useEffect(() => {
@@ -181,9 +182,7 @@ function Kiosk() {
     handleChange(e);
     handleChange2(e);
   };
-
   const isLocationValid = kioskLocation.trim().length >= 1 && kioskLocation.trim().length <= 20;
-
   //삭제 버튼 기능
   const deleteKiosk = () => {
     selectedKiosk.forEach(tmp => {
@@ -191,12 +190,12 @@ function Kiosk() {
         .then(res => {
           // 삭제한 항목을 제외하고 페이지 정보 업데이트
           const updatedList = pageInfo.list.filter(item => item.id !== tmp.id);
-        setpageInfo({
-          ...pageInfo,
-          list: updatedList
-        });
-        // 모든 항목이 삭제되었는지 확인하여 isEmpty 상태 업데이트
-        setEmpty(updatedList.length === 0);
+          setpageInfo({
+            ...pageInfo,
+            list: updatedList
+          });
+          // 모든 항목이 삭제되었는지 확인하여 isEmpty 상태 업데이트
+          setEmpty(updatedList.length === 0);
         })
         .catch(error => {
           setEmpty(true)
@@ -267,20 +266,20 @@ function Kiosk() {
         </Table>
         {isEmpty && <EmptyText message={'키오스크가 없습니다.'} />}
         {!isEmpty && (
-        <Pagination>
-          <Pagination.Item onClick={() => {
-            refresh(pageInfo.startPageNum - 1)
-          }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
-          {pageArray.map(num =>
+          <Pagination>
             <Pagination.Item onClick={() => {
-              refresh(num)
-              // setParams({ pageNum: num })
-            }} key={num} active={pageInfo.pageNum === num}>{num}</Pagination.Item>
-          )}
-          <Pagination.Item onClick={() => {
-            refresh(pageInfo.endPageNum + 1)
-          }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
-        </Pagination>
+              refresh(pageInfo.startPageNum - 1)
+            }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
+            {pageArray.map(num =>
+              <Pagination.Item onClick={() => {
+                refresh(num)
+                // setParams({ pageNum: num })
+              }} key={num} active={pageInfo.pageNum === num}>{num}</Pagination.Item>
+            )}
+            <Pagination.Item onClick={() => {
+              refresh(pageInfo.endPageNum + 1)
+            }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
+          </Pagination>
         )}
       </div>
     )
