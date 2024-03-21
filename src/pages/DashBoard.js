@@ -7,7 +7,7 @@ import DashTable from "../components/dashBoard/DashTable";
 import Header from "../components/dashBoard/Header";
 import Chart from "../components/dashBoard/LineChart";
 import Error from "./Error";
-import { create } from "../util/websocket";
+import { setToast }  from "../util/websocket";
 
 
 export default function DashBoard() {
@@ -47,20 +47,13 @@ export default function DashBoard() {
   }
   useEffect(() => {
     refresh(dateCode, categoryCode)
-    if(ws.current == null) {
-      create(ws)
-    }else {
-      ws.current.onmessage = (msg) =>{
-        if(msg != null) {
-          let result = JSON.parse(msg.data)
-          console.log(msg.data)
-          if(result.type === "SET_TOAST") {
-            dispatch({type : "SET_TOAST", payload:{isToast:true}})
-          }
-        }
+    /** WebSocket.js */
+    setToast(ws,(result)=>{
+      if (result.type === "SET_TOAST") {
+        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
       }
-    }
-  }, [dateCode, categoryCode])
+    })
+  }, [dateCode, categoryCode, ws])
   const role = useSelector(state => state.role)
   if (role.includes("4001")) {
     return (
