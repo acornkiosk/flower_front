@@ -148,6 +148,12 @@ useEffect(() => {
     })
   }
   const handleSave = () => {
+    if(dirty.isId ===false && dirty.isUserName===false && dirty.isPassword ===false){
+      alert("수정한 내용이 없습니다!")
+      refresh()
+      setshow(false)
+      reset()
+    }else{
     axios.post("/api/user/update", item)
       .then(res => {
         //회원 목록 보기로 이동
@@ -159,6 +165,7 @@ useEffect(() => {
         console.log(error)
         alert("업데이트 실패했습니다.")
       })
+    }
   }
   //아이디 중복 체크
   const checkId = () => {
