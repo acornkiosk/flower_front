@@ -4,16 +4,25 @@ import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import AddModal from "../components/login/AddModal";
+import DeModal from "../components/login/DeModal";
 import UpdateModal from "../components/login/UpdateModal";
 import Error from "./Error";
+<<<<<<< HEAD
 import DelModal from "../components/login/DelModal";
 
+=======
+>>>>>>> origin
 
 
 export default function OwnerMange() {
     //사장님(owner) 리스트 관리
     const [ownerlist, setOwnerlist] = useState([]);
     const rank = useSelector(state => state.rank)
+    const [showAddModal, setShowAddModal] = useState(false)
+    const [showUpModal, setShowUpModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
+    const [currentItem, setCurrentItem] = useState({})
+    const [ownerId, setOwnerId] = useState()
     //화면 refresh 하기
     const refresh = () => {
         axios.post("/api/user/list", { rank: 3002, pageNum: 0 })
@@ -28,6 +37,7 @@ export default function OwnerMange() {
     useEffect(() => {
         refresh()
     }, [])
+<<<<<<< HEAD
     const [showAddModal, setShowAddModal] = useState(false)
     const [showUpModal, setShowUpModal] = useState(false)
     const [deleteModal,setDeleteModal]=useState(false)
@@ -53,10 +63,12 @@ export default function OwnerMange() {
         return b;
     }
 
+=======
+>>>>>>> origin
     if (rank === 3001) {
         return (
             <div >
-                <h1 style={{  textAlign: 'center' }}>super 전용 (관리자 모드)</h1>
+                <h1 style={{ textAlign: 'center' }}>super 전용 (관리자 모드)</h1>
                 <h4>사장님(OWENR) 목록</h4>
                 <Button variant="success" onClick={() => {
                     setShowAddModal(true)
@@ -93,8 +105,8 @@ export default function OwnerMange() {
                                     </Button>
                                 </td>
                                 <td><Button variant="danger" onClick={() => {
-                                        setOwnerId(item.id)
-                                        setDeleteModal(true)
+                                    setOwnerId(item.id)
+                                    setDeleteModal(true)
                                 }}>삭제</Button></td>
                             </tr>)
                         }
@@ -107,7 +119,6 @@ export default function OwnerMange() {
         )
     }
     else {
-
         return (
             <Error />
         )
