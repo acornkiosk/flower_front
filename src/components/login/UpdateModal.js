@@ -51,33 +51,31 @@ const [validationState, setValidationState] = useState({
 });
 useEffect(() => {
   if (dirty.isUserName) {
-    const test = pass.passUserName && (!dirty.isPassword || pass.passNewPassword);
-    console.log("이름:" + test);
+    const userNameValid = pass.passUserName && (!dirty.isPassword || pass.passNewPassword);
     setValidationState(prevState => ({
       ...prevState,
-      isUserNameValid: test
+      isUserNameValid: userNameValid
     }));
   }
   
   if (dirty.isPassword) {
-    const test2 = pass.passNewPassword && (!dirty.isUserName || pass.passUserName);
-    console.log("패스워드:" + test2);
+    const passwordValid = pass.passNewPassword && (!dirty.isUserName || pass.passUserName);
     setValidationState(prevState => ({
       ...prevState,
-      isPasswordValid: test2
+      isPasswordValid: passwordValid
     }));
   }
 
   if (dirty.isId) {
-    const test3 = (pass.passNewId && pass.duplicateId) && (!dirty.isUserName || pass.passUserName) && (!dirty.isPassword || pass.passNewPassword);
-    console.log("아이디" + test3);
+    const idValid = (pass.passNewId && pass.duplicateId) && (!dirty.isUserName || pass.passUserName) && (!dirty.isPassword || pass.passNewPassword);
     setValidationState(prevState => ({
       ...prevState,
-      isIdValid: test3
+      isIdValid: idValid
     }));
   }
 }, [pass, dirty]);
 
+//버튼 활성화 유무
 useEffect(() => {
   const isPassAll = validationState.isUserNameValid && validationState.isPasswordValid && validationState.isIdValid;
   setPassAll(isPassAll);
