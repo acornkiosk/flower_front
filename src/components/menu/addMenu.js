@@ -1,16 +1,9 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Form, Image, InputGroup } from "react-bootstrap";
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { setToast } from '../../util/websocket';
 import { useDispatch, useSelector } from 'react-redux';
-=======
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom";
-import { create } from '../../util/websocket';
-import 'animate.css';
->>>>>>> origin
 
 function AddMenu() {
     const [category, setCategory] = useState([])
@@ -30,7 +23,6 @@ function AddMenu() {
     const fileInputRef = useRef(null);
     useEffect(() => {
         getCategory()
-<<<<<<< HEAD
         /** WebSocket.js */
         setToast(ws, (result) => {
             if (result.type === "SET_TOAST") {
@@ -38,21 +30,6 @@ function AddMenu() {
             }
         })
     }, [ws])
-=======
-        if (ws.current == null) {
-            create(ws)
-        } else {
-            ws.current.onmessage = (msg) => {
-                if (msg != null) {
-                    let result = JSON.parse(msg.data)
-                    if (result.type === "SET_TOAST") {
-                        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
-                    }
-                }
-            }
-        }
-    }, [])
->>>>>>> origin
     const getCategory = () => {
         axios.post("/api/common/child", { "code_id": 1000 })
             .then(res => {

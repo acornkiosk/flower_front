@@ -73,6 +73,11 @@ function setToast(ws, callback) {
   if(ws.current == null){Create(ws)}
   if(ws.current){
     ws.current.onmessage = (msg) => {
+      /** 알림소리 => 크롬 음악정책 */
+      // const dieSound = new Audio("/sounds/DingDong.mp3");
+      // dieSound.currentTime = 0;
+      // dieSound.play();
+      
       let result = JSON.parse(msg.data);
       callback(result)
     }

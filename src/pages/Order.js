@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Col, Container, Row } from "react-bootstrap"
+import { Col, Row } from "react-bootstrap"
 import { useDispatch, useSelector } from 'react-redux'
 import EmptyText from "../components/error/EmptyText"
 import DetailModal from "../components/order/DetailModal"
@@ -48,6 +48,7 @@ export default function Order(props) {
         const orderData = res.data.list
         //order_id를 기준으로 주문들을 묶어서 저장할 객체
         let updatedOrders = {}
+        let count = 0; 
         orderData.forEach(order => {
           const orderId = order.order_id
           if (updatedOrders[orderId]) {
@@ -58,9 +59,10 @@ export default function Order(props) {
             updatedOrders[orderId] = [order]
           }
           /** 반복문 코드를 활용하여 주문개수 실시간 파악하기 */
-          setOrderCount(orderCount + 1)
+          count++;
         })
         setOrders(updatedOrders)
+        setOrderCount(count)
       })
       .catch(error => {
         setEmpty(true)

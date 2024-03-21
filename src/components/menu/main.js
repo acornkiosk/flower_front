@@ -5,17 +5,10 @@ import { PencilFill, XLg } from 'react-bootstrap-icons';
 import Table from 'react-bootstrap/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import CategoryBtn from './categoryBtn';
 import WarningModal from './WarningModal';
-import { useDispatch, useSelector } from 'react-redux';
 import { setToast } from '../../util/websocket';
-=======
-import { create } from '../../util/websocket';
->>>>>>> origin
 import EmptyText from '../error/EmptyText';
-import WarningModal from './WarningModal';
-import CategoryBtn from './categoryBtn';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
@@ -90,10 +83,6 @@ function Main() {
     navigate(`/menu/updateMenu`)
     sessionStorage.setItem("MenuId", MenuId)
     let storage_menuId = sessionStorage.getItem("MenuId")
-<<<<<<< HEAD
-
-=======
->>>>>>> origin
     dispatch({ type: "SELECT_MENU", payload: storage_menuId })
   }
   /** 메뉴등록 폼으로가기 */
