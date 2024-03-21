@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AddModal from "../components/kiosk/AddModal";
 import UpdateModal from "../components/kiosk/UpdateModal";
 import Error from "./Error";
-import { create, send } from "../util/websocket";
+import { send, setToast } from "../util/websocket";
 import EmptyText from "../components/error/EmptyText";
 
 function Kiosk() {
@@ -63,20 +63,13 @@ function Kiosk() {
   //화면 로딩시
   useEffect(() => {
     refresh(1)
-    if(ws.current == null) {
-      create(ws)
-    }else {
-      ws.current.onmessage = (msg) =>{
-        if(msg != null) {
-          let result = JSON.parse(msg.data)
-          console.log(msg.data)
-          if(result.type === "SET_TOAST") {
-            dispatch({type : "SET_TOAST", payload:{isToast:true}})
-          }
-        }
+    /** WebSocket.js */
+    setToast(ws,(result)=>{
+      if (result.type === "SET_TOAST") {
+        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
       }
-    }
-  }, [])
+    })
+  }, [ws])
   //체크박스 체크시 호출 함수
   const handleCheckBoxChange = (e, item) => {
     const isChecked = e.target.checked
@@ -144,7 +137,7 @@ function Kiosk() {
           })
       })
       /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
-      send(ws)
+      send(ws,"on")
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
@@ -158,7 +151,7 @@ function Kiosk() {
           })
       })
       /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
-      send(ws)
+      send(ws,"off")
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)

@@ -6,8 +6,8 @@ import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom';
 import CategoryBtn from './categoryBtn';
 import WarningModal from './WarningModal';
-import { useDispatch, useSelector  } from 'react-redux';
-import { create } from '../../util/websocket';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToast } from '../../util/websocket';
 import EmptyText from '../error/EmptyText';
 
 
@@ -66,19 +66,13 @@ function Main() {
     let category_id = categoryNum.code_id
     if (category_id == null) category_id = 0
     refresh(pageNum, categoryNum.code_id, sortByPrice)
-    if (ws.current == null) {
-      create(ws)
-    } else {
-      ws.current.onmessage = (msg) => {
-        if (msg != null) {
-          let result = JSON.parse(msg.data)
-          if (result.type === "SET_TOAST") {
-            dispatch({ type: "SET_TOAST", payload: { isToast: true } })
-          }
-        }
+    /** WebSocket.js */
+    setToast(ws, (result) => {
+      if (result.type === "SET_TOAST") {
+        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
       }
-    }
-  }, [categoryNum, sortByPrice]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
+    })
+  }, [categoryNum, sortByPrice,ws]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
   /** 카테고리 드롭다운 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
   const handleCategoryChange = (item) => {
     setCategoryNum(item)
@@ -88,8 +82,8 @@ function Main() {
   const goToUpdateMenu = (MenuId) => {
     navigate(`/menu/updateMenu`)
     sessionStorage.setItem("MenuId", MenuId)
-    let storage_menuId=sessionStorage.getItem("MenuId")
-    
+    let storage_menuId = sessionStorage.getItem("MenuId")
+
     dispatch({ type: "SELECT_MENU", payload: storage_menuId })
 
   }
@@ -102,12 +96,12 @@ function Main() {
     axios.post("/api/menu/delete", { id: id })
       .then(res => {
         setWarning(false)
-          // 삭제가 성공하면 상태를 업데이트하고 UI를 새로 고칩니다.
+        // 삭제가 성공하면 상태를 업데이트하고 UI를 새로 고칩니다.
         setFilteredMenuList(prevState => ({
           ...prevState,
           list: prevState.list.filter(item => item.id !== id) // 삭제된 메뉴를 제외한 새로운 목록으로 업데이트
         }));
-        refresh(1, categoryNum.code_id,sortByPrice)
+        refresh(1, categoryNum.code_id, sortByPrice)
       })
       .catch(error => console.log(error))
   }
