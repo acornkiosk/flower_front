@@ -186,7 +186,7 @@ useEffect(() => {
         console.log(error);
       });
   };
-
+  const [test,setTest]=useState(true);
   return (
     <Modal
       {...props}
@@ -229,7 +229,7 @@ useEffect(() => {
         <Form.Control type='hidden' name='id' value={item.id} />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-success" disabled={!passAll} onClick={handleSave}>수정</Button>
+        <Button variant="outline-success" disabled={!passAll || (dirty.isId ===false && dirty.isUserName===false && dirty.isPassword ===false)} onClick={handleSave}>수정</Button>
         <Button variant="outline-warning" onClick={() => {
           setshow(false)
           reset()
