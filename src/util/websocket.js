@@ -6,10 +6,12 @@ export default function Create(ws) {
   /** 최초 연결 후 동작 */
   function connectWebSocket() {
     /** localhost용 요청링크 */
-    ws.current = new WebSocket("ws://localhost:9000/flower/ws/owner")
+    // ws.current = new WebSocket("ws://localhost:9000/flower/ws/owner")
     /** 실제서버용 요청링크 */
-    //ws.current = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/owner")
-    ws.current.onopen = () => { console.log(socketState(ws.current.readyState)) }
+    ws.current = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/owner")
+    ws.current.onopen = () => { 
+      // console.log(socketState(ws.current.readyState))
+    }
     ws.current.onerror = (e) => {
       console.log(e)
       console.log(socketState(ws.readyState))
@@ -59,13 +61,16 @@ function close(ws, msg) {
   }
 }
 /** kiosk.js 에서 시작하는 키오스크 전원제어 */
-function send(ws, msg) {
+function send(ws, msg, list) {
   if (ws.current) {
-    var info = {
-      type: "SET_KIOSK"
-      , power: msg
-    }
-    ws.current.send(JSON.stringify(info))
+    list.forEach(id => {
+      var info = {
+        type: "SET_KIOSK"
+        , kioskID: id
+        , power: msg
+      }
+      ws.current.send(JSON.stringify(info))
+    });
   }
 }
 /** 콜백함수를 활용한 Toast 메시지 */
@@ -73,7 +78,7 @@ function setToast(ws, callback) {
   if(ws.current == null){Create(ws)}
   if(ws.current){
     ws.current.onmessage = (msg) => {
-      /** 알림소리 => 크롬 음악정책 */
+      /** 알림소리 => 크롬 음악정책 해결할 필요있음 */
       // const dieSound = new Audio("/sounds/DingDong.mp3");
       // dieSound.currentTime = 0;
       // dieSound.play();
