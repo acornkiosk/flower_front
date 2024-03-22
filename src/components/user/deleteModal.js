@@ -13,7 +13,8 @@ export default function DeleteModal(props) {
   }
   return (
     <Modal
-      {...props}
+    show={props.show}
+    onHide={props.onHide}
       size="sm"
       centered
       style={{ marginTop: '20px' }}

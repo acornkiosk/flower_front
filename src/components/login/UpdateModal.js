@@ -3,7 +3,8 @@ import { useEffect, useState } from "react"
 import { Button, Col, Form, Modal, Row } from "react-bootstrap"
 
 export default function UpdateModal(props) {
-  const { item, setCurrentItem, refresh, setshow } = props
+  const { item, setCurrentItem, refresh, setShow } = props;
+
 
   // 정규식 표현에 대한 true.false state값
   const [pass, setPass] = useState({
@@ -151,14 +152,14 @@ useEffect(() => {
     if(dirty.isId ===false && dirty.isUserName===false && dirty.isPassword ===false){
       alert("수정한 내용이 없습니다!")
       refresh()
-      setshow(false)
+      setShow(false)
       reset()
     }else{
     axios.post("/api/user/update", item)
       .then(res => {
         //회원 목록 보기로 이동
         refresh()
-        setshow(false)
+        setShow(false)
         reset()
       })
       .catch(error => {
@@ -186,10 +187,10 @@ useEffect(() => {
         console.log(error);
       });
   };
-  const [test,setTest]=useState(true);
+
   return (
     <Modal
-      {...props}
+    show={props.show} 
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -231,7 +232,7 @@ useEffect(() => {
       <Modal.Footer>
         <Button variant="outline-success" disabled={!passAll || (dirty.isId ===false && dirty.isUserName===false && dirty.isPassword ===false)} onClick={handleSave}>수정</Button>
         <Button variant="outline-warning" onClick={() => {
-          setshow(false)
+          setShow(false)
           reset()
         }}>취소</Button>
       </Modal.Footer>
