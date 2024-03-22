@@ -193,7 +193,8 @@ const checkId = () => {
 
     return (
         <Modal
-            {...props}
+        show={props.show}
+        onHide={props.onHide}
             size="lg"
             centered
             dialogClassName="modal-90w"
@@ -230,10 +231,10 @@ const checkId = () => {
                         </Col>
                         <Form.Label style={labelStyle} column md="2" > 직급 : </Form.Label>
                         <Col md="3">
-                            <Form.Select aria-label="직급" name='rank' onChange={handleChange} >
+                            <Form.Select aria-label="직급" name='rank' onChange={handleChange}>
                                 {Rank.map((item, index) => {
                                     if (index < 2) return null;
-                                    return <option key={item.code_id} value={item.code_id} selected={item.code_id==3004}>{item.code_name}</option>
+                                    return <option key={item.code_id} value={item.code_id} >{item.code_name}</option>
                                 })}
                             </Form.Select>
                         </Col>

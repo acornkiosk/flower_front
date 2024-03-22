@@ -88,7 +88,8 @@ export default function UpdateModal(props) {
     }
     return (
         <Modal
-            {...props}
+        show={props.show}
+        onHide={props.onHide}
             size="lg"
             centered
             dialogClassName="modal-90w"
