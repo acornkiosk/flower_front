@@ -1,12 +1,14 @@
 import { CSVLink } from "react-csv"
 
-export default function ExcelButton( { orderData } ) {
+export default function ExcelButton({ orderData }) {
 
   const data = orderData ? orderData.map(item => ({
     name: item.menu_name,
     category: item.category_name,
     options: item.options_name,
     price: item.menu_price,
+    count: item.menu_count,
+    total: item.menu_price * item.menu_count,
     regdate: item.regdate
   })) : [];
 
@@ -15,6 +17,8 @@ export default function ExcelButton( { orderData } ) {
     { label: "카테고리", key: "category" },
     { label: "옵션", key: "options" },
     { label: "가격", key: "price" },
+    { label: "개수", key: "count" },
+    { label: "총가격", key: "total" },
     { label: "판매 시간", key: "regdate" }
   ]
   return (

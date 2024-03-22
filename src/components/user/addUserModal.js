@@ -4,7 +4,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 /** 사용자 정보 등록 모달 */
 export default function InsertModal(props) {
-    const { onHide, onUserAdded, pageInfoList } = props
+    const { onHide, onUserAdded, pageinfolist } = props
     const [Rank, setRank] = useState([])
     const labelStyle = {
         textAlign: 'right'
@@ -31,7 +31,7 @@ export default function InsertModal(props) {
         axios.post(url, formData)
             .then(res => {
                 onHide();
-                onUserAdded();
+                onUserAdded(1)
             })
             .catch(error => {
                console.log(error)
@@ -63,6 +63,7 @@ export default function InsertModal(props) {
           })
         getRank()
     }, [props.show])
+
 
 
  // 정규식 표현에 대한 true.false state값
@@ -107,6 +108,7 @@ const checkId = () => {
     const isPass = pass.passId && pass.passUserName && pass.passPassword && pass.duplicateId &&pass.passDate
     setPassAll(isPass)
   }, [pass]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         const idReg = /^[a-zA-Z][a-zA-Z0-9]{2,15}$/;

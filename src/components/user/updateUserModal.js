@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 export default function UpdateModal(props) {
-    const { userId, deleteShow } = props;
+    const { userid, deleteshow } = props;
     const [Rank, setRank] = useState([]);
     const [userData, setUserData] = useState({ role: "" });
     const labelStyle = {
@@ -22,11 +22,9 @@ export default function UpdateModal(props) {
         if (checked) {
             // 새롭게 체크된 체크박스의 value 값을 추가
             updatedRoles.push(roleId);
-            console.log(updatedRoles)
         } else {
             // 체크가 해제된 체크박스의 value 값을 제거
             updatedRoles = updatedRoles.filter(role => role !== roleId);
-            console.log(updatedRoles)
         }
 
         // 업데이트된 role 값을 문자열로 변환하여 설정
@@ -44,7 +42,7 @@ export default function UpdateModal(props) {
     };
 
     const getUser = () => {
-        axios.post("/api/user/get", { id: userId })
+        axios.post("/api/user/get", { id: userid })
             .then(res => {
                 setUserData(res.data.dto);
             })
@@ -60,7 +58,6 @@ export default function UpdateModal(props) {
         formData.append("role", userData.role)
         axios.post(url, formData, { headers: { "Content-Type": "application/json" } })
             .then(res => {
-                console.log(res.data);
                 props.onHide();
                 props.onUserUpdate();
             });
@@ -70,12 +67,8 @@ export default function UpdateModal(props) {
         getRank();
     }, []);
 
-    // useEffect(() => {
-    //     getUser();
-    // }, [userId]);
-
     useEffect(() => {
-        if (userId != null) getUser();
+        if (userid != null) getUser();
 
         return () => {
             setUserData({});
@@ -162,7 +155,7 @@ export default function UpdateModal(props) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={deleteShow}>직원 삭제</Button>
+                    <Button variant="danger" onClick={deleteshow}>직원 삭제</Button>
                     <Button variant="success" type="submit">저장</Button>
                     <Button variant="danger" onClick={props.onHide}>취소</Button>
                 </Modal.Footer>

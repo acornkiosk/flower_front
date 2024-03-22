@@ -48,7 +48,7 @@ export default function DashTable(props) {
           <tbody>
             {
               orderData.map(item =>
-                <tr>
+                <tr key={item.id}>
                   <td>{item.order_id}</td>
                   <td>{item.category_name}</td>
                   <td>{item.menu_name}</td>
