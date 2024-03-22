@@ -29,7 +29,7 @@ export default function InsertModal(props) {
         e.preventDefault();
         const url = "/api/user/add";
         const formData = new FormData(e.target);
-        axios.post(url, formData)
+        axios.post(url, formData,{headers :{"Content-Type": "application/json"}})
             .then(res => {
                 onHide();
                 onUserAdded();
