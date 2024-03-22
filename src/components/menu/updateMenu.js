@@ -143,8 +143,10 @@ function UpdateMenu() {
         const isPriceValid = !isNaN(parseFloat(price));
         const isSummaryValid = summary.trim().length >= 1 && summary.trim().length <= 30;
         const isDescriptionValid = description.trim().length >= 1 && description.trim().length <= 300;
-        return isMenuNameValid && isPriceValid && isSummaryValid && isDescriptionValid;
+        const isPriceDivisibleBy100 = parseFloat(price) % 100 === 0;
+        return isMenuNameValid && isPriceValid && isSummaryValid && isDescriptionValid && isPriceDivisibleBy100;
     };
+
     const previewStyle = {
         "width": "200px",
         "height": "200px",
