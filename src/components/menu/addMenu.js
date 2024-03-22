@@ -4,16 +4,39 @@ import { Button, Form, Image, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { setToast } from '../../util/websocket';
 import { useDispatch, useSelector } from 'react-redux';
+import { create } from '../../util/websocket';
+import 'animate.css'
+
 
 function AddMenu() {
     const [category, setCategory] = useState([])
     const [selectedCategory, setSelectedCategory] = useState("");
     const navigate = useNavigate()
     const [previewImage, setPreviewImage] = useState(null)
-    const [menuName, setMenuName] = useState("");
     const [price, setPrice] = useState("");
-    const [summary, setSummary] = useState("");
-    const [description, setDescription] = useState("");
+    const [menuData, setMenuData] = useState({
+        name: "",
+        price: "",
+        summary: "",
+        description: ""
+    })
+    // 정규식 표현에 대한 true.false state값
+    const [pass, setPass] = useState({
+        passMenuName: false,
+        passPrice: false,
+        passSummary: false,
+        passDescription: false
+    })
+
+    //input type dirty 검사
+    const [dirty, setDirty] = useState({
+        isMenuName: false,
+        isPrice: false,
+        isSummary: false,
+        isDescription: false
+    })
+
+
     /** 웹소켓 객체 가져오기 */
     let ws = useSelector(state => state.ws)
     const dispatch = useDispatch()
@@ -22,14 +45,17 @@ function AddMenu() {
     };
     const fileInputRef = useRef(null);
     useEffect(() => {
+
         getCategory()
         /** WebSocket.js */
         setToast(ws, (result) => {
             if (result.type === "SET_TOAST") {
                 dispatch({ type: "SET_TOAST", payload: { isToast: true } })
             }
+
         })
-    }, [ws])
+    }, [ws,pass])
+
     const getCategory = () => {
         axios.post("/api/common/child", { "code_id": 1000 })
             .then(res => {
@@ -47,8 +73,94 @@ function AddMenu() {
             { headers: { "Content-Type": "multipart/form-data" } })
             .then(res => {
                 goToMenuMain()
+                reset()
             })
     }
+
+    //state 값을 초기화 하는 부분
+    const reset = () => {
+       
+        setPass({
+            passMenuName: false,
+            passPrice: false,
+            passSummary: false,
+            passDescription: false
+        })
+        setMenuData({
+            name: "",
+            price: "",
+            summary: "",
+            description: ""
+        })
+        setDirty({
+            isMenuName: false,
+            isPrice: false,
+            isSummary: false,
+            isDescription: false
+        })
+    }
+
+    const menuChange = (e) => {
+        const isMenuNameValid = /^[\s\S]{1,15}$/
+        const isSummaryValid = /^[\s\S]{1,30}$/
+        const isDescriptionValid = /^[\s\S]{1,300}$/;
+
+        if (e.target.name === "name") {
+            setMenuData({
+                ...menuData,
+                [e.target.name]: e.target.value
+            });
+            setDirty({
+                ...dirty,
+                isMenuName: true
+            });
+            setPass({
+                ...pass,
+                passMenuName: isMenuNameValid.test(e.target.value)
+            })
+
+
+    
+
+        } else if (e.target.name === "summary") {
+            setMenuData({
+                ...menuData,
+                [e.target.name]: e.target.value
+            });
+            setDirty({
+                ...dirty,
+                isSummary: true
+            });
+            setPass({
+                ...pass,
+                passSummary: isSummaryValid.test(e.target.value)
+            })
+
+        } else if (e.target.name === "description") {
+            setMenuData({
+                ...menuData,
+                [e.target.name]: e.target.value
+            });
+            setDirty({
+                ...dirty,
+                isDescription: true
+            });
+            setPass({
+                ...pass,
+                passDescription: isDescriptionValid.test(e.target.value)
+            })
+            
+        }
+
+        setMenuData({
+            ...menuData,
+            [e.target.name]: e.target.value
+        })
+
+    };
+
+
+
     const handleChange = (e) => {
         //선택한 파일 얻어내기
         const file = e.target.files[0]
@@ -79,22 +191,22 @@ function AddMenu() {
 
     // 입력값 유효성 검사 함수 추가
     const isFormValid = () => {
-        const isMenuNameValid = menuName.trim().length >= 1 && menuName.trim().length <= 15;
-        const isPriceValid = !isNaN(parseFloat(price));
-        const isSummaryValid = summary.trim().length >= 1 && summary.trim().length <= 30;
-        const isDescriptionValid = description.trim().length >= 1 && description.trim().length <= 300;
-        const isCategoryValid = selectedCategory !== "" && selectedCategory !== "카테고리 선택";
-        return isMenuNameValid && isPriceValid && isSummaryValid && isDescriptionValid && isCategoryValid;
+        const isCategoryValid = selectedCategory !== "카테고리 선택";
+        const isPriceDivisibleBy100 = parseFloat(price) % 100 === 0;
+        return isCategoryValid && isPriceDivisibleBy100;
     };
 
     // 가격 입력 필드에 숫자만 입력 가능하도록 처리하는 함수
     const handlePriceChange = (e) => {
-        const value = e.target.value;
+        const value = parseFloat(e.target.value);
         // 숫자 또는 빈 문자열인 경우에만 가격 상태 업데이트
-        if (/^[1-9][0-9.]*$/.test(value)) {
+        if (/^[1-9][0-9]*$/.test(value)) {
             setPrice(value);
         }
     };
+
+    const isPriceDivisibleBy100 = price === "" || parseFloat(price) % 100 === 0;
+    const isPriceValid = price === "" || !isNaN(parseFloat(price));
 
     return (
 
@@ -106,12 +218,12 @@ function AddMenu() {
                     <Image fluid src="/images/rope.svg" style={{ width: "30px", marginLeft: "200px" }} />
                 </div>
 
-                <Form onSubmit={(e) => menuInput(e)} className="text-bg-secondary p-3 rounded"
+                <Form onSubmit={(e) => menuInput(e)} className="text-bg-white p-3 rounded"
                     style={{
-                        backgroundImage: `url('/images/wood.jpg')`,
-                        backgroundSize: 'cover',
+                        backgroundColor:"#FAFAFA",
+                        border:"solid 3px ",
                         backgroundPosition: 'center',
-                        width: '800px',
+                        width: '800px'
                     }}>
 
                     <div className="d-flex justify-content-between" style={{ margin: "0" }}>
@@ -126,16 +238,26 @@ function AddMenu() {
                                 </Form.Select>
                             </Form.Group>
 
-                            <Form.Group className="mb-4 d-flex justify-content-between" >
-                                <div>
+                            <Form.Group className=" d-flex justify-content-between" >
+                                <div style={{ height: "103px" }}>
                                     <Form.Label >메뉴 이름</Form.Label>
-                                    <Form.Control type="text" name="name" style={{ width: "160px" }} placeholder="메뉴이름" value={menuName} onChange={(e) => setMenuName(e.target.value)} />
+                                    <Form.Control type="text" name="name"  style={{ width: "160px" }} placeholder="메뉴이름" onChange={menuChange}
+                                        isInvalid={dirty.isMenuName && !pass.passMenuName} isValid={pass.passMenuName} />
+                                    <Form.Control.Feedback type="invalid" >
+                                        1~15 글자로 입력해주세요.
+                                    </Form.Control.Feedback>
+                                    <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
                                 </div>
-                                <div>
+                                <div style={{ width: "180px" }} >
                                     <Form.Label >가격</Form.Label>
                                     <InputGroup>
-                                        <Form.Control type="number" min="0" step="100" name="price" style={{ width: "160px" }} placeholder="가격" value={price} onChange={handlePriceChange} />
-                                        <InputGroup.Text>원</InputGroup.Text>
+                                        <Form.Control type="number" min="0" step="100" name="price"  placeholder="가격" onChange={handlePriceChange}
+                                            isValid={isPriceValid && isPriceDivisibleBy100 && price !== ""} isInvalid={!isPriceValid || !isPriceDivisibleBy100 && price !== ""}  />
+                                        <InputGroup.Text style={{ borderRadius: '0 10px 10px 0' }}>원</InputGroup.Text>
+                                        <Form.Control.Feedback type="invalid">
+                                            100원 단위로 입력 해주세요.
+                                        </Form.Control.Feedback>
+                                        <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
                                     </InputGroup>
                                 </div>
                             </Form.Group>
@@ -143,7 +265,12 @@ function AddMenu() {
 
                             <Form.Group className="mb-4">
                                 <Form.Label >요약설명</Form.Label>
-                                <Form.Control name="summary" placeholder="요약설명" value={summary} onChange={(e) => setSummary(e.target.value)} />
+                                <Form.Control name="summary"  placeholder="요약설명" onChange={menuChange}
+                                    isInvalid={dirty.isSummary && !pass.passSummary} isValid={pass.passSummary}/>
+                                <Form.Control.Feedback type="invalid">
+                                    1자 이상 30자 이하로 입력해주세요.
+                                </Form.Control.Feedback>
+                                <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
                             </Form.Group>
 
                         </div>
@@ -169,15 +296,18 @@ function AddMenu() {
                             </Form.Group>
                         </div>
                     </div>
-                    <div>
-                        <Form.Group className="mb-3"  >
+                    <div style={{ height: "170px" }}>
+                        <Form.Group>
                             <Form.Label >상세설명</Form.Label>
-                            <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" value={description} onChange={(e) => setDescription(e.target.value)} />
+                            <Form.Control as="textarea" style={{ height: '100px' }} name="description"  placeholder="상세설명을 입력해주세요" onChange={menuChange}
+                                isInvalid={dirty.isDescription && !pass.passDescription} isValid={pass.passDescription}/>
+                            <Form.Control.Feedback type="invalid">
+                                1자 이상 300자 이하로 입력해주세요.
+                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
                         </Form.Group>
-                        <Button type="submit" disabled={!isFormValid()}>등록</Button>
-
-
                     </div>
+                    <Button type="submit" variant="outline-success" disabled={!pass.passMenuName || !pass.passSummary || !pass.passDescription || !isFormValid()}>등록</Button>
                 </Form>
 
             </div>
