@@ -104,18 +104,7 @@ function Kiosk() {
     setChecked(newChecked)
     setSelectedKiosk(newSelectedKiosk)
   }
-  //추가 요청 함수
-  const addKiosk = () => {
-    //키오스크 추가 옵션
-    axios.post('/api/kiosk', { location: location })
-      .then(res => {
-        refresh(1)
-        setAddModalShow(false)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
+
   //수정 요청 함수
   const updateKiosk = (action) => {
     /** UpdateModal.js 를 통해 키오스크 위치만 수정할 때 */
@@ -188,7 +177,9 @@ function Kiosk() {
     handleChange(e);
     handleChange2(e);
   };
+
   const isLocationValid = kioskLocation.trim().length >= 1 && kioskLocation.trim().length <= 20;
+
   //삭제 버튼 기능
   const deleteKiosk = () => {
     selectedKiosk.forEach(tmp => {
@@ -240,7 +231,14 @@ function Kiosk() {
             <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
           </Col>
         </Row>
-        <AddModal addModalShow={addModalShow} setAddModalShow={setAddModalShow} handleChange={handleChange} addKiosk={addKiosk} combinedHandleChange={combinedHandleChange} isLocationValid={isLocationValid} location={location} />
+        <AddModal 
+        /** 모달을 보여주기 위한 boolean 값 */
+        addModalShow={addModalShow} 
+        /** 모달을 띄우는 처리함수 */
+        setAddModalShow={setAddModalShow} 
+        /** 기존에 등록한 정보를 모두 가져옴 */
+
+        />
         <UpdateModal addModalShow={addModalShow} updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} isLocationValid={isLocationValid} combinedHandleChange={combinedHandleChange} />
         <Table striped bordered hover>
           <thead>
