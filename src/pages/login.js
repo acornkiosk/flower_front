@@ -11,10 +11,14 @@ import Create  from '../util/websocket';
 function Login() {
   const cookies = new Cookies();
   const dispatch = useDispatch()
-  // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
-  const [login, setLogin] = useState({
+  const [cid,setCid]=useState({
     id: cookies.get('cid')
   })
+  // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
+  const [login, setLogin] = useState({
+    id:cid.id
+  })
+
   const navigate = useNavigate();
   //로그인실패시 alert 
   const [showAlert, setShowAlert] = useState(false)
@@ -70,7 +74,7 @@ function Login() {
               <p className="text-center fs-4 fw-bold mb-5"> 키오스크 로그인 </p>
               <Form>
                 <Form.Group className="mb-3" controlId="formbasicEmail" >
-                  <Form.Control type="text" name="id" placeholder="USER ID" value={login.id} onChange={handleChange} />
+                  <Form.Control type="text" name="id" placeholder="USER ID" value={cid.id} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Control type="password" name="password" placeholder="PASSWORD" onChange={handleChange} />
