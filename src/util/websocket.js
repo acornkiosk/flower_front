@@ -11,6 +11,7 @@ export default function Create(ws) {
     ws.current = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/owner")
     ws.current.onopen = () => { 
       // console.log(socketState(ws.current.readyState))
+
     }
     ws.current.onerror = (e) => {
       console.log(e)
