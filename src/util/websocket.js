@@ -6,9 +6,9 @@ export default function Create(ws) {
   /** 최초 연결 후 동작 */
   function connectWebSocket() {
     /** localhost용 요청링크 */
-    // ws.current = new WebSocket("ws://localhost:9000/flower/ws/owner")
+    ws.current = new WebSocket("ws://localhost:9000/flower/ws/owner")
     /** 실제서버용 요청링크 */
-    ws.current = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/owner")
+    // ws.current = new WebSocket("ws://flower.onleave.co.kr:9000/flower/ws/owner")
     ws.current.onopen = () => { 
       // console.log(socketState(ws.current.readyState))
 
