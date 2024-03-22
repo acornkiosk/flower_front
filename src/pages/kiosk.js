@@ -65,7 +65,7 @@ function Kiosk() {
   useEffect(() => {
     refresh(1)
     /** WebSocket.js */
-    setToast(ws,(result)=>{
+    setToast(ws, (result) => {
       if (result.type === "SET_TOAST") {
         dispatch({ type: "SET_TOAST", payload: { isToast: true } })
       }
@@ -129,8 +129,11 @@ function Kiosk() {
           console.log(error)
         })
     } else if (action === 'on') {
-      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
+      /** 이전 정보에서 power 값을 on 으로 최신화시키기 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'on' } })
+      /** selectedKiosk 배열에서 power가 'on'인 항목들만 추출하여 배열로 반환 */ 
+      const powerOnIds = updatedKiosk.filter(item => item.power === 'on').map(item => item.id);
+      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
@@ -138,13 +141,16 @@ function Kiosk() {
           })
       })
       /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
-      send(ws,"on")
+      send(ws, "on", powerOnIds)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
     } else {
-      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
+      /** 이전 정보에서 power 값을 off 으로 최신화시키기 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'off' } })
+      /** selectedKiosk 배열에서 power가 'off'인 항목들만 추출하여 배열로 반환 */ 
+      const powerOnIds = updatedKiosk.filter(item => item.power === 'off').map(item => item.id);
+      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
@@ -152,7 +158,7 @@ function Kiosk() {
           })
       })
       /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
-      send(ws,"off")
+      send(ws, "off", powerOnIds)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
