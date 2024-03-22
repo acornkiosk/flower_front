@@ -6,7 +6,7 @@ import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import { create } from '../util/websocket';
+import Create  from '../util/websocket';
 
 function Login() {
   const cookies = new Cookies();
@@ -25,7 +25,7 @@ function Login() {
     // Axios를 사용하여 Spring Boot와 통신합니다.
     axios.post("/api/auth", login)
       .then(res => {
-        create(ws)
+        Create(ws)
         //로컬 스토리지에 토큰 저장하기
         localStorage.token = res.data
         //저장된 토큰 디코딩 후 result에 저장하기

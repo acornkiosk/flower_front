@@ -12,36 +12,75 @@ export default function UpdateModal(props) {
     passNewPassword: false,
     duplicateId: false
   })
-  //input type dirty 검사
-  const [dirty, setDirty] = useState({
-    isId: false,
-    isUserName: false,
-    isPassword: false
-  })
+
+    //input type dirty 검사
+    const [dirty,setDirty]=useState({
+      isId:false,
+      isUserName:false,
+      isPassword:false,
+      isDuplicateId:false
+    })
 
   // id,password,userName 값 모두 true 일경우
-  const [passAll, setPassAll] = useState(false)
-  //state 값을 초기화 하는 부분
-  const reset = () => {
-    setPassAll(false)
-    setPass({
-      passNewId: false,
-      passUserName: false,
-      passNewPassword: false,
-      duplicateId: false
-    })
-    setDirty({
-      isId: false,
-      isUserName: false,
-      isPassword: false
-    })
-
+  const [passAll,setPassAll]=useState(false)
+//state 값을 초기화 하는 부분
+const reset=()=>{
+  setPassAll(false)
+  setPass({
+    passNewId:false,
+    passUserName:false,
+    passNewPassword:false,
+    duplicateId:false
+  })
+  setDirty({
+    isId:false,
+    isUserName:false,
+    isPassword:false,
+    isDuplicateId:false
+  })
+  setValidationState({
+    isUserNameValid: true,
+    isPasswordValid: true,
+    isIdValid: true
+  })
+}
+const [validationState, setValidationState] = useState({
+  isUserNameValid: true,
+  isPasswordValid: true,
+  isIdValid: true
+});
+useEffect(() => {
+  if (dirty.isUserName) {
+    const userNameValid = pass.passUserName && (!dirty.isPassword || pass.passNewPassword);
+    setValidationState(prevState => ({
+      ...prevState,
+      isUserNameValid: userNameValid
+    }));
   }
-  //passAll 에 state 값을 pass(id,userName,password )값이 변동될때마다 상태 변경
-  useEffect(() => {
-    const isPass = pass.passNewId && pass.passUserName && pass.passNewPassword && pass.duplicateId
-    setPassAll(isPass)
-  }, [pass]);
+  
+  if (dirty.isPassword) {
+    const passwordValid = pass.passNewPassword && (!dirty.isUserName || pass.passUserName);
+    setValidationState(prevState => ({
+      ...prevState,
+      isPasswordValid: passwordValid
+    }));
+  }
+
+  if (dirty.isId) {
+    const idValid = (pass.passNewId && pass.duplicateId) && (!dirty.isUserName || pass.passUserName) && (!dirty.isPassword || pass.passNewPassword);
+    setValidationState(prevState => ({
+      ...prevState,
+      isIdValid: idValid
+    }));
+  }
+}, [pass, dirty]);
+
+//버튼 활성화 유무
+useEffect(() => {
+  const isPassAll = validationState.isUserNameValid && validationState.isPasswordValid && validationState.isIdValid;
+  setPassAll(isPassAll);
+}, [validationState]);
+
 
   //모달창에 입력값 바뀌면 state 값 바꾸기
   const handleChange = (e) => {
@@ -109,6 +148,12 @@ export default function UpdateModal(props) {
     })
   }
   const handleSave = () => {
+    if(dirty.isId ===false && dirty.isUserName===false && dirty.isPassword ===false){
+      alert("수정한 내용이 없습니다!")
+      refresh()
+      setshow(false)
+      reset()
+    }else{
     axios.post("/api/user/update", item)
       .then(res => {
         //회원 목록 보기로 이동
@@ -118,23 +163,30 @@ export default function UpdateModal(props) {
       })
       .catch(error => {
         console.log(error)
+        alert("업데이트 실패했습니다.")
       })
+    }
   }
   //아이디 중복 체크
   const checkId = () => {
+    setDirty({
+      ...dirty,
+      isDuplicateId:true
+    })
     const id = item.newId
-    axios.post("/api/user/checkid", id)
+      axios.post("/api/user/checkid", {id})
       .then(res => {
-        setPass({
-          ...pass,
-          duplicateId: res.data
-        })
+          setPass({
+            ...pass,
+            duplicateId:res.data
+          })
+
       })
       .catch(error => {
         console.log(error);
       });
   };
-
+  const [test,setTest]=useState(true);
   return (
     <Modal
       {...props}
@@ -156,14 +208,15 @@ export default function UpdateModal(props) {
         </Form.Group>
         <Form.Group as={Row} className="mb-3">
           <Form.Label column md="2"> 아이디 변경:  </Form.Label>
-          <Col md="4"><Form.Control type='text' name='newId' onChange={handleChange} placeholder={item.id} readOnly={pass.duplicateId} isInvalid={dirty.isId && !pass.passNewId || pass.passNewId && !pass.duplicateId} isValid={pass.passNewId && pass.duplicateId} />
-            <Form.Control.Feedback type="invalid">
-              {
-                !pass.passNewId && !pass.duplicateId ? "아이디를 입력해주세요" : pass.passNewId && !pass.duplicateId ? "중복 체크해주세요" : ''
-              }
-            </Form.Control.Feedback>
-            <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
-            {pass.passNewId && <Col><Button onClick={checkId} disabled={pass.duplicateId}>중복확인</Button></Col>}
+          <Col md="4"><Form.Control type='text' name='newId'  onChange={handleChange} placeholder={item.id}  readOnly={pass.duplicateId} isInvalid={dirty.isId &&!pass.passNewId || pass.passNewId && !pass.duplicateId}  isValid={pass.passNewId && pass.duplicateId}/>
+          <Form.Control.Feedback type="invalid">
+            {
+              !pass.passNewId && !pass.duplicateId ? "아이디를 입력해주세요": pass.passNewId && !dirty.isDuplicateId  ? "중복 체크해주세요": pass.passNewId && dirty.isDuplicateId ? "이미 존재하는 아이디입니다." : ""
+            }
+          </Form.Control.Feedback>
+          <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
+          {pass.passNewId && <Col><Button onClick={checkId} disabled={pass.duplicateId}>중복확인</Button></Col>}
+
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="mb-6">
@@ -176,7 +229,7 @@ export default function UpdateModal(props) {
         <Form.Control type='hidden' name='id' value={item.id} />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-success" disabled={!passAll} onClick={handleSave}>수정</Button>
+        <Button variant="outline-success" disabled={!passAll || (dirty.isId ===false && dirty.isUserName===false && dirty.isPassword ===false)} onClick={handleSave}>수정</Button>
         <Button variant="outline-warning" onClick={() => {
           setshow(false)
           reset()
