@@ -4,7 +4,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 /** 사용자 정보 등록 모달 */
 export default function InsertModal(props) {
-    const { onHide, onUserAdded, pageInfoList } = props
+    const { onHide, onUserAdded, pageinfolist } = props
     const [Rank, setRank] = useState([])
     const labelStyle = {
         textAlign: 'right'
@@ -32,7 +32,7 @@ export default function InsertModal(props) {
         axios.post(url, formData,{headers :{"Content-Type": "application/json"}})
             .then(res => {
                 onHide();
-                onUserAdded();
+                onUserAdded(1)
             })
             .catch(error => {
                 setErrorMessage("사용자 추가 중 오류가 발생했습니다.");
@@ -50,7 +50,7 @@ export default function InsertModal(props) {
     }, [props.show])
     const handleAddUserId = (e) => {
         e.preventDefault();
-        const existedId = pageInfoList.map(user => user.id);
+        const existedId = pageinfolist.map(user => user.id);
         // 새로운 아이디가 이미 존재하는지 확인
         if (existedId.includes(formData.id)) {
             setErrorMessage("이미 존재하는 아이디입니다.");

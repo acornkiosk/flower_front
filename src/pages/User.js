@@ -144,7 +144,7 @@ function User() {
           </thead>
           <tbody>
             {pageInfo.list.map(item =>
-              <tr key={item.userName}>
+              <tr key={item.id}>
                 <td>{item.userName}</td>
                 <td>{item.id}</td>
                 <td>{convertRank(item.rank)}</td>
@@ -173,8 +173,8 @@ function User() {
               pageRefresh(pageInfo.endPageNum + 1)
             }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
           </Pagination>}
-        <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={() => { pageRefresh(1) }}></UpdateModal>
-        <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} pageInfoList={pageInfo.list} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
+        <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userid={selectedUserId} deleteshow={() => { setDeleteShow(true) }} onUserUpdate={() => { pageRefresh(1) }}></UpdateModal>
+        <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} pageinfolist={pageInfo.list} onUserAdded={pageRefresh}></InsertModal>
         <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={() => { pageRefresh(1) }}></DeleteModal>
       </>
     )
