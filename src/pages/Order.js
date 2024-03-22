@@ -1,11 +1,11 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Col, Container, Row } from "react-bootstrap"
+import { Col, Row } from "react-bootstrap"
 import { useDispatch, useSelector } from 'react-redux'
 import EmptyText from "../components/error/EmptyText"
 import DetailModal from "../components/order/DetailModal"
 import OrderItem from "../components/order/orderItem"
-import { create } from "../util/websocket"
+import { setToast } from "../util/websocket"
 import Error from "./Error"
 
 export default function Order(props) {
@@ -28,27 +28,17 @@ export default function Order(props) {
   /** 화면 접속시 호출 메서드 */
   useEffect(() => {
     refresh()
-    if (ws.current == null) {
-      create(ws)
-    } else {
-      ws.current.onmessage = (msg) => {
-        if (msg != null) {
-          let result = JSON.parse(msg.data)
-          /** 각 페이지마다 Toast 메시지 전달하기 */
-          if (result.type === "SET_TOAST") {
-            dispatch({ type: "SET_TOAST", payload: { isToast: true } })
-          }
-          /** 주문관리 모달 최신화 */
-          if (result.type === "UPDATE_ORDERS") {
-            refresh()
-            /** 주문현황 개수 기입 */
-            console.log(orders)
-            dispatch({ type: "SET_TOAST", payload: { orderCount: orderCount } })
-          }
-        }
+    /** WebSocket.js */
+    setToast(ws, (result) => {
+      if (result.type === "SET_TOAST") {
+        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
       }
-    }
-  }, [])
+      /** 주문관리 모달 최신화 */
+      if (result.type === "UPDATE_ORDERS") {
+        refresh()
+      }
+    })
+  }, [ws])
 
   const refresh = () => {
     // "order_id==0" : 주문 db 중에서 IS_COMPLETED 가 'false' 인 정보들 전부 가져오기 
@@ -58,6 +48,7 @@ export default function Order(props) {
         const orderData = res.data.list
         //order_id를 기준으로 주문들을 묶어서 저장할 객체
         let updatedOrders = {}
+        let count = 0; 
         orderData.forEach(order => {
           const orderId = order.order_id
           if (updatedOrders[orderId]) {
@@ -68,9 +59,10 @@ export default function Order(props) {
             updatedOrders[orderId] = [order]
           }
           /** 반복문 코드를 활용하여 주문개수 실시간 파악하기 */
-          setOrderCount(orderCount+1)
+          count++;
         })
         setOrders(updatedOrders)
+        setOrderCount(count)
       })
       .catch(error => {
         setEmpty(true)
@@ -83,13 +75,13 @@ export default function Order(props) {
       <div>
         <h1>주문 관리</h1>
         <div className="album py-5">
-            <Row className="row-cols-sm-2 row-cols-md-3 d-flex justify-content-start g-3">
-              {Object.keys(orders).map(key =>
-                <Col key={key}>
-                  <OrderItem  setEmpty={setEmpty} orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} orderCount={orderCount} setOrderCount={setOrderCount} />
-                </Col>
-              )}
-            </Row>
+          <Row className="row-cols-sm-2 row-cols-md-3 d-flex justify-content-start g-3">
+            {Object.keys(orders).map(key =>
+              <Col key={key}>
+                <OrderItem setEmpty={setEmpty} orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} orderCount={orderCount} setOrderCount={setOrderCount} />
+              </Col>
+            )}
+          </Row>
         </div>
         {/** 주의 : refresh={refresh()} => 무한요청 원인!! */}
         {isEmpty && <EmptyText message={'주문이 없습니다.'} />}

@@ -2,12 +2,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Pagination, Table } from 'react-bootstrap';
 import { ArrowDown, ArrowDownUp, ArrowUp, PencilFill } from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import InsertModal from '../components/user/addUserModal';
 import DeleteModal from '../components/user/deleteModal';
 import UpdateModal from '../components/user/updateUserModal';
 import Error from './Error';
 import EmptyText from '../components/error/EmptyText';
+import { setToast } from '../util/websocket';
 
 function User() {
   // 빈 화면 state
@@ -23,6 +24,8 @@ function User() {
   const role = useSelector(state => state.role)
   // 페이징 UI 를 만들 때 사용할 배열
   const [pageArray, setPageArray] = useState([])
+  const dispatch = useDispatch()
+  let ws = useSelector(state => state.ws)
   // 페이징 UI 를 만들 때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = [];
@@ -105,7 +108,13 @@ function User() {
   }
   useEffect(() => {
     pageRefresh(1)
-  }, [])
+    /** WebSocket.js */
+    setToast(ws, (result) => {
+      if (result.type === "SET_TOAST") {
+        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
+      }
+    })
+  }, [ws])
   if (role.includes("4001")) {
     return (
       <>
@@ -150,20 +159,20 @@ function User() {
             )}
           </tbody>
         </Table>
-          {pageInfo.list.length === 0 ? <EmptyText message={'직원이 없습니다.'}/>:
-        <Pagination className="mt-3">
-          <Pagination.Item onClick={() => {
-            pageRefresh(pageInfo.startPageNum - 1)
-          }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
-          {
-            pageArray.map(item => (<Pagination.Item onClick={() => {
-              pageRefresh(item)
-            }} key={item} active={pageInfo.pageNum === item}>{item}</Pagination.Item>))
-          }
-          <Pagination.Item onClick={() => {
-            pageRefresh(pageInfo.endPageNum + 1)
-          }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
-        </Pagination>}
+        {pageInfo.list.length === 0 ? <EmptyText message={'직원이 없습니다.'} /> :
+          <Pagination className="mt-3">
+            <Pagination.Item onClick={() => {
+              pageRefresh(pageInfo.startPageNum - 1)
+            }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
+            {
+              pageArray.map(item => (<Pagination.Item onClick={() => {
+                pageRefresh(item)
+              }} key={item} active={pageInfo.pageNum === item}>{item}</Pagination.Item>))
+            }
+            <Pagination.Item onClick={() => {
+              pageRefresh(pageInfo.endPageNum + 1)
+            }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
+          </Pagination>}
         <UpdateModal show={updateShow} onHide={() => { setUpdateShow(false) }} userId={selectedUserId} deleteShow={() => { setDeleteShow(true) }} onUserUpdate={() => { pageRefresh(1) }}></UpdateModal>
         <InsertModal show={insertShow} onHide={() => { setInsertShow(false) }} pageInfoList={pageInfo.list} onUserAdded={() => { pageRefresh(1) }}></InsertModal>
         <DeleteModal show={deleteShow} onHide={() => { setDeleteShow(false) }} userId={selectedUserId} updateHide={() => { setUpdateShow(false) }} onUserDelete={() => { pageRefresh(1) }}></DeleteModal>

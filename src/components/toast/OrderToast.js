@@ -1,10 +1,18 @@
 import { Toast } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import style from "../order/style"
+import { useEffect } from "react"
 
 export default function OrderToast() {
   const dispatch = useDispatch()
 
+  /** 알림소리 => 크롬 음악정책 */
+  // useEffect(() => {
+  //   const dieSound = new Audio("/sounds/DingDong.mp3");
+  //   dieSound.currentTime = 0;
+  //   dieSound.play();
+  // }, []);
+  
   return (
     <>
       <Toast
