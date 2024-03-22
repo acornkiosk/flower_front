@@ -37,9 +37,6 @@ export default function InsertModal(props) {
                 setErrorMessage("사용자 추가 중 오류가 발생했습니다.");
             });
     }
-    const test=()=>{
-    console.log(formData)    
-    }
     //초기화
     useEffect(() => {
         setFormData({
@@ -253,7 +250,6 @@ const checkId = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success" onClick={userInput}  disabled={!passAll}>추가</Button>
-                    <button onClick={test}>test</button>
                     <Button variant="danger" onClick={onHide}>취소</Button>
                 </Modal.Footer>
 
