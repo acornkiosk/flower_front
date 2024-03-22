@@ -41,7 +41,7 @@ export default function AddModal(props) {
         alert(res.data.dto.userName + "님(owenr) 등록 되었습니다.")
         setshow(false)
         refresh()
-        reset()
+  
       })
       .catch(error => {
         alert("오류입니다.")
@@ -69,6 +69,10 @@ export default function AddModal(props) {
       isDuplicateId:false
     })
   }
+
+  useEffect(()=>{
+    reset()
+  },[props.show])
   //사장 (owner) input값 
   const ownerChange = (e) => {
     const idReg = /^[a-zA-Z][a-zA-Z0-9]{2,15}$/;
@@ -156,7 +160,7 @@ export default function AddModal(props) {
 
   return (
     <Modal
-      {...props}
+    show={props.show} 
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -199,8 +203,7 @@ export default function AddModal(props) {
       <Modal.Footer>
         <Button variant="outline-success" onClick={ownerInsert} disabled={!passAll}>등록</Button>
         <Button variant="outline-warning" onClick={() => {
-          setshow(false)
-          reset()
+          setshow(false)    
         }} >취소</Button>
       </Modal.Footer>
     </Modal>

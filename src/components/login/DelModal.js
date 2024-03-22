@@ -30,7 +30,7 @@ export default function DelModal(props) {
     }
   return (
     <Modal
-      {...props}
+    show={props.show} 
       centered
       style={{ marginTop: '20px' }}
     >

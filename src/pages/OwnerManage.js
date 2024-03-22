@@ -100,7 +100,7 @@ export default function OwnerMange() {
                 </Table>
                 <DelModal show={deleteModal} id={ownerId} refresh={refresh} setshow={setDeleteModal} />
                 <AddModal show={showAddModal} refresh={refresh} setshow={setShowAddModal} />
-                <UpdateModal show={showUpModal} setshow={setShowUpModal} item={currentItem} setCurrentItem={setCurrentItem} refresh={refresh} />
+                <UpdateModal show={showUpModal} setShow={setShowUpModal} item={currentItem} setCurrentItem={setCurrentItem} refresh={refresh} />
             </div>
         )
     }
