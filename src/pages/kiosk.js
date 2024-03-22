@@ -105,6 +105,19 @@ function Kiosk() {
     setSelectedKiosk(newSelectedKiosk)
   }
 
+  /** 유효성 검사 통과 이후 추가 요청 함수 */
+  const addKiosk = (inputValue) => {
+    //키오스크 추가 옵션
+    axios.post('/api/kiosk', { location: inputValue })
+      .then(res => {
+        setAddModalShow(false)
+        refresh(1)
+      })
+      .catch(error => {
+        alert("오류입니다.")
+      })
+  }
+
   //수정 요청 함수
   const updateKiosk = (action) => {
     /** UpdateModal.js 를 통해 키오스크 위치만 수정할 때 */
@@ -120,7 +133,7 @@ function Kiosk() {
     } else if (action === 'on') {
       /** 이전 정보에서 power 값을 on 으로 최신화시키기 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'on' } })
-      /** selectedKiosk 배열에서 power가 'on'인 항목들만 추출하여 배열로 반환 */ 
+      /** selectedKiosk 배열에서 power가 'on'인 항목들만 추출하여 배열로 반환 */
       const powerOnIds = updatedKiosk.filter(item => item.power === 'on').map(item => item.id);
       /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
       updatedKiosk.forEach(item => {
@@ -137,7 +150,7 @@ function Kiosk() {
     } else {
       /** 이전 정보에서 power 값을 off 으로 최신화시키기 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'off' } })
-      /** selectedKiosk 배열에서 power가 'off'인 항목들만 추출하여 배열로 반환 */ 
+      /** selectedKiosk 배열에서 power가 'off'인 항목들만 추출하여 배열로 반환 */
       const powerOnIds = updatedKiosk.filter(item => item.power === 'off').map(item => item.id);
       /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
       updatedKiosk.forEach(item => {
@@ -231,13 +244,15 @@ function Kiosk() {
             <Button variant="warning" style={{ color: "white" }} onClick={deleteKiosk}>삭제하기</Button>
           </Col>
         </Row>
-        <AddModal 
-        /** 모달을 보여주기 위한 boolean 값 */
-        addModalShow={addModalShow} 
-        /** 모달을 띄우는 처리함수 */
-        setAddModalShow={setAddModalShow} 
-        /** 기존에 등록한 정보를 모두 가져옴 */
-
+        <AddModal
+          /** 모달을 보여주기 위한 boolean 값 */
+          addModalShow={addModalShow}
+          /** 모달을 띄우는 처리함수 */
+          setAddModalShow={setAddModalShow}
+          /** 기존에 등록한 kiosk 정보를 모두 모달로 전달 */
+          pageInfo={pageInfo}
+          /** 유효성 통과 후 가져온 값을 함수(매개변수)로 전달 */
+          addKiosk={addKiosk}
         />
         <UpdateModal addModalShow={addModalShow} updateModalShow={updateModalShow} setUpdateModalShow={setUpdateModalShow} data={data} handleChange={handleChange} updateKiosk={updateKiosk} isLocationValid={isLocationValid} combinedHandleChange={combinedHandleChange} />
         <Table striped bordered hover>
