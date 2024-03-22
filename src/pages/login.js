@@ -6,15 +6,19 @@ import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import { create } from '../util/websocket';
+import Create  from '../util/websocket';
 
 function Login() {
   const cookies = new Cookies();
   const dispatch = useDispatch()
-  // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
-  const [login, setLogin] = useState({
+  const [cid,setCid]=useState({
     id: cookies.get('cid')
   })
+  // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
+  const [login, setLogin] = useState({
+    id:cid.id
+  })
+
   const navigate = useNavigate();
   //로그인실패시 alert 
   const [showAlert, setShowAlert] = useState(false)
@@ -25,7 +29,7 @@ function Login() {
     // Axios를 사용하여 Spring Boot와 통신합니다.
     axios.post("/api/auth", login)
       .then(res => {
-        create(ws)
+        Create(ws)
         //로컬 스토리지에 토큰 저장하기
         localStorage.token = res.data
         //저장된 토큰 디코딩 후 result에 저장하기
@@ -70,7 +74,7 @@ function Login() {
               <p className="text-center fs-4 fw-bold mb-5"> 키오스크 로그인 </p>
               <Form>
                 <Form.Group className="mb-3" controlId="formbasicEmail" >
-                  <Form.Control type="text" name="id" placeholder="USER ID" value={login.id} onChange={handleChange} />
+                  <Form.Control type="text" name="id" placeholder="USER ID" value={cid.id} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Control type="password" name="password" placeholder="PASSWORD" onChange={handleChange} />

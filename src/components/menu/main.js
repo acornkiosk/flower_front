@@ -5,10 +5,10 @@ import { PencilFill, XLg } from 'react-bootstrap-icons';
 import Table from 'react-bootstrap/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { create } from '../../util/websocket';
-import EmptyText from '../error/EmptyText';
-import WarningModal from './WarningModal';
 import CategoryBtn from './categoryBtn';
+import WarningModal from './WarningModal';
+import { setToast } from '../../util/websocket';
+import EmptyText from '../error/EmptyText';
 
 
 /** HTML 본문 : 메뉴조회 전체 */
@@ -66,19 +66,13 @@ function Main() {
     let category_id = categoryNum.code_id
     if (category_id == null) category_id = 0
     refresh(pageNum, categoryNum.code_id, sortByPrice)
-    if (ws.current == null) {
-      create(ws)
-    } else {
-      ws.current.onmessage = (msg) => {
-        if (msg != null) {
-          let result = JSON.parse(msg.data)
-          if (result.type === "SET_TOAST") {
-            dispatch({ type: "SET_TOAST", payload: { isToast: true } })
-          }
-        }
+    /** WebSocket.js */
+    setToast(ws, (result) => {
+      if (result.type === "SET_TOAST") {
+        dispatch({ type: "SET_TOAST", payload: { isToast: true } })
       }
-    }
-  }, [categoryNum, sortByPrice]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
+    })
+  }, [categoryNum, sortByPrice,ws]); // [] 배열 안에 있는 값이 변화를 감지할 때만 함수가 호출됨
   /** 카테고리 드롭다운 버튼을 눌렀을 때 그 값을 변수에 담는 함수이자 component 함수 연결고리 */
   const handleCategoryChange = (item) => {
     setCategoryNum(item)
