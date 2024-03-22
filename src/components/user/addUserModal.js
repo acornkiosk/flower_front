@@ -92,7 +92,6 @@ const checkId = () => {
     const id = formData.id;
       axios.post("/api/user/checkid", {id})
       .then(res => {
-          console.log(res.data.hasID);
           setPass({
             ...pass,
             duplicateId:res.data.hasID
