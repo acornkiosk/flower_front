@@ -200,10 +200,9 @@ const checkId = () => {
             aria-labelledby="example-custom-modal-styling-title"
         >
                 <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title"></Modal.Title>
+                    <Modal.Title id="example-custom-modal-styling-title">직원 추가</Modal.Title>
                 </Modal.Header>
                 <Modal.Body >
-                    {errorMessage && <p style={{ color: 'red', marginLeft: "50px" }}>{errorMessage}</p>}
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label style={labelStyle} column md="2"> 아이디 : </Form.Label>
                         <Col md="3"><Form.Control type='text' name='id' value={formData.id} onChange={handleChange} readOnly={pass.duplicateId} isInvalid={dirty.isId &&!pass.passId || pass.passId && !pass.duplicateId}  isValid={pass.passId && pass.duplicateId} />
