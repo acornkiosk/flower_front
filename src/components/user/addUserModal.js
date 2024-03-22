@@ -16,7 +16,7 @@ export default function InsertModal(props) {
         rank:3003,
         regdate: ""
     });
-    const [errorMessage, setErrorMessage] = useState("");
+
     const getRank = () => {
         axios.post("/api/common/child", { "code_id": 3000 })
             .then(res => {
@@ -34,7 +34,7 @@ export default function InsertModal(props) {
                 onUserAdded(1)
             })
             .catch(error => {
-                setErrorMessage("사용자 추가 중 오류가 발생했습니다.");
+               console.log(error)
             });
     }
     //초기화
@@ -61,7 +61,6 @@ export default function InsertModal(props) {
             isDate:false,
             isDuplicateId:false
           })
-        setErrorMessage("")
         getRank()
     }, [props.show])
 
@@ -93,7 +92,6 @@ const checkId = () => {
     const id = formData.id;
       axios.post("/api/user/checkid", {id})
       .then(res => {
-          console.log(res.data.hasID);
           setPass({
             ...pass,
             duplicateId:res.data.hasID
