@@ -283,23 +283,25 @@ function Kiosk() {
             )}
           </tbody>
         </Table>
-        {isEmpty && <EmptyText message={'키오스크가 없습니다.'} />}
-        {!isEmpty && (
-          <Pagination>
+
+        {isEmpty ? <EmptyText message={'키오스크가 없습니다.'} /> :
+      
+        <Pagination>
+          <Pagination.Item onClick={() => {
+            refresh(pageInfo.startPageNum - 1)
+          }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
+          {pageArray.map(num =>
             <Pagination.Item onClick={() => {
-              refresh(pageInfo.startPageNum - 1)
-            }} disabled={pageArray[0] === 1}>&laquo;</Pagination.Item>
-            {pageArray.map(num =>
-              <Pagination.Item onClick={() => {
-                refresh(num)
-                // setParams({ pageNum: num })
-              }} key={num} active={pageInfo.pageNum === num}>{num}</Pagination.Item>
-            )}
-            <Pagination.Item onClick={() => {
-              refresh(pageInfo.endPageNum + 1)
-            }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
-          </Pagination>
-        )}
+              refresh(num)
+              // setParams({ pageNum: num })
+            }} key={num} active={pageInfo.pageNum === num}>{num}</Pagination.Item>
+          )}
+          <Pagination.Item onClick={() => {
+            refresh(pageInfo.endPageNum + 1)
+          }} disabled={pageInfo.endPageNum >= pageInfo.totalPageCount}>&raquo;</Pagination.Item>
+        </Pagination>
+        }
+
       </div>
     )
   } else {

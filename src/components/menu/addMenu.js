@@ -227,7 +227,7 @@ function AddMenu() {
                     }}>
 
                     <div className="d-flex justify-content-between" style={{ margin: "0" }}>
-                        <div className="" style={{ width: '400px' }}>
+                        <div  style={{ width: '400px' }}>
                             <Form.Group className="mb-4">
                                 <Form.Label >카테고리</Form.Label>
                                 <Form.Select name="category_id" style={{ width: "160px" }} onChange={(e) => setSelectedCategory(e.target.value)}>
@@ -317,4 +317,3 @@ function AddMenu() {
 }
 
 export default AddMenu
-
