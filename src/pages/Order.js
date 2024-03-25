@@ -78,7 +78,7 @@ export default function Order(props) {
           <Row className="row-cols-sm-2 row-cols-md-3 d-flex justify-content-start g-3">
             {Object.keys(orders).map(key =>
               <Col key={key}>
-                <OrderItem setEmpty={setEmpty} orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} orderCount={orderCount} setOrderCount={setOrderCount} />
+                <OrderItem refresh={refresh} orders={orders[key]} setOrders={setOrders} list={orders} id={key} setShowModal={setShowModal} setData={setData} deleteModal={deleteModal} orderCount={orderCount} setOrderCount={setOrderCount} />
               </Col>
             )}
           </Row>
