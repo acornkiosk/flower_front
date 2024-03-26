@@ -18,7 +18,6 @@ export default function UpdateModal(props) {
     const handleChange = (e, roleId) => {
         const { checked } = e.target;
         let updatedRoles = userData.role.split(',');
-
         if (checked) {
             // 새롭게 체크된 체크박스의 value 값을 추가
             updatedRoles.push(roleId);
@@ -26,10 +25,14 @@ export default function UpdateModal(props) {
             // 체크가 해제된 체크박스의 value 값을 제거
             updatedRoles = updatedRoles.filter(role => role !== roleId);
         }
-
         // 업데이트된 role 값을 문자열로 변환하여 설정
         setUserData({ ...userData, role: updatedRoles.join(',') });
     };
+
+    const selectHandle = (e) => {
+        const {name, value} = e.target
+        setUserData({...userData, [name]: value})
+    }
 
     const getRank = () => {
         axios.post("/api/common/child", { "code_id": 3000 }, { headers: { "Content-Type": "application/json" } })
@@ -113,7 +116,7 @@ export default function UpdateModal(props) {
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label style={labelStyle} column md="3"> 직급 : </Form.Label>
                             <Col md="4">
-                                <Form.Select aria-label="직급" onChange={handleChange} value={userData.rank} name='rank'>
+                                <Form.Select aria-label="직급" onChange={selectHandle} value={userData.rank} name='rank'>
                                     {Rank.map((item, index) => {
                                         if (index < 2) return null;
                                         return <option key={item.code_id} value={item.code_id}>{item.code_name}</option>;
