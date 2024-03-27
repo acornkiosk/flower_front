@@ -1,10 +1,13 @@
+import 'animate.css';
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Form, Image, InputGroup } from "react-bootstrap";
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { setToast } from '../../util/websocket';
 import { useDispatch, useSelector } from 'react-redux';
 import 'animate.css'
+
 
 
 function AddMenu() {
@@ -21,6 +24,7 @@ function AddMenu() {
     })
     // 정규식 표현에 대한 true.false state값
     const [pass, setPass] = useState({
+        passCategory: false,
         passMenuName: false,
         passPrice: false,
         passSummary: false,
@@ -29,6 +33,7 @@ function AddMenu() {
 
     //input type dirty 검사
     const [dirty, setDirty] = useState({
+        isCategory: false,
         isMenuName: false,
         isPrice: false,
         isSummary: false,
@@ -53,7 +58,7 @@ function AddMenu() {
             }
 
         })
-    }, [ws,pass])
+    }, [ws, pass])
 
     const getCategory = () => {
         axios.post("/api/common/child", { "code_id": 1000 })
@@ -78,8 +83,9 @@ function AddMenu() {
 
     //state 값을 초기화 하는 부분
     const reset = () => {
-       
+
         setPass({
+            passCategory: false,
             passMenuName: false,
             passPrice: false,
             passSummary: false,
@@ -92,6 +98,7 @@ function AddMenu() {
             description: ""
         })
         setDirty({
+            isCategory: false,
             isMenuName: false,
             isPrice: false,
             isSummary: false,
@@ -119,7 +126,7 @@ function AddMenu() {
             })
 
 
-    
+
 
         } else if (e.target.name === "summary") {
             setMenuData({
@@ -148,7 +155,7 @@ function AddMenu() {
                 ...pass,
                 passDescription: isDescriptionValid.test(e.target.value)
             })
-            
+
         }
 
         setMenuData({
@@ -219,17 +226,21 @@ function AddMenu() {
 
                 <Form onSubmit={(e) => menuInput(e)} className="text-bg-white p-3 rounded"
                     style={{
-                        backgroundColor:"#FAFAFA",
-                        border:"solid 3px ",
+                        backgroundColor: "#FAFAFA",
+                        border: "solid 3px ",
                         backgroundPosition: 'center',
                         width: '800px'
                     }}>
 
                     <div className="d-flex justify-content-between" style={{ margin: "0" }}>
-                        <div  style={{ width: '400px' }}>
+                        <div style={{ width: '400px' }}>
                             <Form.Group className="mb-4">
                                 <Form.Label >카테고리</Form.Label>
-                                <Form.Select name="category_id" style={{ width: "160px" }} onChange={(e) => setSelectedCategory(e.target.value)}>
+                                <Form.Select name="category_id" style={{ width: "160px" }} onChange={(e) => {
+                                    setSelectedCategory(e.target.value)
+                                    setDirty({ ...dirty, isCategory: true })
+                                    setPass({ ...pass, passCategory: true })
+                                }}>
                                     <option >카테고리 선택</option>
                                     {category.map(item =>
                                         <option key={item.code_id} value={item.code_id}>{item.code_name}</option>
@@ -240,7 +251,7 @@ function AddMenu() {
                             <Form.Group className=" d-flex justify-content-between" >
                                 <div style={{ height: "103px" }}>
                                     <Form.Label >메뉴 이름</Form.Label>
-                                    <Form.Control type="text" name="name"  style={{ width: "160px" }} placeholder="메뉴이름" onChange={menuChange}
+                                    <Form.Control type="text" name="name" style={{ width: "160px" }} placeholder="메뉴이름" onChange={menuChange}
                                         isInvalid={dirty.isMenuName && !pass.passMenuName} isValid={pass.passMenuName} />
                                     <Form.Control.Feedback type="invalid" >
                                         1~15 글자로 입력해주세요.
@@ -250,8 +261,8 @@ function AddMenu() {
                                 <div style={{ width: "180px" }} >
                                     <Form.Label >가격</Form.Label>
                                     <InputGroup>
-                                        <Form.Control type="number" min="0" step="100" name="price"  placeholder="가격" onChange={handlePriceChange}
-                                            isValid={isPriceValid && isPriceDivisibleBy100 && price !== ""} isInvalid={!isPriceValid || !isPriceDivisibleBy100 && price !== ""}  />
+                                        <Form.Control type="number" min="0" step="100" name="price" placeholder="가격" onChange={handlePriceChange}
+                                            isValid={isPriceValid && isPriceDivisibleBy100 && price !== ""} isInvalid={!isPriceValid || !isPriceDivisibleBy100 && price !== ""} />
                                         <InputGroup.Text style={{ borderRadius: '0 10px 10px 0' }}>원</InputGroup.Text>
                                         <Form.Control.Feedback type="invalid">
                                             100원 단위로 입력 해주세요.
@@ -264,8 +275,8 @@ function AddMenu() {
 
                             <Form.Group className="mb-4">
                                 <Form.Label >요약설명</Form.Label>
-                                <Form.Control name="summary"  placeholder="요약설명" onChange={menuChange}
-                                    isInvalid={dirty.isSummary && !pass.passSummary} isValid={pass.passSummary}/>
+                                <Form.Control name="summary" placeholder="요약설명" onChange={menuChange}
+                                    isInvalid={dirty.isSummary && !pass.passSummary} isValid={pass.passSummary} />
                                 <Form.Control.Feedback type="invalid">
                                     1자 이상 30자 이하로 입력해주세요.
                                 </Form.Control.Feedback>
@@ -298,15 +309,15 @@ function AddMenu() {
                     <div style={{ height: "170px" }}>
                         <Form.Group>
                             <Form.Label >상세설명</Form.Label>
-                            <Form.Control as="textarea" style={{ height: '100px' }} name="description"  placeholder="상세설명을 입력해주세요" onChange={menuChange}
-                                isInvalid={dirty.isDescription && !pass.passDescription} isValid={pass.passDescription}/>
+                            <Form.Control as="textarea" style={{ height: '100px' }} name="description" placeholder="상세설명을 입력해주세요" onChange={menuChange}
+                                isInvalid={dirty.isDescription && !pass.passDescription} isValid={pass.passDescription} />
                             <Form.Control.Feedback type="invalid">
                                 1자 이상 300자 이하로 입력해주세요.
                             </Form.Control.Feedback>
                             <Form.Control.Feedback type="valid">사용가능합니다.</Form.Control.Feedback>
                         </Form.Group>
                     </div>
-                    <Button type="submit" variant="outline-success" disabled={!pass.passMenuName || !pass.passSummary || !pass.passDescription || !isFormValid()}>등록</Button>
+                    <Button type="submit" variant="outline-success" disabled={!pass.passCategory || !pass.passMenuName || !pass.passSummary || !pass.passDescription || !isFormValid()}>등록</Button>
                 </Form>
 
             </div>

@@ -36,6 +36,7 @@ export default function AddModal(props) {
   }, [pass]);
   // 사장(owner) 추가
   const ownerInsert = () => {
+    console.log(ownerdata)
     axios.post("/api/user/add", ownerdata)
       .then(res => {
         alert(res.data.dto.userName + "님(owenr) 등록 되었습니다.")
@@ -145,6 +146,7 @@ export default function AddModal(props) {
       isDuplicateId:true
     })
     const id = ownerdata.id;
+    console.log(id)
       axios.post("/api/user/checkid", {id})
       .then(res => {
           console.log(res.data.hasID);

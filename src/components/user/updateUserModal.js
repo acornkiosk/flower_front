@@ -40,7 +40,7 @@ export default function UpdateModal(props) {
                 setRank(res.data.list);
             })
             .catch(error => {
-                console.log("직급리스트: " + error);
+                console.log(error);
             });
     };
 
@@ -78,7 +78,7 @@ export default function UpdateModal(props) {
         };
     }, [props.show]);
 
-    //정보가 불러와지지 않으면 모달을 안띄우게 하기
+    // 정보가 불러와지지 않으면 모달을 안 띄우게 하기
     if (!userData.id) {
         return null;
     }
@@ -126,7 +126,6 @@ export default function UpdateModal(props) {
                         </Form.Group>
                     </div>
                     <div className="col-md-3">
-                        {/*<input type="text" name="role"  onChange={handleChange} defaultValue={userData.role} />*/}
                         <Form.Group className="mb-3 d-flex">
                             <Form.Check
                                 onChange={(e) => handleChange(e, "4004")}
@@ -144,7 +143,6 @@ export default function UpdateModal(props) {
                                 value="4002"
                             />
                             <Form.Label>메뉴 관리 권한</Form.Label>
-
                         </Form.Group>
                         <Form.Group className="mb-3 d-flex">
                             <Form.Check
@@ -166,4 +164,3 @@ export default function UpdateModal(props) {
         </Modal>
     );
 }
-
