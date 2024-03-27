@@ -7,6 +7,7 @@ import ConvertOptions from "./Util"
 export default function DetailModal(props) {
   let order_id
   let kiosk_id
+  let status
   if (props.data.length !== 0) {
     order_id = props.data[0].order_id
     kiosk_id = props.data[0].kiosk_id
@@ -25,6 +26,7 @@ export default function DetailModal(props) {
         })
         .catch(error => console.log(error))
     }
+    status = "complete"
     setShowModal(false)
   }
   //주문취소 버튼을 누를시
@@ -35,6 +37,7 @@ export default function DetailModal(props) {
           setShowModal(false)
         }
       })
+    status = "delete"
     setDeleteModal({ target: order_id })
   }
   return (
@@ -57,7 +60,7 @@ export default function DetailModal(props) {
       </Modal.Header>
       <Modal.Body style={style.customModalBody}>
         {data.map(item =>
-          <React.Fragment key={item.order_id}>
+          <React.Fragment key={item.id}>
             <Row className="mb-3 ms-3">
               <Col>
                 <Row className="text" style={{ fontSize: '1.5rem' }}>{item.menu_name} X {item.menu_count}</Row>
