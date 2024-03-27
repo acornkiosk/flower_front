@@ -5,6 +5,8 @@ import { Button, Form, Image, InputGroup } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { setToast } from '../../util/websocket';
+import 'animate.css'
+
 
 
 function AddMenu() {

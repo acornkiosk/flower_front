@@ -11,7 +11,7 @@ import Create  from '../util/websocket';
 function Login() {
   const cookies = new Cookies();
   const dispatch = useDispatch()
-  const [cid,setCid]=useState({
+  const [cid]=useState({
     id: cookies.get('cid')
   })
   // useState를 사용하여 각각의 input 필드의 값을 저장합니다.
