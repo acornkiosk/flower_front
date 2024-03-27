@@ -4,8 +4,8 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 /** 사용자 정보 등록 모달 */
 export default function InsertModal(props) {
-    const { onHide, onUserAdded, pageinfolist } = props
-    const [Rank, setRank] = useState([])
+    const { onHide, onUserAdded } = props
+    const [ Rank, setRank ] = useState([])
     const labelStyle = {
         textAlign: 'right'
     };
@@ -23,7 +23,7 @@ export default function InsertModal(props) {
                 setRank(res.data.list)
             })
             .catch(error => {
-                console.log("직급 리스트: " + error)
+                console.log(error)
             })
     }
     const userInput = () => {
@@ -37,7 +37,7 @@ export default function InsertModal(props) {
                console.log(error)
             });
     }
-    //초기화
+    // 초기화
     useEffect(() => {
         setFormData({
             id: "",
@@ -52,30 +52,28 @@ export default function InsertModal(props) {
           passUserName: false,
           passPassword: false,
           duplicateId: false,
-          passDate:false
+          passDate: false
         })
         setDirty({
-            isId:false,
-            isUserName:false,
-            isPassword:false,
-            isDate:false,
-            isDuplicateId:false
+            isId: false,
+            isUserName: false,
+            isPassword: false,
+            isDate: false,
+            isDuplicateId: false
           })
         getRank()
     }, [props.show])
 
-
-
- // 정규식 표현에 대한 true.false state값
- const [pass, setPass] = useState({
+ // 정규식 표현에 대한 true.false state 값
+ const [ pass, setPass ] = useState({
     passId: false,
     passUserName: false,
     passPassword: false,
     duplicateId: false,
-    passDate:false
+    passDate: false
   })
-  //input type dirty 검사
-  const [dirty,setDirty]=useState({
+  // input type dirty 검사
+  const [ dirty,setDirty ] = useState({
     isId:false,
     isUserName:false,
     isPassword:false,
@@ -83,7 +81,7 @@ export default function InsertModal(props) {
     isDuplicateId:false
 
   })
-//아이디 중복 체크
+// 아이디 중복 체크
 const checkId = () => {
     setDirty({
       ...dirty,
@@ -102,8 +100,8 @@ const checkId = () => {
       });
   };
 
-  // id,password,userName 값 모두 true 일경우
-  const [passAll, setPassAll] = useState(false)
+  // id, password, userName 값 모두 true 일 경우
+  const [ passAll, setPassAll ] = useState(false)
   useEffect(() => {
     const isPass = pass.passId && pass.passUserName && pass.passPassword && pass.duplicateId &&pass.passDate
     setPassAll(isPass)
@@ -131,7 +129,6 @@ const checkId = () => {
               passUserName: false
             })
           }
-    
     
         } else if (e.target.name === "id") {
           setDirty({
@@ -183,7 +180,6 @@ const checkId = () => {
               })
             }
           }        
-
 
         setFormData({
             ...formData,

@@ -92,7 +92,7 @@ function User() {
     // 입사일자 오름차순, 내림차순으로 정렬함
     axios.post("/api/user/list", { pageNum: 1, sort: sort })
       .then(res => {
-        //super와 owner는 없애서 setPageInfo에 넣어야함
+        // super 와 owner 는 제외하고 setPageInfo 에 넣어야함
         const filterList = res.data.list.filter(item => item.rank !== 3001 && item.rank !== 3002);
         setPageInfo({
           ...res.data,
