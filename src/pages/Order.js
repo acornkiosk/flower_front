@@ -66,7 +66,6 @@ export default function Order(props) {
       })
       .catch(error => {
         setEmpty(true)
-        console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
       })
   }
   const role = useSelector(state => state.role)
