@@ -10,36 +10,36 @@ import Error from "./Error";
 import { send, setToast } from "../util/websocket";
 
 function Kiosk() {
-  //페이지 정보를 저장하는 state
+  // 페이지 정보를 저장하는 state
   const [pageInfo, setpageInfo] = useState({
-    list: [], //키오스크 리스트
+    list: [], // 키오스크 리스트
     sortBy: null,
     sortOrder: 'asc'
   })
   // 빈 화면 state
   const [isEmpty, setEmpty] = useState(false)
   const [kioskLocation, setKioskLocation] = useState("");
-  //추가모달 state
+  // 추가모달 state
   const [addModalShow, setAddModalShow] = useState(false)
-  //수정 모달 state
+  // 수정 모달 state
   const [updateModalShow, setUpdateModalShow] = useState(false)
-  //수정시 data state
+  // 수정 시 data state
   const [data, setData] = useState({})
-  //체크박스 state
+  // 체크박스 state
   const [checked, setChecked] = useState({})
-  //추가 form
+  // 추가 form
   const [location, setLocation] = useState("")
-  //체크박스(선택된) 키오스크
+  // 체크박스(선택된) 키오스크
   const [selectedKiosk, setSelectedKiosk] = useState([])
-  //전체  체크박스 state
+  // 전체  체크박스 state
   const [allCheck, setAllCheck] = useState(false)
-  //페이징 UI를 만들때 사용할 배열
+  // 페이징 UI를 만들 때 사용할 배열
   const [pageArray, setPageArray] = useState([])
   const role = useSelector(state => state.role)
   let ws = useSelector(state => state.ws)
   const dispatch = useDispatch()
 
-  //페이징 UI를 만들때 사용할 배열을 리턴해주는 함수
+  // 페이징 UI를 만들 때 사용할 배열을 리턴해주는 함수
   function createArray(start, end) {
     const result = []
     for (let i = start; i <= end; i++) {
@@ -48,7 +48,7 @@ function Kiosk() {
     return result;
   }
   const refresh = (num) => {
-    //table에 출력할 키오스크 정보를 받아옴
+    // table 에 출력할 키오스크 정보를 받아옴
     axios.post("/api/kiosk/page", num, { "headers": { "Content-Type": "application/json" } })
       .then(res => {
         setEmpty(false)
@@ -61,7 +61,7 @@ function Kiosk() {
         console.log(error)
       })
   }
-  //화면 로딩시
+  // 화면 로딩 시
   useEffect(() => {
     refresh(1)
     /** WebSocket.js */
@@ -71,7 +71,7 @@ function Kiosk() {
       }
     })
   }, [ws])
-  //체크박스 체크시 호출 함수
+  // 체크박스 체크 시 호출 함수
   const handleCheckBoxChange = (e, item) => {
     const isChecked = e.target.checked
     setChecked({
@@ -79,15 +79,15 @@ function Kiosk() {
       [item.id]: isChecked
     })
     if (isChecked) {
-      //체크된 키오스크 저장
+      // 체크된 키오스크 저장
       setSelectedKiosk([...selectedKiosk, item])
     } else {
-      //체크된 키오스크에서 삭제
+      // 체크된 키오스크에서 삭제
       let newState = selectedKiosk.filter(tmp => tmp.id !== item.id)
       setSelectedKiosk(newState)
     }
   }
-  //전체 체크박스 체크시 호출 함수
+  // 전체 체크박스 체크 시 호출 함수
   const handleAllCheckBox = (e) => {
     const isChecked = e.target.checked
     setAllCheck(isChecked)
@@ -107,7 +107,7 @@ function Kiosk() {
 
   /** 유효성 검사 통과 이후 추가 요청 함수 */
   const addKiosk = (inputValue) => {
-    //키오스크 추가 옵션
+    // 키오스크 추가 옵션
     axios.post('/api/kiosk', { location: inputValue })
       .then(res => {
         setAddModalShow(false)
@@ -118,7 +118,7 @@ function Kiosk() {
       })
   }
 
-  //수정 요청 함수
+  // 수정 요청 함수
   const updateKiosk = (action) => {
     /** UpdateModal.js 를 통해 키오스크 위치만 수정할 때 */
     if (action === 'location') {
@@ -133,16 +133,16 @@ function Kiosk() {
     } else if (action === 'on') {
       /** 이전 정보에서 power 값을 on 으로 최신화시키기 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'on' } })
-      /** selectedKiosk 배열에서 power가 'on'인 항목들만 추출하여 배열로 반환 */
+      /** selectedKiosk 배열에서 power가 'on' 인 항목들만 추출하여 배열로 반환 */
       const powerOnIds = updatedKiosk.filter(item => item.power === 'on').map(item => item.id);
-      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
+      /** 실제 DB 로 키오스크 전원여부 데이터를 보내는 코드 */
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
             refresh(1)
           })
       })
-      /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
+      /** websocket.js 를 통해 손님 키오스크에 '신호' 보내주기 */
       send(ws, "on", powerOnIds)
       setChecked({})
       setSelectedKiosk([])
@@ -150,23 +150,23 @@ function Kiosk() {
     } else {
       /** 이전 정보에서 power 값을 off 으로 최신화시키기 */
       const updatedKiosk = selectedKiosk.map(item => { return { ...item, power: 'off' } })
-      /** selectedKiosk 배열에서 power가 'off'인 항목들만 추출하여 배열로 반환 */
+      /** selectedKiosk 배열에서 power가 'off' 인 항목들만 추출하여 배열로 반환 */
       const powerOnIds = updatedKiosk.filter(item => item.power === 'off').map(item => item.id);
-      /** 실제 DB로 키오스크 전원여부 데이터를 보내는 코드 */
+      /** 실제 DB 로 키오스크 전원여부 데이터를 보내는 코드 */
       updatedKiosk.forEach(item => {
         axios.post("/api/kiosk/update", item)
           .then(res => {
             refresh(1)
           })
       })
-      /** websocket.js를 통해 손님 키오스크에 '신호' 보내주기 */
+      /** websocket.js 를 통해 손님 키오스크에 '신호' 보내주기 */
       send(ws, "off", powerOnIds)
       setChecked({})
       setSelectedKiosk([])
       setAllCheck(false)
     }
   }
-  //수정 버튼 클릭 함수
+  // 수정 버튼 클릭 함수
   const showUpdateModal = (item) => {
     setUpdateModalShow(true)
     setData({
@@ -175,7 +175,7 @@ function Kiosk() {
       power: item.power
     })
   }
-  //input 값 변경시 location 업데이트
+  // input 값 변경시 location 업데이트
   const handleChange = (e) => {
     setLocation(e.target.value)
     setData({
@@ -193,7 +193,7 @@ function Kiosk() {
 
   const isLocationValid = kioskLocation.trim().length >= 1 && kioskLocation.trim().length <= 20;
 
-  //삭제 버튼 기능
+  // 삭제 버튼 기능
   const deleteKiosk = () => {
     selectedKiosk.forEach(tmp => {
       axios.post("/api/kiosk/delete", tmp)
@@ -212,7 +212,7 @@ function Kiosk() {
           console.log(error)
         })
     })
-    //선택된 키오스크 초기화
+    // 선택된 키오스크 초기화
     setSelectedKiosk([])
   }
   const handleSort = (columnName) => {
@@ -310,6 +310,5 @@ function Kiosk() {
     )
   }
 }
-
 
 export default Kiosk

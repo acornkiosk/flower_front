@@ -1,20 +1,19 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
 export default function AddModal(props) {
   const { addModalShow, setAddModalShow, pageInfo, addKiosk } = props
-  /** 유효성 검사 통과시 나타낼 UI */
+  /** 유효성 검사 통과 시 나타낼 UI */
   const [isValid, setIsValid] = useState(false)
-  /** 유효성 검사 실패시 나타낼 UI */
+  /** 유효성 검사 실패 시 나타낼 UI */
   const [isInvalid, setIsInvalid] = useState(false)
   /** 유효성 검사 실패 사유를 나타낼 함수 */
   const [validationMessage, setValidationMessage] = useState("")
-  /** 유효성 검사 성공시에만 등록버튼 활성화 */
+  /** 유효성 검사 성공 시에만 등록 버튼 활성화 */
   const [pass, setPass] = useState(false)
-  /** 키오스크 정보추가시 입력한 값을 보관 */
+  /** 키오스크 정보추가 시 입력한 값을 보관 */
   const [inputValue, setInputValue] = useState(null)
-  /** 이미 등록된 정보중에 위치정보가 동일한 게 있는 지 체크(중복방지) */
+  /** 이미 등록된 정보 중에 위치정보가 동일한 게 있는지 체크(중복방지) */
   const kioskLocation = pageInfo.list.map(item => item.location)
 
   /** 입력할 때마다 호출 */
@@ -115,7 +114,7 @@ export default function AddModal(props) {
                 type="button"
                 /** 데이터 전달하여 추가시키기 */
                 onClick={() => addKiosk(inputValue)}
-                /** disabled: 조건 불충족시 기능 비활성화 */
+                /** disabled: 조건 불충족 시 기능 비활성화 */
                 disabled={!pass}>추가하기
               </Button>
             </Col>

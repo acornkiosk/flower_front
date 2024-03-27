@@ -17,7 +17,7 @@ import Menu from './pages/menu';
 
 function App() {
   /** 실시간 주문개수 파악 SideBar.js 로 보내기
-   * useSelector로 안한 이유 : undefined */
+   * useSelector 로 안한 이유 : undefined */
   const [orderCount, setOrderCount] = useState(0)
   const isToast = useSelector(state => state.isToast)
   const dispatch = useDispatch()
