@@ -68,7 +68,7 @@ useEffect(() => {
   }
 
   if (dirty.isId) {
-    const idValid = (pass.passNewId && pass.duplicateId) && (!dirty.isUserName || pass.passUserName) && (!dirty.isPassword || pass.passNewPassword);
+    const idValid = ((pass.passNewId && pass.duplicateId) && (!dirty.isUserName || pass.passUserName) && (!dirty.isPassword || pass.passNewPassword));
     setValidationState(prevState => ({
       ...prevState,
       isIdValid: idValid
@@ -209,7 +209,7 @@ useEffect(() => {
         </Form.Group>
         <Form.Group as={Row} className="mb-3">
           <Form.Label column md="2"> 아이디 변경:  </Form.Label>
-          <Col md="4"><Form.Control type='text' name='newId'  onChange={handleChange} placeholder={item.id}  readOnly={pass.duplicateId} isInvalid={dirty.isId &&!pass.passNewId || pass.passNewId && !pass.duplicateId}  isValid={pass.passNewId && pass.duplicateId}/>
+          <Col md="4"><Form.Control type='text' name='newId'  onChange={handleChange} placeholder={item.id}  readOnly={pass.duplicateId} isInvalid={(dirty.isId &&!pass.passNewId) || (pass.passNewId && !pass.duplicateId)}  isValid={pass.passNewId && pass.duplicateId}/>
           <Form.Control.Feedback type="invalid">
             {
               !pass.passNewId && !pass.duplicateId ? "아이디를 입력해주세요": pass.passNewId && !dirty.isDuplicateId  ? "중복 체크해주세요": pass.passNewId && dirty.isDuplicateId ? "이미 존재하는 아이디입니다." : ""

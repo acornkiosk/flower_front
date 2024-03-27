@@ -184,7 +184,7 @@ export default function AddModal(props) {
         </Form.Group>
         <Form.Group as={Row} className="mb-4">
           <Form.Label column md="2"> 아이디 : </Form.Label>
-          <Col md="8"><Form.Control type='text' name='id' onChange={ownerChange} placeholder="ID 입력해주세요" readOnly={pass.duplicateId} isInvalid={dirty.isId &&!pass.passId || pass.passId && !pass.duplicateId}  isValid={pass.passId && pass.duplicateId}/>
+          <Col md="8"><Form.Control type='text' name='id' onChange={ownerChange} placeholder="ID 입력해주세요" readOnly={pass.duplicateId} isInvalid={(dirty.isId &&!pass.passId) || (pass.passId && !pass.duplicateId)}  isValid={pass.passId && pass.duplicateId}/>
           <Form.Control.Feedback type="invalid">
           {
               !pass.passId && !pass.duplicateId ? "아이디를 입력해주세요": pass.passId && !dirty.isDuplicateId  ? "중복 체크해주세요": pass.passId && dirty.isDuplicateId ? "이미 존재하는 아이디입니다." : ""
