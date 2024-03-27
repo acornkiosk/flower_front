@@ -65,8 +65,9 @@ export default function Order(props) {
         setOrderCount(count)
       })
       .catch(error => {
+        setOrders({})
+        setOrderCount(0)
         setEmpty(true)
-        console.log("주문관리 : 400이 나올 경우 서버 상태와 주문개수 확인")
       })
   }
   const role = useSelector(state => state.role)
@@ -85,7 +86,7 @@ export default function Order(props) {
         </div>
         {/** 주의 : refresh={refresh()} => 무한요청 원인!! */}
         {isEmpty && <EmptyText message={'주문이 없습니다.'} />}
-        <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal} />
+        <DetailModal show={showModal} data={data} setShowModal={setShowModal} onHide={() => setShowModal(false)} setDeleteModal={setDeleteModal} refresh={refresh} />
       </div>
     )
   } else {

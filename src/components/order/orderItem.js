@@ -19,7 +19,7 @@ export default function OrderItem(props) {
   }
   /** DetailModal.js 완료 혹은 취소 처리시 제거 */
   if (deleteModal.target === orderId) {
-    onComplted()
+    refresh()
   }
   //완료 버튼 누를 시 
   function onComplted() {
